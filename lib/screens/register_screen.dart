@@ -1,3 +1,4 @@
+import 'package:agencies_app/screens/load_home_screen.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,14 @@ class RegisterScreen extends StatelessWidget {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (ctx) => const LoginScreen(),
+        ),
+      );
+    }
+
+    void _registeredSuccessfully() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => const LoadHomeScreen(),
         ),
       );
     }
@@ -97,7 +106,7 @@ class RegisterScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _registeredSuccessfully,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: const Color(0xff1E232C),
@@ -105,7 +114,7 @@ class RegisterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Login'),
+                  child: const Text('Register'),
                 ),
               ),
               Padding(
