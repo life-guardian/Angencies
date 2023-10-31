@@ -1,6 +1,7 @@
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
