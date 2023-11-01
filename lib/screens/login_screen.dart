@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController agencyLoginEmail = TextEditingController();
     void _popScreen() {
       Navigator.of(context).pop();
     }
@@ -113,7 +114,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 31,
                     ),
-                    const TextFieldWidget(labelText: 'Agency Email'),
+                    TextFieldWidget(
+                      labelText: 'Agency Email',
+                      dynamicControllerText: agencyLoginEmail,
+                    ),
                     const SizedBox(
                       height: 12,
                     ),
