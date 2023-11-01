@@ -4,14 +4,16 @@ class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({
     super.key,
     required this.labelText,
+    required this.dynamicControllerText,
   });
-  //kjhbjhfyfyyjvvv
 
   final String labelText;
+  final TextEditingController dynamicControllerText;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: dynamicControllerText,
       decoration: InputDecoration(
         filled: true,
         fillColor: const Color.fromARGB(162, 232, 236, 244),

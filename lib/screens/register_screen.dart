@@ -1,5 +1,7 @@
-import 'package:agencies_app/screens/load_home_screen.dart';
+import 'dart:convert';
+import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/login_screen.dart';
+import 'package:http/http.dart' as http;
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,14 @@ class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    TextEditingController agencyName = TextEditingController();
+    TextEditingController agencyEmail = TextEditingController();
+    TextEditingController agencyPhone = TextEditingController();
+    TextEditingController agencyAddress = TextEditingController();
+    TextEditingController representativeName = TextEditingController();
+    TextEditingController agencyPassword = TextEditingController();
+    TextEditingController agencyConfirmPassword = TextEditingController();
+
     void _popScreen() {
       Navigator.of(context).pop();
     }
@@ -19,12 +29,24 @@ class RegisterScreen extends StatelessWidget {
       );
     }
 
-    void _registeredSuccessfully() {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => const LoadHomeScreen(),
-        ),
+    void _registerUser() async {
+      //check validation of texts
+      var regBody = {
+        "agencyName": agencyName.text.toString(),
+        "agencyPhNo": agencyPhone.text.toString(),
+        "agencyEmail": agencyEmail.text.toString(),
+        "password": agencyPassword.text.toString(),
+        "address": agencyPassword.text.toString(),
+        "representativeName": representativeName.text.toString(),
+      };
+
+      var response = await http.post(
+        Uri.parse(registerurl),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(regBody),
       );
+
+      print(response);
     }
 
     return Scaffold(
@@ -66,35 +88,53 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(
                 height: 31,
               ),
-              const Expanded(
+              Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      TextFieldWidget(labelText: 'Agency Name'),
-                      SizedBox(
+                      TextFieldWidget(
+                          labelText: 'Agency Name',
+                          dynamicControllerText: agencyName),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Agency Email'),
-                      SizedBox(
+                      TextFieldWidget(
+                        labelText: 'Agency Email',
+                        dynamicControllerText: agencyEmail,
+                      ),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Agency Ph No'),
-                      SizedBox(
+                      TextFieldWidget(
+                        labelText: 'Agency Ph No',
+                        dynamicControllerText: agencyPhone,
+                      ),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Agency Address'),
-                      SizedBox(
+                      TextFieldWidget(
+                        labelText: 'Agency Address',
+                        dynamicControllerText: agencyAddress,
+                      ),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Representative Name'),
-                      SizedBox(
+                      TextFieldWidget(
+                        labelText: 'Representative Name',
+                        dynamicControllerText: representativeName,
+                      ),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Password'),
-                      SizedBox(
+                      TextFieldWidget(
+                          labelText: 'Password',
+                          dynamicControllerText: agencyPassword),
+                      const SizedBox(
                         height: 21,
                       ),
-                      TextFieldWidget(labelText: 'Confirm Password'),
+                      TextFieldWidget(
+                          labelText: 'Confirm Password',
+                          dynamicControllerText: agencyConfirmPassword),
                     ],
                   ),
                 ),
@@ -106,7 +146,7 @@ class RegisterScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: _registeredSuccessfully,
+                  onPressed: _registerUser,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: const Color(0xff1E232C),
