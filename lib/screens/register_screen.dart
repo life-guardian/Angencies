@@ -9,6 +9,8 @@ class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
     TextEditingController agencyName = TextEditingController();
     TextEditingController agencyEmail = TextEditingController();
     TextEditingController agencyPhone = TextEditingController();
@@ -29,6 +31,82 @@ class RegisterScreen extends StatelessWidget {
       );
     }
 
+    void _submitForm() {
+      if (_formkey.currentState!.validate()) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Register Successfully')));
+      }
+    }
+
+    String? _validateEmail(value, String? label) {
+      if (value.isEmpty) {
+        return 'Please enter an $label';
+      }
+      RegExp emailRegx = RegExp(r'^.+@[a-zA-Z]+\.[a-zA-Z]+$');
+      if (!emailRegx.hasMatch(value)) {
+        return 'Please enter a valid $label';
+      }
+      return null;
+    }
+
+    String? _validatePhoneNo(value, String? label) {
+      var no = int.tryParse(value);
+      if (no == null) {
+        return 'Please enter a valid $label';
+      }
+      if (value.isEmpty) {
+        return 'Please enter a $label';
+      }
+      if (value.length != 10) {
+        return 'Please enter a 10-digit $label';
+      }
+      return null;
+    }
+
+    String? _validateTextField(value, String? label) {
+      if (value.isEmpty) {
+        return 'Please enter a $label';
+      }
+      return null;
+    }
+
+    String? _validatePassword(value, String? label) {
+      if (value.isEmpty) {
+        return 'Please enter a $label';
+      }
+      if (value.length < 8 && value.length > 16) {
+        return 'Please enter $label between 8 to 16 digits';
+      }
+      if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$').hasMatch(value)) {
+        return 'Password must contains at least one upper case, lower case, number & special symbol';
+      }
+
+      return null;
+    }
+
+    String? _validateConfirmPassword(value, String? label) {
+      if (value.isEmpty) {
+        return 'Please enter a $label';
+      }
+      String agPass = agencyPassword.text.toString();
+      if (agPass != value.toString()) {
+        return 'Password and confirm password did\'t match';
+      }
+
+      return null;
+    }
+
+    String? _validateName(value, String? label) {
+      var no = int.tryParse(value);
+      if (no != null) {
+        return 'Please enter a valid $label';
+      }
+      if (value.isEmpty) {
+        return 'Please enter a $label';
+      }
+      return null;
+    }
+
     void _registerUser() async {
       //check validation of texts
       var regBody = {
@@ -36,7 +114,7 @@ class RegisterScreen extends StatelessWidget {
         "agencyPhNo": agencyPhone.text.toString(),
         "agencyEmail": agencyEmail.text.toString(),
         "password": agencyPassword.text.toString(),
-        "address": agencyPassword.text.toString(),
+        "address": agencyAddress.text.toString(),
         "representativeName": representativeName.text.toString(),
       };
 
@@ -90,52 +168,72 @@ class RegisterScreen extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextFieldWidget(
+                  child: Form(
+                    key: _formkey,
+                    child: Column(
+                      children: [
+                        TextFieldWidget(
                           labelText: 'Agency Name',
-                          dynamicControllerText: agencyName),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Agency Email',
-                        dynamicControllerText: agencyEmail,
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Agency Ph No',
-                        dynamicControllerText: agencyPhone,
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Agency Address',
-                        dynamicControllerText: agencyAddress,
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Representative Name',
-                        dynamicControllerText: representativeName,
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
+                          controllerText: agencyName,
+                          checkValidation: (value) =>
+                              _validateName(value, 'Name'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
+                          labelText: 'Agency Email',
+                          controllerText: agencyEmail,
+                          checkValidation: (value) =>
+                              _validateEmail(value, 'Email'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
+                          labelText: 'Agency Ph No',
+                          controllerText: agencyPhone,
+                          checkValidation: (value) =>
+                              _validatePhoneNo(value, 'Phone Number'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
+                          labelText: 'Agency Address',
+                          controllerText: agencyAddress,
+                          checkValidation: (value) =>
+                              _validateTextField(value, 'Address'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
+                          labelText: 'Representative Name',
+                          controllerText: representativeName,
+                          checkValidation: (value) =>
+                              _validateName(value, 'Representative name'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
                           labelText: 'Password',
-                          dynamicControllerText: agencyPassword),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      TextFieldWidget(
+                          controllerText: agencyPassword,
+                          checkValidation: (value) =>
+                              _validatePassword(value, 'Password'),
+                        ),
+                        const SizedBox(
+                          height: 21,
+                        ),
+                        TextFieldWidget(
                           labelText: 'Confirm Password',
-                          dynamicControllerText: agencyConfirmPassword),
-                    ],
+                          controllerText: agencyConfirmPassword,
+                          checkValidation: (value) => _validateConfirmPassword(
+                              value, 'Confirm Password'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -146,7 +244,7 @@ class RegisterScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: _registerUser,
+                  onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: const Color(0xff1E232C),

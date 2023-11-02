@@ -4,19 +4,26 @@ class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({
     super.key,
     required this.labelText,
-    required this.dynamicControllerText,
+    required this.controllerText,
+    required this.checkValidation,
   });
 
   final String labelText;
-  final TextEditingController dynamicControllerText;
+  final String? Function(String?) checkValidation;
+  final TextEditingController controllerText;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: dynamicControllerText,
+    return TextFormField(
+      controller: controllerText,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) => checkValidation(value),
       decoration: InputDecoration(
         filled: true,
         fillColor: const Color.fromARGB(162, 232, 236, 244),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color.fromARGB(156, 158, 158, 158)),
           borderRadius: BorderRadius.all(
@@ -29,10 +36,7 @@ class TextFieldWidget extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
-        label: Text(
-          labelText,
-          style: const TextStyle(color: Colors.grey),
-        ),
+        labelText: labelText,
       ),
     );
   }
