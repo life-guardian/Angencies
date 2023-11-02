@@ -31,13 +31,6 @@ class RegisterScreen extends StatelessWidget {
       );
     }
 
-    void _submitForm() {
-      if (_formkey.currentState!.validate()) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Register Successfully')));
-      }
-    }
-
     String? _validateEmail(value, String? label) {
       if (value.isEmpty) {
         return 'Please enter an $label';
@@ -74,7 +67,7 @@ class RegisterScreen extends StatelessWidget {
       if (value.isEmpty) {
         return 'Please enter a $label';
       }
-      if (value.length < 8 && value.length > 16) {
+      if (value.length < 8 || value.length > 16) {
         return 'Please enter $label between 8 to 16 digits';
       }
       if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$').hasMatch(value)) {
@@ -127,7 +120,16 @@ class RegisterScreen extends StatelessWidget {
       print(response);
     }
 
+    void _submitForm() {
+      if (_formkey.currentState!.validate()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Register Successfully')));
+        // _registerUser();
+      }
+    }
+
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,

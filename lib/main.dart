@@ -1,3 +1,4 @@
+import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Angencies',
-      home: WelcomeScreen(),
+      home: HomeScreen(),
     );
   }
 }

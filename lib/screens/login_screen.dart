@@ -12,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var _selectedObscure = false;
+  var _selectedObscure = true;
 
   void _obscurePassoword() {
     setState(() {
@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -128,10 +129,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: _obscurePassoword,
-                          icon: const Icon(
-                            Icons.remove_red_eye,
-                            color: Colors.grey,
-                          ),
+                          icon: _selectedObscure
+                              ? const Icon(
+                                  Icons.visibility,
+                                  color: Colors.grey,
+                                )
+                              : const Icon(
+                                  Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
                         ),
                         filled: true,
                         fillColor: const Color.fromARGB(162, 232, 236, 244),
@@ -148,10 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Radius.circular(10),
                           ),
                         ),
-                        label: const Text(
-                          'Password',
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                        labelText: 'Password',
                       ),
                     ),
                     const SizedBox(
