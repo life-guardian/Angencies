@@ -11,14 +11,25 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
+        elevation: 3,
+        shadowColor: Colors.black,
         height: 60,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.home_filled)),
             IconButton(
-                onPressed: () {}, icon: const Icon(Icons.man_2_outlined)),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.home_rounded,
+                  size: 30,
+                )),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.account_circle_rounded,
+                  size: 30,
+                )),
           ],
         ),
       ),
@@ -202,6 +213,7 @@ class HomeScreen extends StatelessWidget {
                 height: 31,
               ),
               const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   EventCard(
                     text1: 'E',
@@ -211,7 +223,7 @@ class HomeScreen extends StatelessWidget {
                     color2: Color.fromARGB(232, 224, 83, 61),
                   ),
                   SizedBox(
-                    width: 15,
+                    width: 25,
                   ),
                   EventCard(
                     text1: 'M',

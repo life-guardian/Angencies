@@ -1,8 +1,12 @@
-import 'dart:ffi';
+import 'dart:convert';
 
+import 'package:agencies_app/backend_url/config.dart';
+import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,29 +16,69 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var _selectedObscure = true;
+  TextEditingController agencyLoginEmail = TextEditingController();
+  TextEditingController agencyPassword = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void _obscurePassoword() {
-    setState(() {
-      _selectedObscure = _selectedObscure ? false : true;
-    });
+  late SharedPreferences prefs;
+
+  void _popScreen() {
+    Navigator.of(context).pop();
+  }
+
+  String? _validateTextField(value, String? label) {
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    return null;
+  }
+
+  void _goToRegisterPage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (ctx) => const RegisterScreen(),
+      ),
+    );
+  }
+
+  void _navigateToHomeScreen() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (ctx) => const HomeScreen(),
+      ),
+    );
+  }
+
+  void _submitButton() {
+    if (_formKey.currentState!.validate()) {
+      _loginUser();
+    }
+  }
+
+  void _loginUser() async {
+    var reqBody = {
+      "username": agencyLoginEmail.text,
+      "password": agencyPassword.text,
+    };
+
+    var response = await http.post(
+      Uri.parse(loginUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(reqBody),
+    );
+    // print(response.statusCode);
+    // var jsonResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      _navigateToHomeScreen();
+      print('login successful');
+    } else {
+      print('Something went wrong');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController agencyLoginEmail = TextEditingController();
-    void _popScreen() {
-      Navigator.of(context).pop();
-    }
-
-    void _goToRegisterPage() {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => const RegisterScreen(),
-        ),
-      );
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -103,79 +147,61 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 31,
               ),
               SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const Text(
-                      'Welcome back! Glad to see you, team!',
-                      style: TextStyle(
-                        color: Color(0xff1E232C),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Welcome back! Glad to see you, team!',
+                        style: TextStyle(
+                          color: Color(0xff1E232C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 31,
-                    ),
-                    TextFieldWidget(
-                      labelText: 'Agency Email',
-                      controllerText: agencyLoginEmail,
-                      checkValidation: (value) => null,
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    TextField(
-                      obscureText: _selectedObscure,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          onPressed: _obscurePassoword,
-                          icon: _selectedObscure
-                              ? const Icon(
-                                  Icons.visibility,
-                                  color: Colors.grey,
-                                )
-                              : const Icon(
-                                  Icons.visibility_off,
-                                  color: Colors.grey,
-                                ),
-                        ),
-                        filled: true,
-                        fillColor: const Color.fromARGB(162, 232, 236, 244),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(156, 158, 158, 158)),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
+                      const SizedBox(
+                        height: 31,
+                      ),
+                      TextFieldWidget(
+                        labelText: 'Email / Phone',
+                        controllerText: agencyLoginEmail,
+                        checkValidation: (value) =>
+                            _validateTextField(value, 'Email / Phone'),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      TextFieldWidget(
                         labelText: 'Password',
+                        controllerText: agencyPassword,
+                        checkValidation: (value) =>
+                            _validateTextField(value, 'Password'),
+                        obsecureIcon: true,
+                        hideText: true,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 31,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: const Color(0xff1E232C),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      const SizedBox(
+                        height: 31,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: _submitButton,
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: const Color(0xff1E232C),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
+                          child: const Text('Login'),
                         ),
-                        child: const Text('Login'),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const Spacer(),

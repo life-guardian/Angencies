@@ -124,7 +124,7 @@ class RegisterScreen extends StatelessWidget {
       if (_formkey.currentState!.validate()) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Register Successfully')));
-        // _registerUser();
+        _registerUser();
       }
     }
 
@@ -224,6 +224,7 @@ class RegisterScreen extends StatelessWidget {
                           controllerText: agencyPassword,
                           checkValidation: (value) =>
                               _validatePassword(value, 'Password'),
+                          hideText: true,
                         ),
                         const SizedBox(
                           height: 21,
@@ -233,6 +234,7 @@ class RegisterScreen extends StatelessWidget {
                           controllerText: agencyConfirmPassword,
                           checkValidation: (value) => _validateConfirmPassword(
                               value, 'Confirm Password'),
+                          hideText: true,
                         ),
                       ],
                     ),

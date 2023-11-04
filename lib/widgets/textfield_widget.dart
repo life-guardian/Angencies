@@ -1,24 +1,59 @@
 import 'package:flutter/material.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class TextFieldWidget extends StatefulWidget {
   const TextFieldWidget({
     super.key,
     required this.labelText,
+    this.hideText = false,
+    this.obsecureIcon = false,
     required this.controllerText,
     required this.checkValidation,
   });
 
   final String labelText;
+  final bool obsecureIcon;
+  final bool hideText;
   final String? Function(String?) checkValidation;
   final TextEditingController controllerText;
 
   @override
+  State<TextFieldWidget> createState() =>
+      // ignore: no_logic_in_create_state
+      _TextFieldWidgetState(selectedObscure: hideText);
+}
+
+class _TextFieldWidgetState extends State<TextFieldWidget> {
+  _TextFieldWidgetState({required this.selectedObscure});
+  bool selectedObscure;
+
+  void _obscuretxt() {
+    setState(() {
+      selectedObscure = selectedObscure ? false : true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controllerText,
+      obscureText: selectedObscure,
+      controller: widget.controllerText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) => checkValidation(value),
+      validator: (value) => widget.checkValidation(value),
       decoration: InputDecoration(
+        suffixIcon: widget.obsecureIcon
+            ? IconButton(
+                onPressed: _obscuretxt,
+                icon: selectedObscure
+                    ? const Icon(
+                        Icons.visibility_off,
+                        color: Colors.grey,
+                      )
+                    : const Icon(
+                        Icons.visibility,
+                        color: Colors.grey,
+                      ),
+              )
+            : null,
         filled: true,
         fillColor: const Color.fromARGB(162, 232, 236, 244),
         border: OutlineInputBorder(
@@ -36,7 +71,7 @@ class TextFieldWidget extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
-        labelText: labelText,
+        labelText: widget.labelText,
       ),
     );
   }
