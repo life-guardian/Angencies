@@ -1,5 +1,6 @@
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
+import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -7,16 +8,18 @@ class WelcomeScreen extends StatelessWidget {
 
   void _login(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => const LoginScreen(),
+      CustomSlideTransition(
+        direction: AxisDirection.left,
+        child: const LoginScreen(),
       ),
     );
   }
 
   void _register(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => const RegisterScreen(),
+      CustomSlideTransition(
+        direction: AxisDirection.left,
+        child: const RegisterScreen(),
       ),
     );
   }

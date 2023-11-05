@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 class TextFieldWidget extends StatefulWidget {
   const TextFieldWidget({
     super.key,
-    required this.labelText,
+    this.labelText = '',
     this.hideText = false,
     this.obsecureIcon = false,
     required this.controllerText,
     required this.checkValidation,
+    this.textHint = '',
   });
 
   final String labelText;
   final bool obsecureIcon;
   final bool hideText;
+  final String textHint;
   final String? Function(String?) checkValidation;
   final TextEditingController controllerText;
 
@@ -72,6 +74,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           ),
         ),
         labelText: widget.labelText,
+        hintText: widget.textHint,
       ),
     );
   }

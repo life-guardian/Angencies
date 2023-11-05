@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
+import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -35,8 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToRegisterPage() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (ctx) => const RegisterScreen(),
+      CustomSlideTransition(
+        direction: AxisDirection.up,
+        child: const RegisterScreen(),
       ),
     );
   }

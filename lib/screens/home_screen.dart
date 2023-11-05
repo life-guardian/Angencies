@@ -1,11 +1,29 @@
+import 'package:agencies_app/modal_bottom_sheets/history.dart';
+import 'package:agencies_app/modal_bottom_sheets/organize_event.dart';
+import 'package:agencies_app/modal_bottom_sheets/rescue_operation.dart';
+import 'package:agencies_app/modal_bottom_sheets/send_alert.dart';
 import 'package:agencies_app/widgets/event_card.dart';
 import 'package:agencies_app/widgets/manage_card.dart';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  void _openModal(BuildContext context, Widget widget) {
+    showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      builder: (ctx) => widget,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +43,12 @@ class HomeScreen extends StatelessWidget {
                   size: 30,
                 )),
             IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.account_circle_rounded,
-                  size: 30,
-                )),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.account_circle_rounded,
+                size: 30,
+              ),
+            ),
           ],
         ),
       ),
@@ -107,7 +126,8 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               'Events',
                               style: GoogleFonts.inter().copyWith(
-                                  color: Color.fromARGB(255, 220, 217, 217),
+                                  color:
+                                      const Color.fromARGB(255, 220, 217, 217),
                                   fontSize: 12),
                             ),
                             const SizedBox(
@@ -146,7 +166,8 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               'Rescue Ops',
                               style: GoogleFonts.inter().copyWith(
-                                  color: Color.fromARGB(255, 220, 217, 217),
+                                  color:
+                                      const Color.fromARGB(255, 220, 217, 217),
                                   fontSize: 12),
                             ),
                             const SizedBox(
@@ -178,25 +199,61 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              const Row(
+              Row(
                 children: [
-                  ManageCard(text1: 'Alert for disaster', text2: 'Send Alert'),
-                  SizedBox(
+                  ManageCard(
+                    text1: 'Alert for disaster',
+                    text2: 'Send Alert',
+                    showModal: () {
+                      _openModal(
+                        context,
+                        const SendAlert(),
+                      );
+                    },
+                  ),
+                  const SizedBox(
                     width: 11,
                   ),
-                  ManageCard(text1: 'Rescue Operation', text2: 'Start'),
+                  ManageCard(
+                    text1: 'Rescue Operation',
+                    text2: 'Start',
+                    showModal: () {
+                      _openModal(
+                        context,
+                        const RescueOperation(),
+                      );
+                    },
+                  ),
                 ],
               ),
               const SizedBox(
                 height: 15,
               ),
-              const Row(
+              Row(
                 children: [
-                  ManageCard(text1: 'Awareness Event', text2: 'Organize Event'),
-                  SizedBox(
+                  ManageCard(
+                    text1: 'Awareness Event',
+                    text2: 'Organize Event',
+                    showModal: () {
+                      _openModal(
+                        context,
+                        const OrganizeEvent(),
+                      );
+                    },
+                  ),
+                  const SizedBox(
                     width: 11,
                   ),
-                  ManageCard(text1: 'History', text2: 'History'),
+                  ManageCard(
+                    text1: 'History',
+                    text2: 'History',
+                    showModal: () {
+                      _openModal(
+                        context,
+                        const History(),
+                      );
+                    },
+                  ),
                 ],
               ),
               const SizedBox(
@@ -219,7 +276,7 @@ class HomeScreen extends StatelessWidget {
                     text1: 'E',
                     text2: 'Manage',
                     text3: 'Events',
-                    color1: Color.fromARGB(232, 224, 83, 61),
+                    color1: Color.fromARGB(232, 224, 144, 131),
                     color2: Color.fromARGB(232, 224, 83, 61),
                   ),
                   SizedBox(
@@ -229,11 +286,11 @@ class HomeScreen extends StatelessWidget {
                     text1: 'M',
                     text2: 'Rescue',
                     text3: 'Map',
-                    color1: Color.fromARGB(228, 231, 140, 157),
+                    color1: Color.fromARGB(225, 226, 167, 178),
                     color2: Color.fromARGB(228, 231, 140, 157),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

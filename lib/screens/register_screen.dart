@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/login_screen.dart';
+import 'package:agencies_app/screens/register_succesful.dart';
+import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,9 @@ class RegisterScreen extends StatelessWidget {
 
     void _goToLoginPage() {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => const LoginScreen(),
+        CustomSlideTransition(
+          direction: AxisDirection.up,
+          child: const LoginScreen(),
         ),
       );
     }
@@ -117,13 +120,19 @@ class RegisterScreen extends StatelessWidget {
         body: json.encode(regBody),
       );
 
-      print(response);
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushReplacement(
+          CustomSlideTransition(
+            direction: AxisDirection.left,
+            child: const RegisterSuccessfullScreen(),
+          ),
+        );
+      }
     }
 
     void _submitForm() {
       if (_formkey.currentState!.validate()) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Register Successfully')));
         _registerUser();
       }
     }

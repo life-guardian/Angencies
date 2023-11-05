@@ -39,6 +39,7 @@ dependencies:
   http: ^1.1.0
   shared_preferences:
   jwt_decoder:
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:
