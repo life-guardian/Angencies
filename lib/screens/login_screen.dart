@@ -1,5 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
 import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
@@ -20,12 +22,9 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController agencyLoginEmail = TextEditingController();
   TextEditingController agencyPassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool buttonPressed = false;
 
   late SharedPreferences prefs;
-
-  void _popScreen() {
-    Navigator.of(context).pop();
-  }
 
   String? _validateTextField(value, String? label) {
     if (value.isEmpty) {
@@ -53,11 +52,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _submitButton() {
     if (_formKey.currentState!.validate()) {
-      _loginUser();
+      if (!buttonPressed) {
+        buttonPressed = true;
+        _loginUser();
+      }
     }
   }
 
   void _loginUser() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (ctx) => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.grey,
+        ),
+      ),
+    );
+
     var reqBody = {
       "username": agencyLoginEmail.text,
       "password": agencyPassword.text,
@@ -72,10 +84,50 @@ class _LoginScreenState extends State<LoginScreen> {
     // var jsonResponse = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
+      Navigator.of(context).pop();
       _navigateToHomeScreen();
+      //success
       print('login successful');
+    } else if (response.statusCode == 404) {
+      // wrong username
+
+      buttonPressed = await customShowDialog(
+        context: context,
+        titleText: 'Cant\' find account',
+        contentText:
+            'We can\'t find a account with ${agencyLoginEmail.text.toString()}. try another phone number or email address, or if you dont\' have an account, you can sign up.',
+      );
+      buttonPressed = false;
+      Navigator.of(context).pop();
+    } else if (response.statusCode == 403) {
+      // password or username not found
+      buttonPressed = await customShowDialog(
+        context: context,
+        titleText: 'username or password didn\' match',
+        contentText:
+            'The password or username that you have entered is incorrect. please try again.',
+      );
+      buttonPressed = false;
+      Navigator.of(context).pop();
+    } else if (response.statusCode == 400) {
+      // wrong  password
+      buttonPressed = await customShowDialog(
+        context: context,
+        titleText: 'Incorrect password',
+        contentText:
+            'The password that you have entered is incorrect. please try again.',
+      );
+      buttonPressed = false;
+      Navigator.of(context).pop();
     } else {
-      print('Something went wrong');
+      // something went wrong
+      buttonPressed = await customShowDialog(
+        context: context,
+        titleText: 'Server Error',
+        contentText: 'Something went wrong! please try again later.',
+      );
+      buttonPressed = false;
+      Navigator.of(context).pop();
     }
   }
 
@@ -97,7 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Color.fromARGB(32, 30, 35, 44),
               ),
             ),
-            onPressed: _popScreen,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             child: const Icon(
               Icons.arrow_back_ios,
               size: 20,

@@ -40,6 +40,7 @@ dependencies:
   shared_preferences:
   jwt_decoder:
   google_maps_flutter: ^2.5.0
+  quickalert: ^1.0.2
 
 dev_dependencies:
   flutter_test:

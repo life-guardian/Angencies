@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     showModalBottomSheet(
       useSafeArea: true,
       context: context,
+      isScrollControlled: true,
       isDismissible: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

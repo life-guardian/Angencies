@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TextfieldModal extends StatelessWidget {
-  const TextfieldModal({super.key});
+  const TextfieldModal({
+    super.key,
+    required this.hintText,
+  });
+
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,7 @@ class TextfieldModal extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
+        hintText: hintText,
       ),
     );
   }

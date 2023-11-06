@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
+import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/widgets/textfield_widget.dart';
@@ -20,6 +23,7 @@ class RegisterScreen extends StatelessWidget {
     TextEditingController representativeName = TextEditingController();
     TextEditingController agencyPassword = TextEditingController();
     TextEditingController agencyConfirmPassword = TextEditingController();
+    bool registeredButtonPressed = false;
 
     void _popScreen() {
       Navigator.of(context).pop();
@@ -105,6 +109,16 @@ class RegisterScreen extends StatelessWidget {
 
     void _registerUser() async {
       //check validation of texts
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) => const Center(
+          child: CircularProgressIndicator(
+            color: Colors.grey,
+          ),
+        ),
+      );
+
       var regBody = {
         "agencyName": agencyName.text.toString(),
         "agencyPhNo": agencyPhone.text.toString(),
@@ -121,19 +135,33 @@ class RegisterScreen extends StatelessWidget {
       );
 
       if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(
           CustomSlideTransition(
             direction: AxisDirection.left,
             child: const RegisterSuccessfullScreen(),
           ),
         );
+      } else if (response.statusCode == 400) {
+        registeredButtonPressed = await customShowDialog(
+          context: context,
+          titleText: 'Already registered',
+          contentText:
+              'Agency already registered with the email or phone number.',
+        );
+        registeredButtonPressed = false;
+        Navigator.of(context).pop();
+      } else {
+        // something server problem
+        Navigator.of(context).pop();
       }
     }
 
     void _submitForm() {
       if (_formkey.currentState!.validate()) {
-        _registerUser();
+        if (!registeredButtonPressed) {
+          registeredButtonPressed = true;
+          _registerUser();
+        }
       }
     }
 
