@@ -26,6 +26,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   late SharedPreferences prefs;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPrefs();
+  }
+
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   String? _validateTextField(value, String? label) {
     if (value.isEmpty) {
       return 'Please enter a $label';
@@ -42,10 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _navigateToHomeScreen() {
+  void _navigateToHomeScreen(final myToken) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (ctx) => const HomeScreen(),
+        builder: (ctx) => HomeScreen(token: myToken),
       ),
     );
   }
@@ -82,10 +93,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     // print(response.statusCode);
     // var jsonResponse = jsonDecode(response.body);
-
+    var jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      //storin user login data in local variable
+      var myToken = jsonResponse['token'];
+      prefs.setString('token', myToken);
+
       Navigator.of(context).pop();
-      _navigateToHomeScreen();
+      _navigateToHomeScreen(myToken);
       //success
       print('login successful');
     } else if (response.statusCode == 404) {

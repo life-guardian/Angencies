@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:agencies_app/modal_bottom_sheets/history.dart';
 import 'package:agencies_app/modal_bottom_sheets/organize_event.dart';
 import 'package:agencies_app/modal_bottom_sheets/rescue_operation.dart';
@@ -6,9 +8,26 @@ import 'package:agencies_app/widgets/event_card.dart';
 import 'package:agencies_app/widgets/manage_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, @required this.token});
+  final token;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late String email;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Map<String, dynamic> jwtDecoded = JwtDecoder.decode(widget.token);
+    // email = jwtDecoded['message'];
+  }
 
   void _openModal(BuildContext context, Widget widget) {
     showModalBottomSheet(
@@ -38,11 +57,12 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.home_rounded,
-                  size: 30,
-                )),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.home_rounded,
+                size: 30,
+              ),
+            ),
             IconButton(
               onPressed: () {},
               icon: const Icon(
@@ -84,6 +104,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Text(
                           'NDRF Team REX78',
+                          // email,
                           style: GoogleFonts.plusJakartaSans().copyWith(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
