@@ -3,6 +3,7 @@
 import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/user_account_details.dart';
+import 'package:agencies_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,9 +28,15 @@ class _TabsBottomState extends State<TabsBottom> {
   void _logoutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
-    Navigator.of(context).pushReplacement(
+    while (Navigator.canPop(context)) {
+      Navigator.of(context).pop();
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => const WelcomeScreen(),
+      ),
+    );
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => const LoginScreen(),
       ),
