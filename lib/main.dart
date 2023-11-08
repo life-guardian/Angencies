@@ -10,18 +10,18 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final myToken = prefs.getString('token');
   runApp(
-    MyApp2(
+    MyApp(
       token: myToken,
       prefs: myToken,
     ),
   );
 }
 
-class MyApp2 extends StatelessWidget {
+class MyApp extends StatelessWidget {
   final token;
   final String? prefs;
 
-  const MyApp2({super.key, required this.token, required this.prefs});
+  const MyApp({super.key, required this.token, required this.prefs});
 
   Widget startScreen() {
     Widget activeScreen = const WelcomeScreen();
@@ -42,50 +42,6 @@ class MyApp2 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Angencies',
       home: startScreen(),
-    );
-  }
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({
-    super.key,
-    required this.token,
-  });
-  final token;
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late Widget activeScreen;
-  @override
-  void initState() {
-    super.initState();
-    navigateFirstScreen();
-  }
-
-  // final token;
-  void navigateFirstScreen() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (widget.token != null) {
-      activeScreen = (JwtDecoder.isExpired(widget.token))
-          ? const WelcomeScreen()
-          : TabsBottom(
-              token: widget.token,
-            );
-    } else {
-      activeScreen = const WelcomeScreen();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Angencies',
-      home: activeScreen,
     );
   }
 }
