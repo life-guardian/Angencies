@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
 import 'package:agencies_app/backend_url/config.dart';
 import 'package:agencies_app/screens/home_screen.dart';
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _navigateToHomeScreen(final myToken) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (ctx) => HomeScreen(token: myToken),
+        builder: (ctx) => TabsBottom(myToken: myToken),
       ),
     );
   }
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
 
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       _navigateToHomeScreen(myToken);
       //success
       print('login successful');

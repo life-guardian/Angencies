@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:agencies_app/screens/home_screen.dart';
+import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_fade_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterSuccessfullScreen extends StatefulWidget {
   const RegisterSuccessfullScreen({super.key});
@@ -24,10 +28,10 @@ class _RegisterSuccessfullScreenState extends State<RegisterSuccessfullScreen> {
     _timer = Timer(
       const Duration(seconds: 3),
       () {
-        // Push the navigator to the next screen.
+        // Push the navigator to the login screen.
         Navigator.of(context).pushReplacement(
           CustomFadeTransition(
-            child: const HomeScreen(),
+            child: const LoginScreen(),
             durationMiliseconds: 1500,
           ),
         );

@@ -41,19 +41,19 @@ Future customLogoutDialog(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              style: TextButton.styleFrom(
-                foregroundColor: actionButton1Color,
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.mulish(color: actionButton1Color),
               ),
-              child: const Text('Cancel'),
             ),
           ),
           Center(
             child: TextButton(
               onPressed: onTap,
-              style: TextButton.styleFrom(
-                foregroundColor: actionButton2Color,
+              child: Text(
+                actionText2,
+                style: GoogleFonts.mulish(color: actionButton2Color),
               ),
-              child: Text(actionText2),
             ),
           ),
         ],

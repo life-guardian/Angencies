@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       activeScreen = ((JwtDecoder.isExpired(token))
           ? const WelcomeScreen()
           : TabsBottom(
-              token: token,
+              myToken: token,
             ));
     }
     return activeScreen;

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabsBottom extends StatefulWidget {
-  const TabsBottom({super.key, this.token});
-  final token;
+  const TabsBottom({super.key, this.myToken});
+  final myToken;
 
   @override
   State<TabsBottom> createState() => _TabsBottomState();
@@ -28,27 +28,27 @@ class _TabsBottomState extends State<TabsBottom> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
     Navigator.of(context).pop();
+    Navigator.of(context).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => const LoginScreen(),
       ),
     );
-    // Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget _activePage = HomeScreen(token: widget.token);
+    Widget activePage = HomeScreen(token: widget.myToken);
 
     if (_currentIndx == 1) {
-      _activePage = UserAccountDetails(
+      activePage = UserAccountDetails(
         logoutUser: _logoutUser,
       );
     }
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       resizeToAvoidBottomInset: false,
-      body: _activePage,
+      body: SafeArea(child: activePage),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: const Color.fromARGB(175, 158, 158, 158),
         currentIndex: _currentIndx,
