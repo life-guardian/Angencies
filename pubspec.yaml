@@ -41,6 +41,7 @@ dependencies:
   jwt_decoder:
   google_maps_flutter: ^2.5.0
   quickalert: ^1.0.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

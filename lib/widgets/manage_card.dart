@@ -20,7 +20,8 @@ class ManageCard extends StatelessWidget {
       child: InkWell(
         onTap: showModal,
         child: Container(
-          height: 100,
+          // height: 100,
+          // width: 200,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -37,31 +38,33 @@ class ManageCard extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          text1,
-                          style: GoogleFonts.inter().copyWith(
-                            fontSize: 12,
-                            color: const Color.fromARGB(255, 185, 182, 182),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            text1,
+                            style: GoogleFonts.inter().copyWith(
+                              fontSize: 12,
+                              color: const Color.fromARGB(255, 185, 182, 182),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 11,
-                        ),
-                        Text(
-                          text2,
-                          style: GoogleFonts.inter().copyWith(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    const Icon(Icons.arrow_forward_ios_rounded)
-                  ],
+                          const SizedBox(
+                            height: 11,
+                          ),
+                          Text(
+                            text2,
+                            style: GoogleFonts.inter().copyWith(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      const Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
                 ),
                 // the color line if possible see in figma
               ],

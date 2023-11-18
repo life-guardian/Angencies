@@ -1,11 +1,27 @@
 import 'package:agencies_app/custom_elevated_buttons/manage_elevated_button.dart';
+import 'package:agencies_app/custom_functions/datepicker_function.dart';
 import 'package:agencies_app/modal_bottom_sheets/textfield_modal.dart';
 import 'package:agencies_app/small_widgets/custom_text_widget.dart';
+import 'package:agencies_app/small_widgets/text_in_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class OrganizeEvent extends StatelessWidget {
+class OrganizeEvent extends StatefulWidget {
   const OrganizeEvent({super.key});
+
+  @override
+  State<OrganizeEvent> createState() => _OrganizeEventState();
+}
+
+class _OrganizeEventState extends State<OrganizeEvent> {
+  final formatter = DateFormat.yMd();
+  DateTime? _selectedDate;
+
+  void _presentDatePicker() async {
+    _selectedDate = await customDatePicker(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +117,19 @@ class OrganizeEvent extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.calendar_month_outlined),
+                  TextInTextField(
+                    text: (_selectedDate == null)
+                        ? 'Pick Date'
+                        : formatter.format(_selectedDate!),
+                  ),
                   const SizedBox(
                     width: 11,
                   ),
-                  Flexible(
-                    child: Text(
-                      'Today',
-                      style: GoogleFonts.mulish(fontSize: 16),
-                    ),
+                  GestureDetector(
+                    onTap: _presentDatePicker,
+                    child: const Icon(Icons.calendar_month_outlined),
                   ),
                 ],
               ),

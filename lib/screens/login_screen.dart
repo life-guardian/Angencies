@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
-import 'package:agencies_app/backend_url/config.dart';
+import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';

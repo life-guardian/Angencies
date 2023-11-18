@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'package:agencies_app/backend_url/config.dart';
+import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_show_dialog.dart';

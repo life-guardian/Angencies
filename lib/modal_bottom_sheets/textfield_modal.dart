@@ -4,15 +4,18 @@ class TextfieldModal extends StatelessWidget {
   const TextfieldModal({
     super.key,
     required this.hintText,
+    this.controller,
     this.keyboardType = TextInputType.name,
   });
 
   final String hintText;
   final TextInputType keyboardType;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       maxLines: null,
       keyboardType: keyboardType,
       decoration: InputDecoration(
