@@ -9,25 +9,26 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final myToken = prefs.getString('token');
+
   runApp(
     MyApp(
       token: myToken,
-      prefs: myToken,
+      // prefs: myToken,
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
   final token;
-  final String? prefs;
+  // final String? prefs;
 
-  const MyApp({super.key, required this.token, required this.prefs});
+  const MyApp({super.key, required this.token});
 
   Widget startScreen() {
     Widget activeScreen = const WelcomeScreen();
-
-    if (prefs != null) {
-      activeScreen = ((JwtDecoder.isExpired(token))
+    // (JwtDecoder.isExpired(token))
+    if (token != null) {
+      activeScreen = (token == ''
           ? const WelcomeScreen()
           : TabsBottom(
               myToken: token,

@@ -103,7 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
       // Navigator.of(context).pop();
       _navigateToHomeScreen(myToken);
       //success
-      print('login successful');
     } else if (response.statusCode == 404) {
       // wrong username
 

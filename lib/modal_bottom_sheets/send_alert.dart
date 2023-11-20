@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
 
@@ -6,16 +6,21 @@ import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_elevated_buttons/manage_elevated_button.dart';
 import 'package:agencies_app/custom_functions/datepicker_function.dart';
 import 'package:agencies_app/google_maps/google_map.dart';
+import 'package:agencies_app/google_maps/open_street_map.dart';
 import 'package:agencies_app/modal_bottom_sheets/textfield_modal.dart';
+import 'package:agencies_app/small_widgets/custom_google_maps_dialog.dart';
+import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_text_widget.dart';
 import 'package:agencies_app/small_widgets/text_in_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
 class SendAlert extends StatefulWidget {
-  const SendAlert({super.key});
+  const SendAlert({super.key, required this.token});
+  final token;
 
   @override
   State<SendAlert> createState() => _SendAlertState();
@@ -23,10 +28,12 @@ class SendAlert extends StatefulWidget {
 
 class _SendAlertState extends State<SendAlert> {
   String dropDownValue = 'Select Severty';
-  String pickedDate = 'Today';
   DateTime? _selectedDate;
   final formatter = DateFormat.yMd();
   TextEditingController alertNameController = TextEditingController();
+  double? lat;
+  double? lng;
+  String? address;
 
   @override
   void dispose() {
@@ -39,15 +46,20 @@ class _SendAlertState extends State<SendAlert> {
     setState(() {});
   }
 
-  void showGoogleMapsScreen() {
-    // customGoogleMapsDialog(
-    //     context: context, titleText: 'Select Location to send alert');
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (ctx) => const GoogleMaps(),
-    ));
+  void openMaps() async {
+    PickedData pickedLocationData = await customGoogleMapsDialog(
+        context: context, titleText: 'Select Location to send alert');
+    lat = pickedLocationData.latLong.latitude;
+    lng = pickedLocationData.latLong.longitude;
+    setState(() {
+      address = pickedLocationData.address.toString().trim();
+    });
+    // Navigator.of(context).push(MaterialPageRoute(
+    //   builder: (ctx) => const OpenStreetMap(),
+    // ));
   }
 
-  void _sendAlert() async {
+  Future<void> _sendAlert() async {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -58,23 +70,53 @@ class _SendAlertState extends State<SendAlert> {
       ),
     );
 
+    final jwtToken = widget.token;
+
     var reqBody = {
-      "locationCoordinates": ["74.034238", "17.390501"],
-      "alertName": alertNameController.text,
-      "alertSeverity": dropDownValue,
-      "alertForDate": pickedDate,
+      "locationCoordinates": [lng, lat],
+      "alertName": alertNameController.text.toString(),
+      "alertSeverity": dropDownValue.toString().toLowerCase(),
+      "alertForDate": _selectedDate.toString(),
     };
 
-    var response = await http.post(
-      Uri.parse(sendAlertUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(reqBody),
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(sendAlertUrl),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $jwtToken',
+        },
+        body: jsonEncode(reqBody),
+      );
 
-    var jsonResponse = jsonDecode(response.body);
-    print(response.statusCode);
+      var jsonResponse = jsonDecode(response.body);
 
-    Navigator.of(context).pop();
+      if (response.statusCode == 200) {
+        print('Alert Send succefully yess');
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Alert send successfully!'),
+          ),
+        );
+      } else {
+        Navigator.of(context).pop();
+        customShowDialog(
+            context: context,
+            titleText: 'Something went wrong',
+            contentText:
+                'Please check that you have proper inputed all the fields!');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      customShowDialog(
+          context: context,
+          titleText: 'Error',
+          contentText:
+              'Something went wrong! Please check your internet connection');
+      print("Exception: $e");
+    }
   }
 
   @override
@@ -100,8 +142,8 @@ class _SendAlertState extends State<SendAlert> {
           const SizedBox(
             height: 5,
           ),
-          InkWell(
-            onTap: showGoogleMapsScreen,
+          GestureDetector(
+            onTap: openMaps,
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -121,7 +163,8 @@ class _SendAlertState extends State<SendAlert> {
                     ),
                     Flexible(
                       child: Text(
-                        'Area will be in radius of 2km from the locating point',
+                        address ??
+                            'Area will be in radius of 2km from the locating point',
                         style: GoogleFonts.mulish(fontSize: 16),
                       ),
                     ),

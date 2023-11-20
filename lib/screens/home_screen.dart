@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:convert';
+
+import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/modal_bottom_sheets/history.dart';
 import 'package:agencies_app/modal_bottom_sheets/organize_event.dart';
 import 'package:agencies_app/modal_bottom_sheets/rescue_operation.dart';
@@ -8,6 +11,7 @@ import 'package:agencies_app/widgets/event_card.dart';
 import 'package:agencies_app/widgets/manage_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,14 +23,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late String email;
+  late String userId;
+  late String events;
+  late String rescueOps;
+
+  Widget activeScreen = const Center(
+    child: CircularProgressIndicator(
+      color: Colors.grey,
+    ),
+  );
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Map<String, dynamic> jwtDecoded = JwtDecoder.decode(widget.token);
+    Map jwtDecoded = JwtDecoder.decode(widget.token);
+    // userId = jwtDecoded['id'];
+    getAgencyDataFromServer();
     // code to decode data from server
+  }
+
+  Future<void> getAgencyDataFromServer() async {
+    final jwtToken = widget.token;
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $jwtToken'
+    };
+
+    var response = await http.get(
+      Uri.parse(getAgencyHomeScreenUrl),
+      headers: headers,
+    );
+
+    var jsonResponse = jsonDecode(response.body);
+    setState(() {
+      events = jsonResponse['eventsCount'].toString();
+      rescueOps = jsonResponse['rescueOperationsCount'].toString();
+      activeScreen = homeScreenWidget();
+    });
   }
 
   void _openModal(BuildContext context, Widget widget) {
@@ -45,10 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onSelectedPage(int index) {}
-
-  @override
-  Widget build(BuildContext context) {
+  Widget homeScreenWidget() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Expanded(
@@ -128,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             height: 5,
                           ),
-                          Text('120',
+                          Text(events,
                               style: GoogleFonts.inter().copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -168,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 5,
                           ),
                           Text(
-                            '70',
+                            rescueOps,
                             style: GoogleFonts.inter().copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -204,7 +235,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     showModal: () {
                       _openModal(
                         context,
-                        const SendAlert(),
+                        SendAlert(
+                          token: widget.token,
+                        ),
                       );
                     },
                   ),
@@ -236,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     showModal: () {
                       _openModal(
                         context,
-                        const OrganizeEvent(),
+                        OrganizeEvent(token: widget.token),
                       );
                     },
                   ),
@@ -298,5 +331,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return activeScreen;
   }
 }
