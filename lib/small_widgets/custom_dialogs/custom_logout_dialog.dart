@@ -18,7 +18,7 @@ Future customLogoutDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(
           titleText,
           style: GoogleFonts.lato(
@@ -31,7 +31,7 @@ Future customLogoutDialog(
             text: contentText,
             style: GoogleFonts.lato(
               fontSize: 20.0,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
         ),

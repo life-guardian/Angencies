@@ -7,12 +7,16 @@ class ManageCard extends StatelessWidget {
     required this.text1,
     required this.text2,
     required this.showModal,
+    required this.lineColor1,
+    required this.lineColor2,
   });
 
   final void Function() showModal;
 
   final String text1;
   final String text2;
+  final Color lineColor1;
+  final Color lineColor2;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class ManageCard extends StatelessWidget {
           // height: 100,
           // width: 200,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
@@ -67,6 +71,21 @@ class ManageCard extends StatelessWidget {
                   ),
                 ),
                 // the color line if possible see in figma
+                Container(
+                  width: double.infinity,
+                  height: 10,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: const [0.5, 0.5],
+                        colors: [
+                          lineColor1,
+                          lineColor2,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(15)),
+                )
               ],
             ),
           ),

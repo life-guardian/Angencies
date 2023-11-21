@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:agencies_app/small_widgets/custom_logout_dialog.dart';
+import 'package:agencies_app/small_widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

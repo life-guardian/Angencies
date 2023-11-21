@@ -26,7 +26,10 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -36,19 +39,19 @@ class WelcomeScreen extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 40),
               width: double.infinity,
-              child: Image.asset('assets/images/disasterImage1.jpg'),
+              child: Image.asset('assets/images/disasterImage1.png'),
             ),
             Image.asset('assets/images/disasterImage2.jpg'),
             const SizedBox(
               height: 12,
             ),
-            const Text(
+            Text(
               'Life Guardian',
               style: TextStyle(
-                color: Color(0xff1E232C),
+                color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                shadows: [
+                shadows: const [
                   Shadow(
                     offset: Offset(0.0, 7.0),
                     blurRadius: 15.0,
@@ -57,13 +60,13 @@ class WelcomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const Text(
+            Text(
               'For Agencies',
               style: TextStyle(
-                color: Color(0xff1E232C),
+                color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.bold,
                 fontSize: 26,
-                shadows: [
+                shadows: const [
                   Shadow(
                     offset: Offset(0.0, 7.0),
                     blurRadius: 15.0,
@@ -103,9 +106,13 @@ class WelcomeScreen extends StatelessWidget {
                   _register(context);
                 },
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xff1E232C),
-                  side: const BorderSide(
-                    color: Color(0xff1E232C),
+                  foregroundColor: (themeData.brightness == Brightness.light)
+                      ? const Color(0xff1E232C)
+                      : Colors.white,
+                  side: BorderSide(
+                    color: (themeData.brightness == Brightness.light)
+                        ? const Color(0xff1E232C)
+                        : Colors.white,
                   ),
                 ),
                 child: const Text("Register"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextfieldModal extends StatelessWidget {
   const TextfieldModal({
@@ -35,6 +36,9 @@ class TextfieldModal extends StatelessWidget {
           ),
         ),
         hintText: hintText,
+        hintStyle: GoogleFonts.mulish(
+          fontSize: 16,
+        ),
       ),
     );
   }

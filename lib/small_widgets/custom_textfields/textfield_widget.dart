@@ -36,6 +36,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return TextFormField(
       obscureText: selectedObscure,
       controller: widget.controllerText,
@@ -57,7 +58,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               )
             : null,
         filled: true,
-        fillColor: const Color.fromARGB(162, 232, 236, 244),
+        fillColor: (themeData.brightness == Brightness.light)
+            ? const Color.fromARGB(162, 232, 236, 244)
+            : Theme.of(context).colorScheme.primary,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -74,6 +77,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           ),
         ),
         labelText: widget.labelText,
+        labelStyle:
+            TextStyle(color: Theme.of(context).colorScheme.onBackground),
         hintText: widget.textHint,
       ),
     );

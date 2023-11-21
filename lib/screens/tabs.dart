@@ -53,7 +53,8 @@ class _TabsBottomState extends State<TabsBottom> {
       );
     }
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      // backgroundColor: Colors.grey.shade200,
+      backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
       body: SafeArea(child: activePage),
       bottomNavigationBar: BottomNavigationBar(

@@ -4,17 +4,17 @@ import 'dart:convert';
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
-import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
+import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:http/http.dart' as http;
-import 'package:agencies_app/widgets/textfield_widget.dart';
+import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     TextEditingController agencyName = TextEditingController();
     TextEditingController agencyEmail = TextEditingController();
@@ -25,11 +25,13 @@ class RegisterScreen extends StatelessWidget {
     TextEditingController agencyConfirmPassword = TextEditingController();
     bool registeredButtonPressed = false;
 
-    void _popScreen() {
+    ThemeData themeData = Theme.of(context);
+
+    void popScreen() {
       Navigator.of(context).pop();
     }
 
-    void _goToLoginPage() {
+    void goToLoginPage() {
       Navigator.of(context).pushReplacement(
         CustomSlideTransition(
           direction: AxisDirection.up,
@@ -38,7 +40,7 @@ class RegisterScreen extends StatelessWidget {
       );
     }
 
-    String? _validateEmail(value, String? label) {
+    String? validateEmail(value, String? label) {
       if (value.isEmpty) {
         return 'Please enter an $label';
       }
@@ -49,7 +51,7 @@ class RegisterScreen extends StatelessWidget {
       return null;
     }
 
-    String? _validatePhoneNo(value, String? label) {
+    String? validatePhoneNo(value, String? label) {
       var no = int.tryParse(value);
       if (no == null) {
         return 'Please enter a valid $label';
@@ -63,14 +65,14 @@ class RegisterScreen extends StatelessWidget {
       return null;
     }
 
-    String? _validateTextField(value, String? label) {
+    String? validateTextField(value, String? label) {
       if (value.isEmpty) {
         return 'Please enter a $label';
       }
       return null;
     }
 
-    String? _validatePassword(value, String? label) {
+    String? validatePassword(value, String? label) {
       if (value.isEmpty) {
         return 'Please enter a $label';
       }
@@ -84,7 +86,7 @@ class RegisterScreen extends StatelessWidget {
       return null;
     }
 
-    String? _validateConfirmPassword(value, String? label) {
+    String? validateConfirmPassword(value, String? label) {
       if (value.isEmpty) {
         return 'Please enter a $label';
       }
@@ -96,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
       return null;
     }
 
-    String? _validateName(value, String? label) {
+    String? validateName(value, String? label) {
       var no = int.tryParse(value);
       if (no != null) {
         return 'Please enter a valid $label';
@@ -107,7 +109,7 @@ class RegisterScreen extends StatelessWidget {
       return null;
     }
 
-    void _registerUser() async {
+    void registerUser() async {
       //check validation of texts
       showDialog(
         barrierDismissible: false,
@@ -156,17 +158,18 @@ class RegisterScreen extends StatelessWidget {
       }
     }
 
-    void _submitForm() {
-      if (_formkey.currentState!.validate()) {
+    void submitForm() {
+      if (formKey.currentState!.validate()) {
         if (!registeredButtonPressed) {
           registeredButtonPressed = true;
-          _registerUser();
+          registerUser();
         }
       }
     }
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -176,12 +179,16 @@ class RegisterScreen extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
-              foregroundColor: const Color.fromARGB(185, 30, 35, 44),
-              side: const BorderSide(
-                color: Color.fromARGB(32, 30, 35, 44),
+              foregroundColor: (themeData.brightness == Brightness.light)
+                  ? const Color.fromARGB(185, 30, 35, 44)
+                  : const Color(0xffe1dcd3),
+              side: BorderSide(
+                color: (themeData.brightness == Brightness.light)
+                    ? const Color.fromARGB(32, 30, 35, 44)
+                    : const Color(0xffE1DCD3),
               ),
             ),
-            onPressed: _popScreen,
+            onPressed: popScreen,
             child: const Icon(
               Icons.arrow_back_ios,
               size: 20,
@@ -194,10 +201,10 @@ class RegisterScreen extends StatelessWidget {
         child: SizedBox(
           child: Column(
             children: [
-              const Text(
+              Text(
                 'Hello! Register agency to get started',
                 style: TextStyle(
-                  color: Color(0xff1E232C),
+                  color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
                 ),
@@ -208,14 +215,14 @@ class RegisterScreen extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Form(
-                    key: _formkey,
+                    key: formKey,
                     child: Column(
                       children: [
                         TextFieldWidget(
                           labelText: 'Agency Name',
                           controllerText: agencyName,
                           checkValidation: (value) =>
-                              _validateName(value, 'Name'),
+                              validateName(value, 'Name'),
                         ),
                         const SizedBox(
                           height: 21,
@@ -224,7 +231,7 @@ class RegisterScreen extends StatelessWidget {
                           labelText: 'Agency Email',
                           controllerText: agencyEmail,
                           checkValidation: (value) =>
-                              _validateEmail(value, 'Email'),
+                              validateEmail(value, 'Email'),
                         ),
                         const SizedBox(
                           height: 21,
@@ -233,7 +240,7 @@ class RegisterScreen extends StatelessWidget {
                           labelText: 'Agency Ph No',
                           controllerText: agencyPhone,
                           checkValidation: (value) =>
-                              _validatePhoneNo(value, 'Phone Number'),
+                              validatePhoneNo(value, 'Phone Number'),
                         ),
                         const SizedBox(
                           height: 21,
@@ -242,7 +249,7 @@ class RegisterScreen extends StatelessWidget {
                           labelText: 'Agency Address',
                           controllerText: agencyAddress,
                           checkValidation: (value) =>
-                              _validateTextField(value, 'Address'),
+                              validateTextField(value, 'Address'),
                         ),
                         const SizedBox(
                           height: 21,
@@ -251,7 +258,7 @@ class RegisterScreen extends StatelessWidget {
                           labelText: 'Representative Name',
                           controllerText: representativeName,
                           checkValidation: (value) =>
-                              _validateName(value, 'Representative name'),
+                              validateName(value, 'Representative name'),
                         ),
                         const SizedBox(
                           height: 21,
@@ -260,7 +267,7 @@ class RegisterScreen extends StatelessWidget {
                           labelText: 'Password',
                           controllerText: agencyPassword,
                           checkValidation: (value) =>
-                              _validatePassword(value, 'Password'),
+                              validatePassword(value, 'Password'),
                           hideText: true,
                         ),
                         const SizedBox(
@@ -269,7 +276,7 @@ class RegisterScreen extends StatelessWidget {
                         TextFieldWidget(
                           labelText: 'Confirm Password',
                           controllerText: agencyConfirmPassword,
-                          checkValidation: (value) => _validateConfirmPassword(
+                          checkValidation: (value) => validateConfirmPassword(
                               value, 'Confirm Password'),
                           hideText: true,
                         ),
@@ -285,7 +292,7 @@ class RegisterScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: _submitForm,
+                  onPressed: submitForm,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: const Color(0xff1E232C),
@@ -306,7 +313,7 @@ class RegisterScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16),
                     ),
                     TextButton(
-                      onPressed: _goToLoginPage,
+                      onPressed: goToLoginPage,
                       child: const Text(
                         'Login Now',
                         style: TextStyle(

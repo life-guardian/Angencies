@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_fade_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterSuccessfullScreen extends StatefulWidget {
   const RegisterSuccessfullScreen({super.key});

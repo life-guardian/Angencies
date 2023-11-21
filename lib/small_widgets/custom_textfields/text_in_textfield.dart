@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextInTextField extends StatelessWidget {
   const TextInTextField({
@@ -17,8 +18,8 @@ class TextInTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
-        color: color,
+      style: GoogleFonts.mulish(
+        color: Theme.of(context).colorScheme.onBackground,
         fontSize: fontSize,
         fontWeight: fontWeight,
       ),

@@ -2,12 +2,11 @@
 
 import 'dart:convert';
 import 'package:agencies_app/screens/tabs.dart';
-import 'package:agencies_app/small_widgets/custom_show_dialog.dart';
+import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
-import 'package:agencies_app/widgets/textfield_widget.dart';
+import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSharedPrefs();
   }
@@ -148,8 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -159,9 +159,13 @@ class _LoginScreenState extends State<LoginScreen> {
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
-              foregroundColor: const Color.fromARGB(185, 30, 35, 44),
-              side: const BorderSide(
-                color: Color.fromARGB(32, 30, 35, 44),
+              foregroundColor: (themeData.brightness == Brightness.light)
+                  ? const Color.fromARGB(185, 30, 35, 44)
+                  : const Color(0xffe1dcd3),
+              side: BorderSide(
+                color: (themeData.brightness == Brightness.light)
+                    ? const Color.fromARGB(32, 30, 35, 44)
+                    : const Color(0xffE1DCD3),
               ),
             ),
             onPressed: () {
@@ -184,13 +188,13 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 12,
               ),
-              const Text(
+              Text(
                 'Life Guardian',
                 style: TextStyle(
-                  color: Color(0xff1E232C),
+                  color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
-                  shadows: [
+                  shadows: const [
                     Shadow(
                       offset: Offset(0.0, 7.0),
                       blurRadius: 15.0,
@@ -199,13 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              const Text(
+              Text(
                 'For Agencies',
                 style: TextStyle(
-                  color: Color(0xff1E232C),
+                  color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.w700,
                   fontSize: 26,
-                  shadows: [
+                  shadows: const [
                     Shadow(
                       offset: Offset(0.0, 7.0),
                       blurRadius: 15.0,
@@ -222,10 +226,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Welcome back! Glad to see you, team!',
                         style: TextStyle(
-                          color: Color(0xff1E232C),
+                          color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
                         ),

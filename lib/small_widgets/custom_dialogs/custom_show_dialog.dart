@@ -14,12 +14,13 @@ Future customShowDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(
           titleText,
           style: GoogleFonts.lato(
             fontWeight: FontWeight.bold,
             fontSize: 22,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
         content: RichText(
@@ -27,7 +28,7 @@ Future customShowDialog(
             text: contentText,
             style: GoogleFonts.lato(
               fontSize: 20.0,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
         ),

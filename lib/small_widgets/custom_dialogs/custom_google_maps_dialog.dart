@@ -1,7 +1,5 @@
-import 'package:agencies_app/google_maps/google_map.dart';
-import 'package:agencies_app/google_maps/open_street_map.dart';
+import 'package:agencies_app/large_widgets/map_widgets/open_street_map.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future customGoogleMapsDialog({
   required BuildContext context,
@@ -9,7 +7,7 @@ Future customGoogleMapsDialog({
 }) =>
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
           borderRadius:

@@ -24,7 +24,8 @@ class ManageElevatedButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50))),
         child: Text(
           buttonText,
-          style: GoogleFonts.mulish(fontWeight: FontWeight.bold, fontSize: 16),
+          style: GoogleFonts.mulish(
+              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
         ),
       ),
     );
