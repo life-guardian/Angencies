@@ -17,7 +17,7 @@ class TextfieldModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      maxLines: null,
+      cursorColor: Theme.of(context).colorScheme.onBackground,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -38,6 +38,7 @@ class TextfieldModal extends StatelessWidget {
         hintText: hintText,
         hintStyle: GoogleFonts.mulish(
           fontSize: 16,
+          color: Colors.grey.shade600,
         ),
       ),
     );

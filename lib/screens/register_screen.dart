@@ -9,163 +9,195 @@ import 'package:agencies_app/transitions_animations/custom_page_transition.dart'
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
 
-    TextEditingController agencyName = TextEditingController();
-    TextEditingController agencyEmail = TextEditingController();
-    TextEditingController agencyPhone = TextEditingController();
-    TextEditingController agencyAddress = TextEditingController();
-    TextEditingController representativeName = TextEditingController();
-    TextEditingController agencyPassword = TextEditingController();
-    TextEditingController agencyConfirmPassword = TextEditingController();
-    bool registeredButtonPressed = false;
+class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late SharedPreferences prefs;
 
-    ThemeData themeData = Theme.of(context);
+  TextEditingController agencyName = TextEditingController();
+  TextEditingController agencyEmail = TextEditingController();
+  TextEditingController agencyPhone = TextEditingController();
+  TextEditingController agencyAddress = TextEditingController();
+  TextEditingController representativeName = TextEditingController();
+  TextEditingController agencyPassword = TextEditingController();
+  TextEditingController agencyConfirmPassword = TextEditingController();
+  bool registeredButtonPressed = false;
+  bool buttonEnabled = true;
+  Widget activeButtonWidget = const Text('Register');
 
-    void popScreen() {
-      Navigator.of(context).pop();
+  @override
+  void initState() {
+    super.initState();
+    initSharedPrefs();
+  }
+
+  void popScreen() {
+    Navigator.of(context).pop();
+  }
+
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  void goToLoginPage() {
+    Navigator.of(context).pushReplacement(
+      CustomSlideTransition(
+        direction: AxisDirection.up,
+        child: const LoginScreen(),
+      ),
+    );
+  }
+
+  String? validateEmail(value, String? label) {
+    if (value.isEmpty) {
+      return 'Please enter an $label';
+    }
+    RegExp emailRegx = RegExp(r'^.+@[a-zA-Z]+\.[a-zA-Z]+$');
+    if (!emailRegx.hasMatch(value)) {
+      return 'Please enter a valid $label';
+    }
+    return null;
+  }
+
+  String? validatePhoneNo(value, String? label) {
+    var no = int.tryParse(value);
+    if (no == null) {
+      return 'Please enter a valid $label';
+    }
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    if (value.length != 10) {
+      return 'Please enter a 10-digit $label';
+    }
+    return null;
+  }
+
+  String? validateTextField(value, String? label) {
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    return null;
+  }
+
+  String? validatePassword(value, String? label) {
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    if (value.length < 8 || value.length > 16) {
+      return 'Please enter $label between 8 to 16 digits';
+    }
+    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$').hasMatch(value)) {
+      return 'Password must contains at least one upper case, lower case, number & special symbol';
     }
 
-    void goToLoginPage() {
+    return null;
+  }
+
+  String? validateConfirmPassword(value, String? label) {
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    String agPass = agencyPassword.text.toString();
+    if (agPass != value.toString()) {
+      return 'Password and confirm password did\'t match';
+    }
+
+    return null;
+  }
+
+  String? validateName(value, String? label) {
+    var no = int.tryParse(value);
+    if (no != null) {
+      return 'Please enter a valid $label';
+    }
+    if (value.isEmpty) {
+      return 'Please enter a $label';
+    }
+    return null;
+  }
+
+  void registerUser() async {
+    //check validation of texts
+
+    setState(() {
+      buttonEnabled = false;
+      activeButtonWidget = const Center(
+        child: SizedBox(
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    });
+
+    var regBody = {
+      "agencyName": agencyName.text.toString(),
+      "agencyPhNo": agencyPhone.text.toString(),
+      "agencyEmail": agencyEmail.text.toString(),
+      "password": agencyPassword.text.toString(),
+      "address": agencyAddress.text.toString(),
+      "representativeName": representativeName.text.toString(),
+    };
+
+    var response = await http.post(
+      Uri.parse(registerurl),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(regBody),
+    );
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      var myToken = jsonResponse['token'];
+      prefs.setString('token', myToken);
+
       Navigator.of(context).pushReplacement(
         CustomSlideTransition(
-          direction: AxisDirection.up,
-          child: const LoginScreen(),
+          direction: AxisDirection.left,
+          child: RegisterSuccessfullScreen(token: myToken),
         ),
       );
-    }
+    } else if (response.statusCode == 400) {
+      setState(() {
+        activeButtonWidget = const Text('Register');
+      });
 
-    String? validateEmail(value, String? label) {
-      if (value.isEmpty) {
-        return 'Please enter an $label';
-      }
-      RegExp emailRegx = RegExp(r'^.+@[a-zA-Z]+\.[a-zA-Z]+$');
-      if (!emailRegx.hasMatch(value)) {
-        return 'Please enter a valid $label';
-      }
-      return null;
-    }
-
-    String? validatePhoneNo(value, String? label) {
-      var no = int.tryParse(value);
-      if (no == null) {
-        return 'Please enter a valid $label';
-      }
-      if (value.isEmpty) {
-        return 'Please enter a $label';
-      }
-      if (value.length != 10) {
-        return 'Please enter a 10-digit $label';
-      }
-      return null;
-    }
-
-    String? validateTextField(value, String? label) {
-      if (value.isEmpty) {
-        return 'Please enter a $label';
-      }
-      return null;
-    }
-
-    String? validatePassword(value, String? label) {
-      if (value.isEmpty) {
-        return 'Please enter a $label';
-      }
-      if (value.length < 8 || value.length > 16) {
-        return 'Please enter $label between 8 to 16 digits';
-      }
-      if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$').hasMatch(value)) {
-        return 'Password must contains at least one upper case, lower case, number & special symbol';
-      }
-
-      return null;
-    }
-
-    String? validateConfirmPassword(value, String? label) {
-      if (value.isEmpty) {
-        return 'Please enter a $label';
-      }
-      String agPass = agencyPassword.text.toString();
-      if (agPass != value.toString()) {
-        return 'Password and confirm password did\'t match';
-      }
-
-      return null;
-    }
-
-    String? validateName(value, String? label) {
-      var no = int.tryParse(value);
-      if (no != null) {
-        return 'Please enter a valid $label';
-      }
-      if (value.isEmpty) {
-        return 'Please enter a $label';
-      }
-      return null;
-    }
-
-    void registerUser() async {
-      //check validation of texts
-      showDialog(
-        barrierDismissible: false,
+      registeredButtonPressed = await customShowDialog(
         context: context,
-        builder: (ctx) => const Center(
-          child: CircularProgressIndicator(
-            color: Colors.grey,
-          ),
-        ),
+        titleText: 'Already registered',
+        contentText:
+            'Agency already registered with the email or phone number.',
       );
+      registeredButtonPressed = false;
+    } else {
+      setState(() {
+        activeButtonWidget = const Text('Register');
+      });
+      // something server problem
+    }
+    buttonEnabled = true;
+  }
 
-      var regBody = {
-        "agencyName": agencyName.text.toString(),
-        "agencyPhNo": agencyPhone.text.toString(),
-        "agencyEmail": agencyEmail.text.toString(),
-        "password": agencyPassword.text.toString(),
-        "address": agencyAddress.text.toString(),
-        "representativeName": representativeName.text.toString(),
-      };
-
-      var response = await http.post(
-        Uri.parse(registerurl),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(regBody),
-      );
-
-      if (response.statusCode == 200) {
-        Navigator.of(context).pushReplacement(
-          CustomSlideTransition(
-            direction: AxisDirection.left,
-            child: const RegisterSuccessfullScreen(),
-          ),
-        );
-      } else if (response.statusCode == 400) {
-        registeredButtonPressed = await customShowDialog(
-          context: context,
-          titleText: 'Already registered',
-          contentText:
-              'Agency already registered with the email or phone number.',
-        );
-        registeredButtonPressed = false;
-        Navigator.of(context).pop();
-      } else {
-        // something server problem
-        Navigator.of(context).pop();
+  void submitForm() {
+    if (formKey.currentState!.validate()) {
+      if (!registeredButtonPressed) {
+        registeredButtonPressed = true;
+        registerUser();
       }
     }
+  }
 
-    void submitForm() {
-      if (formKey.currentState!.validate()) {
-        if (!registeredButtonPressed) {
-          registeredButtonPressed = true;
-          registerUser();
-        }
-      }
-    }
+  @override
+  Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
@@ -210,7 +242,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 31,
+                height: 21,
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -289,10 +321,10 @@ class RegisterScreen extends StatelessWidget {
                 height: 31,
               ),
               SizedBox(
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: submitForm,
+                  onPressed: buttonEnabled ? submitForm : () {},
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: const Color(0xff1E232C),
@@ -300,7 +332,7 @@ class RegisterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Register'),
+                  child: activeButtonWidget,
                 ),
               ),
               Padding(

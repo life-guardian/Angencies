@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ManageElevatedButton extends StatelessWidget {
   const ManageElevatedButton({
     super.key,
-    required this.buttonText,
+    required this.buttonItem,
     this.color = const Color(0xff2F80ED),
     required this.onButtonClick,
+    this.enabled = true,
   });
-  final String buttonText;
+  final Widget buttonItem;
   final void Function() onButtonClick;
   final Color color;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: onButtonClick,
+        onPressed: enabled ? onButtonClick : () {},
         style: ElevatedButton.styleFrom(
             fixedSize: const Size(200, 40),
             backgroundColor: color,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50))),
-        child: Text(
-          buttonText,
-          style: GoogleFonts.mulish(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-        ),
+        child: buttonItem,
+        //  Text(
+        //   buttonText,
+        //   style: GoogleFonts.mulish(
+        //       fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+        // ),
       ),
     );
   }

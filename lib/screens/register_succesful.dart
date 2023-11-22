@@ -1,13 +1,18 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'dart:async';
-import 'package:agencies_app/screens/login_screen.dart';
+import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/transitions_animations/custom_fade_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterSuccessfullScreen extends StatefulWidget {
-  const RegisterSuccessfullScreen({super.key});
+  const RegisterSuccessfullScreen({
+    super.key,
+    required this.token,
+  });
+
+  final token;
 
   @override
   State<RegisterSuccessfullScreen> createState() =>
@@ -29,7 +34,7 @@ class _RegisterSuccessfullScreenState extends State<RegisterSuccessfullScreen> {
         // Push the navigator to the login screen.
         Navigator.of(context).pushReplacement(
           CustomFadeTransition(
-            child: const LoginScreen(),
+            child: TabsBottom(myToken: widget.token),
             durationMiliseconds: 1500,
           ),
         );

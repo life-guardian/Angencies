@@ -23,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController agencyPassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool buttonPressed = false;
+  Widget activeButtonWidget = const Text('Login');
+  bool buttonEnabled = true;
 
   late SharedPreferences prefs;
 
@@ -70,15 +72,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginUser() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (ctx) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.grey,
+    setState(() {
+      buttonEnabled = false;
+      activeButtonWidget = const Center(
+        child: SizedBox(
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(),
         ),
-      ),
-    );
+      );
+    });
 
     var reqBody = {
       "username": agencyLoginEmail.text,
@@ -103,52 +106,63 @@ class _LoginScreenState extends State<LoginScreen> {
       //success
     } else if (response.statusCode == 404) {
       // wrong username
+      setState(() {
+        activeButtonWidget = const Text('Login');
+      });
 
+      activeButtonWidget = const Text('Login');
       buttonPressed = await customShowDialog(
         context: context,
         titleText: 'Cant\' find account',
         contentText:
             'We can\'t find a account with ${agencyLoginEmail.text.toString()}. try another phone number or email address, or if you dont\' have an account, you can sign up.',
       );
-      buttonPressed = false;
-      Navigator.of(context).pop();
     } else if (response.statusCode == 403) {
       // password or username not found
+      setState(() {
+        activeButtonWidget = const Text('Login');
+      });
+
       buttonPressed = await customShowDialog(
         context: context,
         titleText: 'username or password didn\' match',
         contentText:
             'The password or username that you have entered is incorrect. please try again.',
       );
-      buttonPressed = false;
-      Navigator.of(context).pop();
     } else if (response.statusCode == 400) {
       // wrong  password
+      setState(() {
+        activeButtonWidget = const Text('Login');
+      });
+
       buttonPressed = await customShowDialog(
         context: context,
         titleText: 'Incorrect password',
         contentText:
             'The password that you have entered is incorrect. please try again.',
       );
-      buttonPressed = false;
-      Navigator.of(context).pop();
     } else {
       // something went wrong
+      setState(() {
+        activeButtonWidget = const Text('Login');
+      });
+
       buttonPressed = await customShowDialog(
         context: context,
         titleText: 'Server Error',
         contentText: 'Something went wrong! please try again later.',
       );
-      buttonPressed = false;
-      Navigator.of(context).pop();
     }
+    setState(() {
+      buttonEnabled = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         elevation: 0,
@@ -181,128 +195,119 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/disasterImage2.jpg'),
-              const SizedBox(
-                height: 12,
-              ),
-              Text(
-                'Life Guardian',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(0.0, 7.0),
-                      blurRadius: 15.0,
-                      color: Color.fromARGB(57, 0, 0, 0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Image.asset('assets/images/disasterImage2.jpg'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'Life Guardian',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      shadows: const [
+                        Shadow(
+                          offset: Offset(0.0, 7.0),
+                          blurRadius: 15.0,
+                          color: Color.fromARGB(57, 0, 0, 0),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Text(
-                'For Agencies',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 26,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(0.0, 7.0),
-                      blurRadius: 15.0,
-                      color: Color.fromARGB(57, 0, 0, 0),
+                  ),
+                  Text(
+                    'For Agencies',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 26,
+                      shadows: const [
+                        Shadow(
+                          offset: Offset(0.0, 7.0),
+                          blurRadius: 15.0,
+                          color: Color.fromARGB(57, 0, 0, 0),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 31,
-              ),
-              SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Welcome back! Glad to see you, team!',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                  ),
+                  const SizedBox(
+                    height: 31,
+                  ),
+                  Text(
+                    'Welcome back! Glad to see you, team!',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 31,
+                  ),
+                  TextFieldWidget(
+                    labelText: 'Email / Phone',
+                    controllerText: agencyLoginEmail,
+                    checkValidation: (value) =>
+                        _validateTextField(value, 'Email / Phone'),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  TextFieldWidget(
+                    labelText: 'Password',
+                    controllerText: agencyPassword,
+                    checkValidation: (value) =>
+                        _validateTextField(value, 'Password'),
+                    obsecureIcon: true,
+                    hideText: true,
+                  ),
+                  const SizedBox(
+                    height: 42,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      onPressed: buttonEnabled ? _submitButton : () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: const Color(0xff1E232C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      const SizedBox(
-                        height: 31,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Email / Phone',
-                        controllerText: agencyLoginEmail,
-                        checkValidation: (value) =>
-                            _validateTextField(value, 'Email / Phone'),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      TextFieldWidget(
-                        labelText: 'Password',
-                        controllerText: agencyPassword,
-                        checkValidation: (value) =>
-                            _validateTextField(value, 'Password'),
-                        obsecureIcon: true,
-                        hideText: true,
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      const SizedBox(
-                        height: 31,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 55,
-                        child: ElevatedButton(
-                          onPressed: _submitButton,
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: const Color(0xff1E232C),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      child: activeButtonWidget,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Don\'t have an account?',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        TextButton(
+                          onPressed: _goToRegisterPage,
+                          child: const Text(
+                            'Register Now',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16,
                             ),
                           ),
-                          child: const Text('Login'),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Don\'t have an account?',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    TextButton(
-                      onPressed: _goToRegisterPage,
-                      child: const Text(
-                        'Register Now',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

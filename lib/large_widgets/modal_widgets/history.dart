@@ -12,8 +12,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class History extends StatefulWidget {
-  const History({super.key, required this.token});
+  const History({
+    super.key,
+    required this.token,
+    required this.agencyName,
+  });
+
   final token;
+  final String agencyName;
 
   @override
   State<History> createState() => _HistoryState();
@@ -95,7 +101,7 @@ class _HistoryState extends State<History> {
         data.add(EventHistory.fromJson(jsonData));
       }
     }
-    debugPrint(data.toString());
+
     return data;
   }
 
@@ -124,7 +130,7 @@ class _HistoryState extends State<History> {
                     height: 5,
                   ),
                   Text(
-                    'NDRF Team REX78',
+                    'NDRF Team ${widget.agencyName}',
                     // email,
                     style: GoogleFonts.plusJakartaSans().copyWith(
                       fontSize: 18,
@@ -154,52 +160,61 @@ class _HistoryState extends State<History> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Text(
-                          dropDownValue,
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      Stack(
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              dropDownValue,
+                              style: GoogleFonts.plusJakartaSans().copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          underline: null,
-                          iconSize: 35,
-                          items: values
-                              .map(
-                                (value) => DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                underline: null,
+                                iconSize: 35,
+                                // value: dropDownValue,
+                                items: values
+                                    .map(
+                                      (value) => DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropDownValue = newValue!;
+                                    if (dropDownValue == 'Alert History') {
+                                      activeWidget = BuildAlertHistoryListView(
+                                          list: alertHistoryData);
+                                    } else if (dropDownValue ==
+                                        'Event History') {
+                                      // eventhistory widget;
+                                      activeWidget = BuildEventHistoryListView(
+                                          list: eventHistoryData);
+                                    } else {
+                                      // rescue history widget
+                                      activeWidget = const Center(
+                                          child: Text('Need to work on this'));
+                                    }
+                                  });
+                                },
+                                borderRadius: BorderRadius.circular(10),
+                                icon: const Icon(
+                                  Icons.sort_rounded,
+                                  size: 25,
                                 ),
-                              )
-                              .toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropDownValue = newValue!;
-                              if (dropDownValue == 'Alert History') {
-                                activeWidget = BuildAlertHistoryListView(
-                                    list: alertHistoryData);
-                              } else if (dropDownValue == 'Event History') {
-                                // eventhistory widget;
-                                activeWidget = BuildEventHistoryListView(
-                                    list: eventHistoryData);
-                              } else {
-                                // rescue history widget
-                                activeWidget = const Center(
-                                    child: Text('Need to work on this'));
-                              }
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(10),
-                          icon: const Icon(
-                            Icons.sort_rounded,
-                            size: 25,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),

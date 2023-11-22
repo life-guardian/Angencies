@@ -32,6 +32,12 @@ class _SendAlertState extends State<SendAlert> {
   double? lat;
   double? lng;
   String? address;
+  bool buttonEnabled = true;
+  Widget activeButtonText = Text(
+    'SEND ALERT',
+    style: GoogleFonts.mulish(
+        fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+  );
 
   @override
   void dispose() {
@@ -58,17 +64,19 @@ class _SendAlertState extends State<SendAlert> {
   }
 
   Future<void> _sendAlert() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (ctx) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.grey,
+    setState(() {
+      buttonEnabled = false;
+      activeButtonText = const Center(
+        child: SizedBox(
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(),
         ),
-      ),
-    );
+      );
+    });
 
     final jwtToken = widget.token;
+    var serverMessage;
 
     var reqBody = {
       "locationCoordinates": [lng, lat],
@@ -88,61 +96,135 @@ class _SendAlertState extends State<SendAlert> {
       );
 
       // var jsonResponse = jsonDecode(response.body);
+      var jsonResponse = jsonDecode(response.body);
+
+      serverMessage = jsonResponse['message'];
 
       if (response.statusCode == 200) {
-        print('Alert Send succefully yess');
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Alert send successfully!'),
+          SnackBar(
+            content: Text(serverMessage.toString()),
           ),
         );
       } else {
-        Navigator.of(context).pop();
+        setState(() {
+          activeButtonText = Text(
+            'SEND ALERT',
+            style: GoogleFonts.mulish(
+                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+          );
+        });
         customShowDialog(
             context: context,
             titleText: 'Something went wrong',
-            contentText:
-                'Please check that you have proper inputed all the fields!');
+            contentText: serverMessage.toString());
       }
     } catch (e) {
-      Navigator.of(context).pop();
+      setState(() {
+        activeButtonText = Text(
+          'SEND ALERT',
+          style: GoogleFonts.mulish(
+              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+        );
+      });
       customShowDialog(
           context: context,
           titleText: 'Error',
-          contentText:
-              'Something went wrong! Please check your internet connection');
+          contentText: serverMessage.toString());
       print("Exception: $e");
     }
+    buttonEnabled = true;
   }
 
   @override
   Widget build(BuildContext context) {
     List<String> values = ['High', 'Medium', 'Low'];
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomTextWidget(
-            text: 'Send Emergency Alert',
-            fontSize: 20,
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-          const CustomTextWidget(
-            text: 'ALERTING AREA',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          GestureDetector(
-            onTap: openMaps,
-            child: Container(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        top: 12,
+        left: 12,
+        right: 12,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomTextWidget(
+              text: 'Send Emergency Alert',
+              fontSize: 20,
+            ),
+            const SizedBox(
+              height: 31,
+            ),
+            const CustomTextWidget(
+              text: 'ALERTING AREA',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            GestureDetector(
+              onTap: openMaps,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    // width: 2,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.near_me_outlined,
+                      ),
+                      const SizedBox(
+                        width: 11,
+                      ),
+                      Flexible(
+                        child: Text(
+                          address ??
+                              'Area will be in radius of 2km from the locating point',
+                          style: GoogleFonts.mulish(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            const CustomTextWidget(
+              text: 'ALERT NAME',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            TextfieldModal(
+              hintText: 'Fire and Safety Drill',
+              controller: alertNameController,
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            const CustomTextWidget(
+              text: 'ALERT SEVERITY',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
               decoration: BoxDecoration(
                 border: Border.all(
                   // width: 2,
@@ -154,141 +236,88 @@ class _SendAlertState extends State<SendAlert> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(
-                      Icons.near_me_outlined,
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    Flexible(
-                      child: Text(
-                        address ??
-                            'Area will be in radius of 2km from the locating point',
-                        style: GoogleFonts.mulish(
-                          fontSize: 16,
-                        ),
+                    TextInTextField(text: dropDownValue),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        underline: null,
+                        iconSize: 35,
+                        items: values
+                            .map(
+                              (value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropDownValue = newValue!;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        icon: const Icon(Icons.arrow_drop_down_rounded),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'ALERT NAME',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          TextfieldModal(
-            hintText: 'Fire and Safety Drill',
-            controller: alertNameController,
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'ALERT SEVERITY',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                // width: 2,
-                color: Colors.grey,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(10),
+            const SizedBox(
+              height: 21,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextInTextField(text: dropDownValue),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      underline: null,
-                      iconSize: 35,
-                      items: values
-                          .map(
-                            (value) => DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropDownValue = newValue!;
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      icon: const Icon(Icons.arrow_drop_down_rounded),
+            const CustomTextWidget(
+              text: 'DATE',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  // width: 2,
+                  color: Colors.grey,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextInTextField(
+                      text: (_selectedDate == null)
+                          ? 'Pick Date'
+                          : formatter.format(_selectedDate!),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _presentDatePicker(context);
+                      },
+                      child: const Icon(Icons.calendar_month_outlined),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'DATE',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                // width: 2,
-                color: Colors.grey,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(10),
+            const SizedBox(
+              height: 31,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextInTextField(
-                    text: (_selectedDate == null)
-                        ? 'Pick Date'
-                        : formatter.format(_selectedDate!),
-                  ),
-                  const SizedBox(
-                    width: 11,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _presentDatePicker(context);
-                    },
-                    child: const Icon(Icons.calendar_month_outlined),
-                  ),
-                ],
-              ),
+            ManageElevatedButton(
+              buttonItem: activeButtonText,
+              onButtonClick: _sendAlert,
+              enabled: buttonEnabled,
             ),
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-          ManageElevatedButton(
-            buttonText: 'SEND ALERT',
-            onButtonClick: _sendAlert,
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-        ],
+            const SizedBox(
+              height: 31,
+            ),
+          ],
+        ),
       ),
     );
   }

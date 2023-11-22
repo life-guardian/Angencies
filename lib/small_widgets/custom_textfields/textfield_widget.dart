@@ -41,6 +41,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       obscureText: selectedObscure,
       controller: widget.controllerText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      cursorColor: Theme.of(context).colorScheme.onBackground,
       validator: (value) => widget.checkValidation(value),
       decoration: InputDecoration(
         suffixIcon: widget.obsecureIcon

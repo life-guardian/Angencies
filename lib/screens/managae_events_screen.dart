@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ManageEventsScreen extends StatelessWidget {
-  const ManageEventsScreen({super.key});
+  const ManageEventsScreen({
+    super.key,
+    required this.agencyName,
+  });
+
+  final String agencyName;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class ManageEventsScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        'NDRF Team REX78',
+                        'NDRF Team $agencyName',
                         // email,
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontSize: 18,

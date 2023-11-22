@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String userId;
   late String eventsCount;
   late String rescueCount;
+  late String agencyname;
 
   Widget activeScreen = const Center(
     child: CircularProgressIndicator(
@@ -66,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       eventsCount = jsonResponse['eventsCount'].toString();
       rescueCount = jsonResponse['rescueOperationsCount'].toString();
+      agencyname = jsonResponse['agencyName'].toString();
+      agencyname = agencyname[0].toUpperCase() + agencyname.substring(1);
       activeScreen = homeScreenWidget();
     });
   }
@@ -75,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       useSafeArea: true,
       context: context,
       isScrollControlled: true,
-      isDismissible: true,
+      isDismissible: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -114,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 5,
                       ),
                       Text(
-                        'NDRF Team REX78',
+                        'NDRF Team $agencyname',
                         // email,
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontSize: 18,
@@ -206,7 +209,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     showModal: () {
                       _openModal(
                         context,
-                        History(token: widget.token),
+                        History(
+                          token: widget.token,
+                          agencyName: agencyname,
+                        ),
                       );
                     },
                     lineColor1: Colors.blue.shade400,
@@ -240,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () => Navigator.of(context).push(
                     CustomSlideTransition(
                       direction: AxisDirection.left,
-                      child: const ManageEventsScreen(),
+                      child: ManageEventsScreen(agencyName: agencyname),
                     ),
                   ),
                 ),

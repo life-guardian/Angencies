@@ -32,6 +32,12 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   String? address;
   final formatter = DateFormat.yMd();
   DateTime? _selectedDate;
+  bool buttonEnabled = true;
+  Widget activeButtonText = Text(
+    'PUBLISH',
+    style: GoogleFonts.mulish(
+        fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+  );
 
   void _presentDatePicker() async {
     _selectedDate = await customDatePicker(context);
@@ -52,17 +58,19 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   }
 
   void _publishEvent() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (ctx) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.grey,
+    setState(() {
+      buttonEnabled = false;
+      activeButtonText = const Center(
+        child: SizedBox(
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(),
         ),
-      ),
-    );
+      );
+    });
 
     final jwtToken = widget.token;
+    var serverMessage;
 
     var reqBody = {
       "eventName": eventNameController.text,
@@ -82,61 +90,143 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         body: jsonEncode(reqBody),
       );
 
-      // var jsonResponse = jsonDecode(response.body);
+      var jsonResponse = jsonDecode(response.body);
+
+      serverMessage = jsonResponse['message'];
 
       if (response.statusCode == 200) {
-        print('Alert Send succefully yess');
-        Navigator.of(context).pop();
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Alert send successfully!'),
+          SnackBar(
+            content: Text(serverMessage.toString()),
           ),
         );
       } else {
-        Navigator.of(context).pop();
+        setState(() {
+          activeButtonText = Text(
+            'PUBLISH',
+            style: GoogleFonts.mulish(
+                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+          );
+        });
+
         customShowDialog(
             context: context,
             titleText: 'Something went wrong',
-            contentText:
-                'Please check that you have proper inputed all the fields!');
+            contentText: serverMessage.toString());
       }
     } catch (e) {
-      Navigator.of(context).pop();
+      setState(() {
+        activeButtonText = Text(
+          'PUBLISH',
+          style: GoogleFonts.mulish(
+              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+        );
+      });
+
       customShowDialog(
           context: context,
           titleText: 'Error',
-          contentText:
-              'Something went wrong! Please check your internet connection');
+          contentText: serverMessage.toString());
       print("Exception: $e");
     }
+    buttonEnabled = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomTextWidget(
-            text: 'Organize Awareness Event',
-            fontSize: 20,
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-          const CustomTextWidget(
-            text: 'LOCATION',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          GestureDetector(
-            onTap: openMaps,
-            child: Container(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        top: 12,
+        left: 12,
+        right: 12,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomTextWidget(
+              text: 'Organize Awareness Event',
+              fontSize: 20,
+            ),
+            const SizedBox(
+              height: 31,
+            ),
+            const CustomTextWidget(
+              text: 'LOCATION',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            GestureDetector(
+              onTap: openMaps,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    // width: 2,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.near_me_outlined),
+                      const SizedBox(
+                        width: 11,
+                      ),
+                      Flexible(
+                        child: Text(
+                          address ?? 'Select Location',
+                          style: GoogleFonts.mulish(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            const CustomTextWidget(
+              text: 'EVENT NAME',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            TextfieldModal(
+              hintText: 'Enter event name',
+              controller: eventNameController,
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            const CustomTextWidget(
+              text: 'EVENT DESCRIPTION',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            TextfieldModal(
+              hintText: 'Enter event description',
+              controller: descController,
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            const CustomTextWidget(
+              text: 'DATE',
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
               decoration: BoxDecoration(
                 border: Border.all(
                   // width: 2,
@@ -146,100 +236,39 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.near_me_outlined),
+                    TextInTextField(
+                      text: (_selectedDate == null)
+                          ? 'Pick Date'
+                          : formatter.format(_selectedDate!),
+                    ),
                     const SizedBox(
                       width: 11,
                     ),
-                    Flexible(
-                      child: Text(
-                        address ?? 'Select Location',
-                        style: GoogleFonts.mulish(fontSize: 16),
-                      ),
+                    GestureDetector(
+                      onTap: _presentDatePicker,
+                      child: const Icon(Icons.calendar_month_outlined),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'EVENT NAME',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          TextfieldModal(
-            hintText: 'Enter event name',
-            controller: eventNameController,
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'EVENT DESCRIPTION',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          TextfieldModal(
-            hintText: 'Enter event description',
-            controller: descController,
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          const CustomTextWidget(
-            text: 'DATE',
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                // width: 2,
-                color: Colors.grey,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(10),
+            const SizedBox(
+              height: 31,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextInTextField(
-                    text: (_selectedDate == null)
-                        ? 'Pick Date'
-                        : formatter.format(_selectedDate!),
-                  ),
-                  const SizedBox(
-                    width: 11,
-                  ),
-                  GestureDetector(
-                    onTap: _presentDatePicker,
-                    child: const Icon(Icons.calendar_month_outlined),
-                  ),
-                ],
-              ),
+            ManageElevatedButton(
+              buttonItem: activeButtonText,
+              onButtonClick: _publishEvent,
+              enabled: buttonEnabled,
             ),
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-          ManageElevatedButton(
-            buttonText: 'PUBLISH',
-            onButtonClick: _publishEvent,
-          ),
-          const SizedBox(
-            height: 31,
-          ),
-        ],
+            const SizedBox(
+              height: 31,
+            ),
+          ],
+        ),
       ),
     );
   }
