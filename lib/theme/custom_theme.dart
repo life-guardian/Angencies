@@ -9,7 +9,7 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
     background: Colors.grey.shade200,
-    primary: Colors.white,
+    primary: Colors.grey.shade50,
     secondary: Colors.white,
   ),
   datePickerTheme: DatePickerThemeData(

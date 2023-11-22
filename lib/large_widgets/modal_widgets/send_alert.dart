@@ -212,24 +212,26 @@ class _SendAlertState extends State<SendAlert> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextInTextField(text: dropDownValue),
-                  DropdownButton<String>(
-                    underline: null,
-                    iconSize: 35,
-                    items: values
-                        .map(
-                          (value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropDownValue = newValue!;
-                      });
-                    },
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down_rounded),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      underline: null,
+                      iconSize: 35,
+                      items: values
+                          .map(
+                            (value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropDownValue = newValue!;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down_rounded),
+                    ),
                   ),
                 ],
               ),

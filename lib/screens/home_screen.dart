@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     showModal: () {
                       _openModal(
                         context,
-                        const History(),
+                        History(token: widget.token),
                       );
                     },
                     lineColor1: Colors.blue.shade400,
