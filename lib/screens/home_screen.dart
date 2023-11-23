@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 5,
                       ),
                       Text(
-                        'NDRF Team $agencyname',
+                        agencyname,
                         // email,
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontSize: 18,
