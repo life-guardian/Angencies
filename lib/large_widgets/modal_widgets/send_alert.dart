@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
 import 'package:agencies_app/custom_functions/datepicker_function.dart';
+import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_modal.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
@@ -25,7 +27,8 @@ class SendAlert extends StatefulWidget {
 }
 
 class _SendAlertState extends State<SendAlert> {
-  String dropDownValue = 'Select Severty';
+  String? dropDownValue;
+  bool isPickeddropDownValue = false;
   DateTime? _selectedDate;
   final formatter = DateFormat.yMd();
   TextEditingController alertNameController = TextEditingController();
@@ -33,6 +36,8 @@ class _SendAlertState extends State<SendAlert> {
   double? lng;
   String? address;
   bool buttonEnabled = true;
+  bool dateSelected = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
     'SEND ALERT',
     style: GoogleFonts.mulish(
@@ -47,7 +52,18 @@ class _SendAlertState extends State<SendAlert> {
 
   void _presentDatePicker(BuildContext context) async {
     _selectedDate = await customDatePicker(context);
+    if (!(_selectedDate == null)) {
+      dateSelected = true;
+    }
     setState(() {});
+  }
+
+  void setButtonText() {
+    activeButtonText = Text(
+      'SEND ALERT',
+      style: GoogleFonts.mulish(
+          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+    );
   }
 
   void openMaps() async {
@@ -58,9 +74,20 @@ class _SendAlertState extends State<SendAlert> {
     setState(() {
       address = pickedLocationData.address.toString().trim();
     });
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (ctx) => const OpenStreetMap(),
-    // ));
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      if (address == null || _selectedDate == null || !isPickeddropDownValue) {
+        customShowDialog(
+            context: context,
+            titleText: 'Something went wrong',
+            contentText:
+                'Please check that you have proper inputed alerting area, alert severity and date.');
+      } else {
+        _sendAlert();
+      }
+    }
   }
 
   Future<void> _sendAlert() async {
@@ -110,11 +137,7 @@ class _SendAlertState extends State<SendAlert> {
         );
       } else {
         setState(() {
-          activeButtonText = Text(
-            'SEND ALERT',
-            style: GoogleFonts.mulish(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-          );
+          setButtonText();
         });
         customShowDialog(
             context: context,
@@ -123,17 +146,10 @@ class _SendAlertState extends State<SendAlert> {
       }
     } catch (e) {
       setState(() {
-        activeButtonText = Text(
-          'SEND ALERT',
-          style: GoogleFonts.mulish(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-        );
+        setButtonText();
       });
       customShowDialog(
-          context: context,
-          titleText: 'Error',
-          contentText: serverMessage.toString());
-      print("Exception: $e");
+          context: context, titleText: 'Error', contentText: e.toString());
     }
     buttonEnabled = true;
   }
@@ -149,27 +165,57 @@ class _SendAlertState extends State<SendAlert> {
         right: 12,
       ),
       child: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomTextWidget(
-              text: 'Send Emergency Alert',
-              fontSize: 20,
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            const CustomTextWidget(
-              text: 'ALERTING AREA',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            GestureDetector(
-              onTap: openMaps,
-              child: Container(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomTextWidget(
+                text: 'Send Emergency Alert',
+                fontSize: 20,
+              ),
+              const SizedBox(
+                height: 31,
+              ),
+              const CustomTextWidget(
+                text: 'ALERTING AREA',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SelectMapLocationField(
+                onTap: openMaps,
+                address: address,
+                initialText:
+                    'Area will be in radius of 2 km from the location point.',
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'ALERT NAME',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              TextfieldModal(
+                hintText: 'Fire and Safety Drill',
+                controller: alertNameController,
+                checkValidation: (value) =>
+                    validateTextField(value, 'Alert Name'),
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'ALERT SEVERITY',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                     // width: 2,
@@ -181,142 +227,94 @@ class _SendAlertState extends State<SendAlert> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(
-                        Icons.near_me_outlined,
+                      TextInTextField(
+                        selectedText: dropDownValue,
+                        initialText: 'Select Severty',
                       ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      Flexible(
-                        child: Text(
-                          address ??
-                              'Area will be in radius of 2km from the locating point',
-                          style: GoogleFonts.mulish(
-                            fontSize: 16,
-                          ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          underline: null,
+                          iconSize: 35,
+                          items: values
+                              .map(
+                                (value) => DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              isPickeddropDownValue = true;
+
+                              dropDownValue = newValue!;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                          icon: const Icon(Icons.arrow_drop_down_rounded),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'ALERT NAME',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            TextfieldModal(
-              hintText: 'Fire and Safety Drill',
-              controller: alertNameController,
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'ALERT SEVERITY',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  // width: 2,
-                  color: Colors.grey,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(10),
+              const SizedBox(
+                height: 21,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextInTextField(text: dropDownValue),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        underline: null,
-                        iconSize: 35,
-                        items: values
-                            .map(
-                              (value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropDownValue = newValue!;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(10),
-                        icon: const Icon(Icons.arrow_drop_down_rounded),
+              const CustomTextWidget(
+                text: 'DATE',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    // width: 2,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextInTextField(
+                        selectedText: (_selectedDate == null)
+                            ? null
+                            : formatter.format(_selectedDate!),
+                        initialText: 'Pick Date',
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        width: 11,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _presentDatePicker(context);
+                        },
+                        child: const Icon(Icons.calendar_month_outlined),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'DATE',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  // width: 2,
-                  color: Colors.grey,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(10),
+              const SizedBox(
+                height: 31,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextInTextField(
-                      text: (_selectedDate == null)
-                          ? 'Pick Date'
-                          : formatter.format(_selectedDate!),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _presentDatePicker(context);
-                      },
-                      child: const Icon(Icons.calendar_month_outlined),
-                    ),
-                  ],
-                ),
+              ManageElevatedButton(
+                buttonItem: activeButtonText,
+                onButtonClick: _submitForm,
+                enabled: buttonEnabled,
               ),
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            ManageElevatedButton(
-              buttonItem: activeButtonText,
-              onButtonClick: _sendAlert,
-              enabled: buttonEnabled,
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-          ],
+              const SizedBox(
+                height: 31,
+              ),
+            ],
+          ),
         ),
       ),
     );

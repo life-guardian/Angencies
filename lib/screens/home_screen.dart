@@ -7,6 +7,7 @@ import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count.dart'
 import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/send_alert.dart';
+import 'package:agencies_app/models/modal_bottom_sheet.dart';
 
 import 'package:agencies_app/screens/managae_events_screen.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
@@ -33,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late String eventsCount;
   late String rescueCount;
   late String agencyname;
+
+  ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
   Widget activeScreen = const Center(
     child: CircularProgressIndicator(
@@ -71,23 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
       agencyname = agencyname[0].toUpperCase() + agencyname.substring(1);
       activeScreen = homeScreenWidget();
     });
-  }
-
-  void _openModal(BuildContext context, Widget widget) {
-    showModalBottomSheet(
-      useSafeArea: true,
-      context: context,
-      isScrollControlled: true,
-      isDismissible: false,
-      backgroundColor: Theme.of(context).colorScheme.background,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-      ),
-      builder: (ctx) => widget,
-    );
   }
 
   Widget homeScreenWidget() {
@@ -154,11 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     text1: 'Alert for disaster',
                     text2: 'Send Alert',
                     showModal: () {
-                      _openModal(
-                        context,
-                        SendAlert(
-                          token: widget.token,
-                        ),
+                      modalBottomSheet.openModal(
+                        context: context,
+                        widget: SendAlert(token: widget.token),
                       );
                     },
                     lineColor1: Colors.red.shade400,
@@ -171,9 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     text1: 'Rescue Operation',
                     text2: 'Start',
                     showModal: () {
-                      _openModal(
-                        context,
-                        const RescueOperation(),
+                      modalBottomSheet.openModal(
+                        context: context,
+                        widget: const RescueOperation(),
                       );
                     },
                     lineColor1: Colors.green.shade400,
@@ -192,9 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     text1: 'Awareness Event',
                     text2: 'Organize Event',
                     showModal: () {
-                      _openModal(
-                        context,
-                        OrganizeEvent(token: widget.token),
+                      modalBottomSheet.openModal(
+                        context: context,
+                        widget: OrganizeEvent(token: widget.token),
                       );
                     },
                     lineColor1: Colors.yellow.shade400,
@@ -207,12 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     text1: 'History',
                     text2: 'History',
                     showModal: () {
-                      _openModal(
-                        context,
-                        History(
-                          token: widget.token,
-                          agencyName: agencyname,
-                        ),
+                      modalBottomSheet.openModal(
+                        context: context,
+                        widget: History(
+                            token: widget.token, agencyName: agencyname),
                       );
                     },
                     lineColor1: Colors.blue.shade400,

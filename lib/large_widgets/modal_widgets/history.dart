@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/large_widgets/modal_widgets/filter_history.dart';
 
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
+import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/small_widgets/listview_builder/build_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,13 +30,14 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   late final jwtToken;
   late Map<String, String> headers;
+  ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
   List<String> values = [
     'Alert History',
     'Event History',
     'Rescue Operations History'
   ];
-  String dropDownValue = 'Alert History';
+  String filterValue = 'Alert History';
 
   List<AlertHistory> alertHistoryData = [];
   List<EventHistory> eventHistoryData = [];
@@ -159,43 +162,33 @@ class _HistoryState extends State<History> {
               padding: const EdgeInsets.only(top: 18, left: 18, right: 18),
               child: Column(
                 children: [
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Stack(
-                        alignment: Alignment.centerLeft,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              dropDownValue,
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            filterValue,
+                            style: GoogleFonts.plusJakartaSans().copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Expanded(
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                underline: null,
-                                iconSize: 35,
-                                // value: dropDownValue,
-                                items: values
-                                    .map(
-                                      (value) => DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: (String? newValue) {
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            modalBottomSheet.openModal(
+                              context: context,
+                              widget: FilterHistory(
+                                getFilterValue: (value) {
                                   setState(() {
-                                    dropDownValue = newValue!;
-                                    if (dropDownValue == 'Alert History') {
+                                    filterValue = value;
+                                    if (filterValue == 'Alert History') {
                                       activeWidget = BuildAlertHistoryListView(
                                           list: alertHistoryData);
-                                    } else if (dropDownValue ==
-                                        'Event History') {
+                                    } else if (filterValue == 'Event History') {
                                       // eventhistory widget;
                                       activeWidget = BuildEventHistoryListView(
                                           list: eventHistoryData);
@@ -206,17 +199,19 @@ class _HistoryState extends State<History> {
                                     }
                                   });
                                 },
-                                borderRadius: BorderRadius.circular(10),
-                                icon: const Icon(
-                                  Icons.sort_rounded,
-                                  size: 25,
-                                ),
                               ),
-                            ),
+                              isDismissible: true,
+                            );
+                          },
+                          child: SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: Image.asset(
+                                'assets/logos/settings-sliders.png'),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                   // listview here
                   // BuildListView(list: temp),

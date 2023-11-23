@@ -139,6 +139,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     });
 
+    String serverMessage;
+
     var regBody = {
       "agencyName": agencyName.text.toString(),
       "agencyPhNo": agencyPhone.text.toString(),
@@ -153,35 +155,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       headers: {"Content-Type": "application/json"},
       body: json.encode(regBody),
     );
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
 
+    var jsonResponse = jsonDecode(response.body);
+    serverMessage = jsonResponse['message'];
+
+    if (response.statusCode == 200) {
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
-
       Navigator.of(context).pushReplacement(
         CustomSlideTransition(
           direction: AxisDirection.left,
           child: RegisterSuccessfullScreen(token: myToken),
         ),
       );
-    } else if (response.statusCode == 400) {
+    } else {
       setState(() {
         activeButtonWidget = const Text('Register');
       });
 
       registeredButtonPressed = await customShowDialog(
         context: context,
-        titleText: 'Already registered',
-        contentText:
-            'Agency already registered with the email or phone number.',
+        titleText: 'Something went wrong!',
+        contentText: serverMessage.toString(),
       );
       registeredButtonPressed = false;
-    } else {
-      setState(() {
-        activeButtonWidget = const Text('Register');
-      });
-      // something server problem
     }
     buttonEnabled = true;
   }

@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/custom_functions/validate_textfield.dart';
+import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
@@ -32,7 +34,9 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   String? address;
   final formatter = DateFormat.yMd();
   DateTime? _selectedDate;
+
   bool buttonEnabled = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
     'PUBLISH',
     style: GoogleFonts.mulish(
@@ -41,7 +45,16 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   void _presentDatePicker() async {
     _selectedDate = await customDatePicker(context);
+
     setState(() {});
+  }
+
+  void setButtonText() {
+    activeButtonText = Text(
+      'PUBLISH',
+      style: GoogleFonts.mulish(
+          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+    );
   }
 
   void openMaps() async {
@@ -52,9 +65,20 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     setState(() {
       address = pickedLocationData.address.toString().trim();
     });
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (ctx) => const OpenStreetMap(),
-    // ));
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      if (address == null || _selectedDate == null) {
+        customShowDialog(
+            context: context,
+            titleText: 'Something went wrong',
+            contentText:
+                'Please check that you have proper inputed event location and picked date');
+      } else {
+        _publishEvent();
+      }
+    }
   }
 
   void _publishEvent() async {
@@ -103,11 +127,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         );
       } else {
         setState(() {
-          activeButtonText = Text(
-            'PUBLISH',
-            style: GoogleFonts.mulish(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-          );
+          setButtonText();
         });
 
         customShowDialog(
@@ -117,18 +137,11 @@ class _OrganizeEventState extends State<OrganizeEvent> {
       }
     } catch (e) {
       setState(() {
-        activeButtonText = Text(
-          'PUBLISH',
-          style: GoogleFonts.mulish(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-        );
+        setButtonText();
       });
 
       customShowDialog(
-          context: context,
-          titleText: 'Error',
-          contentText: serverMessage.toString());
-      print("Exception: $e");
+          context: context, titleText: 'Error', contentText: e.toString());
     }
     buttonEnabled = true;
   }
@@ -143,27 +156,72 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         right: 12,
       ),
       child: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomTextWidget(
-              text: 'Organize Awareness Event',
-              fontSize: 20,
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            const CustomTextWidget(
-              text: 'LOCATION',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            GestureDetector(
-              onTap: openMaps,
-              child: Container(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomTextWidget(
+                text: 'Organize Awareness Event',
+                fontSize: 20,
+              ),
+              const SizedBox(
+                height: 31,
+              ),
+              const CustomTextWidget(
+                text: 'LOCATION',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              // ontap , address
+              SelectMapLocationField(
+                onTap: openMaps,
+                address: address,
+                initialText: 'Select Location',
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'EVENT NAME',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              TextfieldModal(
+                hintText: 'Enter event name',
+                controller: eventNameController,
+                checkValidation: (value) =>
+                    validateTextField(value, 'Event Name'),
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'EVENT DESCRIPTION',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              TextfieldModal(
+                hintText: 'Enter event description',
+                controller: descController,
+                checkValidation: (value) =>
+                    validateTextField(value, 'Description'),
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'DATE',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                     // width: 2,
@@ -173,101 +231,40 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.near_me_outlined),
+                      TextInTextField(
+                        selectedText: (_selectedDate == null)
+                            ? null
+                            : formatter.format(_selectedDate!),
+                        initialText: 'Pick Date',
+                      ),
                       const SizedBox(
                         width: 11,
                       ),
-                      Flexible(
-                        child: Text(
-                          address ?? 'Select Location',
-                          style: GoogleFonts.mulish(fontSize: 16),
-                        ),
+                      GestureDetector(
+                        onTap: _presentDatePicker,
+                        child: const Icon(Icons.calendar_month_outlined),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'EVENT NAME',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            TextfieldModal(
-              hintText: 'Enter event name',
-              controller: eventNameController,
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'EVENT DESCRIPTION',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            TextfieldModal(
-              hintText: 'Enter event description',
-              controller: descController,
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            const CustomTextWidget(
-              text: 'DATE',
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  // width: 2,
-                  color: Colors.grey,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(10),
+              const SizedBox(
+                height: 31,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextInTextField(
-                      text: (_selectedDate == null)
-                          ? 'Pick Date'
-                          : formatter.format(_selectedDate!),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    GestureDetector(
-                      onTap: _presentDatePicker,
-                      child: const Icon(Icons.calendar_month_outlined),
-                    ),
-                  ],
-                ),
+              ManageElevatedButton(
+                buttonItem: activeButtonText,
+                onButtonClick: _submitForm,
+                enabled: buttonEnabled,
               ),
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            ManageElevatedButton(
-              buttonItem: activeButtonText,
-              onButtonClick: _publishEvent,
-              enabled: buttonEnabled,
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-          ],
+              const SizedBox(
+                height: 31,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/api_urls/config.dart';
@@ -36,13 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void initSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
-  }
-
-  String? _validateTextField(value, String? label) {
-    if (value.isEmpty) {
-      return 'Please enter a $label';
-    }
-    return null;
   }
 
   void _goToRegisterPage() {
@@ -87,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
       "username": agencyLoginEmail.text,
       "password": agencyPassword.text,
     };
+    String serverMessage;
 
     var response = await http.post(
       Uri.parse(loginUrl),
@@ -96,6 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
     // print(response.statusCode);
     // var jsonResponse = jsonDecode(response.body);
     var jsonResponse = jsonDecode(response.body);
+    serverMessage = jsonResponse['message'];
+
     if (response.statusCode == 200) {
       //storin user login data in local variable
       var myToken = jsonResponse['token'];
@@ -104,43 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
       // Navigator.of(context).pop();
       _navigateToHomeScreen(myToken);
       //success
-    } else if (response.statusCode == 404) {
-      // wrong username
-      setState(() {
-        activeButtonWidget = const Text('Login');
-      });
-
-      activeButtonWidget = const Text('Login');
-      buttonPressed = await customShowDialog(
-        context: context,
-        titleText: 'Cant\' find account',
-        contentText:
-            'We can\'t find a account with ${agencyLoginEmail.text.toString()}. try another phone number or email address, or if you dont\' have an account, you can sign up.',
-      );
-    } else if (response.statusCode == 403) {
-      // password or username not found
-      setState(() {
-        activeButtonWidget = const Text('Login');
-      });
-
-      buttonPressed = await customShowDialog(
-        context: context,
-        titleText: 'username or password didn\' match',
-        contentText:
-            'The password or username that you have entered is incorrect. please try again.',
-      );
-    } else if (response.statusCode == 400) {
-      // wrong  password
-      setState(() {
-        activeButtonWidget = const Text('Login');
-      });
-
-      buttonPressed = await customShowDialog(
-        context: context,
-        titleText: 'Incorrect password',
-        contentText:
-            'The password that you have entered is incorrect. please try again.',
-      );
     } else {
       // something went wrong
       setState(() {
@@ -149,8 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       buttonPressed = await customShowDialog(
         context: context,
-        titleText: 'Server Error',
-        contentText: 'Something went wrong! please try again later.',
+        titleText: 'Ooops!',
+        contentText: serverMessage.toString(),
       );
     }
     setState(() {
@@ -252,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelText: 'Email / Phone',
                     controllerText: agencyLoginEmail,
                     checkValidation: (value) =>
-                        _validateTextField(value, 'Email / Phone'),
+                        validateTextField(value, 'Email / Phone'),
                   ),
                   const SizedBox(
                     height: 12,
@@ -261,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelText: 'Password',
                     controllerText: agencyPassword,
                     checkValidation: (value) =>
-                        _validateTextField(value, 'Password'),
+                        validateTextField(value, 'Password'),
                     obsecureIcon: true,
                     hideText: true,
                   ),

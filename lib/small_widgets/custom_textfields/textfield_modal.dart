@@ -7,16 +7,19 @@ class TextfieldModal extends StatelessWidget {
     required this.hintText,
     this.controller,
     this.keyboardType = TextInputType.name,
+    required this.checkValidation,
   });
 
   final String hintText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
+  final String? Function(String?) checkValidation;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      validator: checkValidation,
       cursorColor: Theme.of(context).colorScheme.onBackground,
       keyboardType: keyboardType,
       decoration: InputDecoration(
@@ -38,7 +41,7 @@ class TextfieldModal extends StatelessWidget {
         hintText: hintText,
         hintStyle: GoogleFonts.mulish(
           fontSize: 16,
-          color: Colors.grey.shade600,
+          color: Colors.grey.shade700,
         ),
       ),
     );

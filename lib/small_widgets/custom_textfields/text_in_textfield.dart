@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 class TextInTextField extends StatelessWidget {
   const TextInTextField({
     super.key,
-    required this.text,
+    this.selectedText,
     this.color = const Color.fromARGB(255, 105, 104, 104),
     this.fontSize = 16,
     this.fontWeight = FontWeight.normal,
+    required this.initialText,
   });
-  final String text;
+  final dynamic selectedText;
+  final String initialText;
   final Color color;
   final double fontSize;
   final FontWeight fontWeight;
@@ -17,9 +19,11 @@ class TextInTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      selectedText ?? initialText,
       style: GoogleFonts.mulish(
-        color: Theme.of(context).colorScheme.onBackground,
+        color: (selectedText == null)
+            ? Colors.grey.shade700
+            : Theme.of(context).colorScheme.onBackground,
         fontSize: fontSize,
         fontWeight: fontWeight,
       ),
