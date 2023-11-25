@@ -336,7 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: buttonEnabled ? submitForm : () {},
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: const Color(0xff1E232C),
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

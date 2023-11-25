@@ -18,7 +18,7 @@ class EventRescueCountCard extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         color: (themeData.brightness == Brightness.dark)
-            ? Theme.of(context).colorScheme.primary
+            ? Theme.of(context).colorScheme.secondary
             : Colors.black87,
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),

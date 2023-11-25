@@ -11,6 +11,7 @@ ThemeData lightTheme = ThemeData(
     background: Colors.grey.shade200,
     primary: Colors.grey.shade50,
     secondary: Colors.white,
+    tertiary: const Color(0xff1E232C),
   ),
   datePickerTheme: DatePickerThemeData(
     backgroundColor: Colors.white,
@@ -29,10 +30,11 @@ ThemeData darkTheme = ThemeData(
     ),
   ),
   brightness: Brightness.dark,
-  colorScheme: ColorScheme.dark(
-    background: Colors.grey.shade900,
-    primary: Colors.grey.shade800,
-    secondary: Colors.grey.shade700,
+  colorScheme: const ColorScheme.dark(
+    background: Color(0xff0F172A),
+    primary: Color(0xff0D2136),
+    secondary: Color(0xff162C46),
+    tertiary: Color(0xff162C46),
   ),
   datePickerTheme: DatePickerThemeData(
     backgroundColor: Colors.grey.shade700,

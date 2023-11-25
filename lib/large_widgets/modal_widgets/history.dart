@@ -220,7 +220,11 @@ class _HistoryState extends State<History> {
                                 height: 22,
                                 margin: const EdgeInsets.only(top: 4),
                                 child: Image.asset(
-                                    'assets/logos/settings-sliders.png'),
+                                  'assets/logos/settings-sliders.png',
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                ),
                               ),
                             ],
                           ),

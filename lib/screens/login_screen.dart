@@ -242,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: buttonEnabled ? _submitButton : () {},
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: const Color(0xff1E232C),
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

@@ -20,7 +20,7 @@ class ManageElevatedButton extends StatelessWidget {
         onPressed: enabled ? onButtonClick : () {},
         style: ElevatedButton.styleFrom(
             fixedSize: const Size(200, 40),
-            backgroundColor: color,
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50))),
         child: buttonItem,

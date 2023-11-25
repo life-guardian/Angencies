@@ -103,28 +103,57 @@ class _TabsBottomState extends State<TabsBottom> {
     }
 
     return Scaffold(
-      // backgroundColor: Colors.grey.shade200,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      // backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
-      body: SafeArea(child: activePage),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: const Color.fromARGB(175, 158, 158, 158),
-        currentIndex: _currentIndx,
-        iconSize: 25,
-        onTap: onSelectedTab,
-        selectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home_rounded),
-            label: 'Home',
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.background,
+              ],
+              stops: const [
+                0.5,
+                1,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
-            activeIcon: Icon(Icons.account_circle_rounded),
-            label: 'Account',
+          child: activePage,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.background),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
           ),
-        ],
+          child: BottomNavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            unselectedItemColor: const Color.fromARGB(175, 158, 158, 158),
+            currentIndex: _currentIndx,
+            iconSize: 25,
+            onTap: onSelectedTab,
+            elevation: 5,
+            selectedItemColor: Colors.grey,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home_rounded),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_outlined),
+                activeIcon: Icon(Icons.account_circle_rounded),
+                label: 'Account',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
