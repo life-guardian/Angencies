@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ModalBottomSheet {
-  void openModal(
+  Future<void> openModal(
       {required BuildContext context,
       required Widget widget,
-      isDismissible = false}) {
-    showModalBottomSheet(
+      isDismissible = true}) async {
+    await showModalBottomSheet(
       useSafeArea: true,
       context: context,
       isScrollControlled: true,

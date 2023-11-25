@@ -31,6 +31,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   TextEditingController eventNameController = TextEditingController();
   double? lat;
   double? lng;
+
   String? address;
   final formatter = DateFormat.yMd();
   DateTime? _selectedDate;

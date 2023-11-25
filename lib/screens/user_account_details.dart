@@ -101,16 +101,16 @@ class UserAccountDetails extends StatelessWidget {
               Text(
                 'Jai ',
                 style: TextStyle(
-                  color: Colors.orange,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14),
               ),
               Text(
                 'Hind !',
                 style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: Colors.green,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16),
               ),
             ],
           ),

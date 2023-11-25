@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String eventsCount;
   late String rescueCount;
   late String agencyname;
+  bool? isadded;
 
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
@@ -154,11 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ManageCard(
                     text1: 'Rescue Operation',
                     text2: 'Start',
-                    showModal: () {
-                      modalBottomSheet.openModal(
+                    showModal: () async {
+                      await modalBottomSheet.openModal(
                         context: context,
                         widget: const RescueOperation(),
                       );
+                      getAgencyDataFromServer();
                     },
                     lineColor1: Colors.green.shade400,
                     lineColor2: Colors.green.shade50,
@@ -175,11 +177,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ManageCard(
                     text1: 'Awareness Event',
                     text2: 'Organize Event',
-                    showModal: () {
-                      modalBottomSheet.openModal(
+                    showModal: () async {
+                      await modalBottomSheet.openModal(
                         context: context,
                         widget: OrganizeEvent(token: widget.token),
                       );
+                      getAgencyDataFromServer();
                     },
                     lineColor1: Colors.yellow.shade400,
                     lineColor2: Colors.yellow.shade50,

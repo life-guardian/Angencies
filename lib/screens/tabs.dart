@@ -88,20 +88,20 @@ class _TabsBottomState extends State<TabsBottom> {
       );
     } else {
       customShowDialog(
-          context: context,
-          titleText: 'Something went wrong',
-          contentText: message);
+          context: context, titleText: 'Ooops!', contentText: message);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Widget activePage = HomeScreen(token: widget.myToken);
     if (_currentIndx == 1) {
       activePage = UserAccountDetails(
         logoutUser: _logoutUser,
       );
+    } else if (_currentIndx == 0) {
+      activePage = HomeScreen(token: widget.myToken);
     }
+
     return Scaffold(
       // backgroundColor: Colors.grey.shade200,
       backgroundColor: Theme.of(context).colorScheme.background,
