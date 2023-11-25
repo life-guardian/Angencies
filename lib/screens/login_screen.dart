@@ -35,6 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
     initSharedPrefs();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    agencyLoginEmail.dispose();
+    agencyPassword.dispose();
+  }
+
   void initSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }

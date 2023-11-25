@@ -5,7 +5,7 @@ class EventHistory {
   String? description;
   String? eventDate;
   String? agencyId;
-  List<Null>? registrations;
+  // List<Null>? registrations;
   String? createdAt;
   String? updatedAt;
   int? iV;
@@ -17,7 +17,7 @@ class EventHistory {
       this.description,
       this.eventDate,
       this.agencyId,
-      this.registrations,
+      // this.registrations,
       this.createdAt,
       this.updatedAt,
       this.iV});
@@ -31,9 +31,9 @@ class EventHistory {
     eventDate = json['eventDate'];
     agencyId = json['agencyId'];
     if (json['registrations'] != null) {
-      registrations = <Null>[];
+      // registrations = <Null>[];
       json['registrations'].forEach((v) {
-        registrations!.add(v);
+        // registrations!.add(v);
       });
     }
     createdAt = json['createdAt'];

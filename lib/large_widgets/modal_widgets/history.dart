@@ -99,7 +99,7 @@ class _HistoryState extends State<History> {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
+
       for (var jsonData in jsonResponse) {
         data.add(EventHistory.fromJson(jsonData));
       }
@@ -133,7 +133,7 @@ class _HistoryState extends State<History> {
                     height: 5,
                   ),
                   Text(
-                    'NDRF Team ${widget.agencyName}',
+                    widget.agencyName,
                     // email,
                     style: GoogleFonts.plusJakartaSans().copyWith(
                       fontSize: 18,
@@ -203,11 +203,26 @@ class _HistoryState extends State<History> {
                               isDismissible: true,
                             );
                           },
-                          child: SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: Image.asset(
-                                'assets/logos/settings-sliders.png'),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Filter',
+                                style: GoogleFonts.plusJakartaSans().copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                width: 22,
+                                height: 22,
+                                margin: const EdgeInsets.only(top: 4),
+                                child: Image.asset(
+                                    'assets/logos/settings-sliders.png'),
+                              ),
+                            ],
                           ),
                         ),
                       ],

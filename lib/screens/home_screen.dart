@@ -19,7 +19,7 @@ import 'package:agencies_app/transitions_animations/custom_page_transition.dart'
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decoder/jwt_decoder.dart';
+// import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.token});
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Map jwtDecoded = JwtDecoder.decode(widget.token);
+    // Map jwtDecoded = JwtDecoder.decode(widget.token);
     // userId = jwtDecoded['id'];
     getAgencyDataFromServer();
 

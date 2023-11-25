@@ -31,6 +31,14 @@ class _RescueOperationState extends State<RescueOperation> {
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
 
+  @override
+  void dispose() {
+    super.dispose();
+    operationNameController.dispose();
+    teamSizeController.dispose();
+    descController.dispose();
+  }
+
   void openMaps() async {
     PickedData pickedLocationData = await customGoogleMapsDialog(
         context: context, titleText: 'Select Location to send alert');

@@ -43,6 +43,13 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
 
+  @override
+  void dispose() {
+    super.dispose();
+    descController.dispose();
+    eventNameController.dispose();
+  }
+
   void _presentDatePicker() async {
     _selectedDate = await customDatePicker(context);
 

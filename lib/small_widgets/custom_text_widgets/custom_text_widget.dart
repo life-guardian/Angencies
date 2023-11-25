@@ -7,7 +7,6 @@ class CustomTextWidget extends StatelessWidget {
     required this.text,
     this.fontSize = 12,
     this.fontWeight = FontWeight.bold,
-    // required this.font,
   });
 
   final String text;

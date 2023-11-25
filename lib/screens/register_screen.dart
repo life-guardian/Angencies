@@ -39,6 +39,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     initSharedPrefs();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    agencyName.dispose();
+    agencyEmail.dispose();
+    agencyPhone.dispose();
+    agencyAddress.dispose();
+    representativeName.dispose();
+    agencyPassword.dispose();
+    agencyConfirmPassword.dispose();
+  }
+
   void popScreen() {
     Navigator.of(context).pop();
   }

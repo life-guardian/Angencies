@@ -3,6 +3,7 @@ var baseUrl = 'https://lifeguardian.cyclic.app';
 // sending data to server
 var registerurl = '$baseUrl/api/agency/register';
 var loginUrl = '$baseUrl/api/agency/login';
+var logoutUserUrl = '$baseUrl/api/agency/logout';
 var sendAlertUrl = '$baseUrl/api/alert/agency/sendalert';
 var awarenessEventUrl = '$baseUrl/api/event/agency/add';
 
