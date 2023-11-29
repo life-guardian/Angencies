@@ -31,18 +31,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late String userId;
-  late String eventsCount;
-  late String rescueCount;
-  late String agencyname;
+  String? eventsCount;
+  String? rescueCount;
+  String? agencyname;
+
+  // late double rescuseLineBarCount;
+  // late double eventsLineBarCount;
+
   bool? isadded;
 
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
-
-  Widget activeScreen = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
 
   @override
   void initState() {
@@ -72,12 +70,20 @@ class _HomeScreenState extends State<HomeScreen> {
       eventsCount = jsonResponse['eventsCount'].toString();
       rescueCount = jsonResponse['rescueOperationsCount'].toString();
       agencyname = jsonResponse['agencyName'].toString();
-      agencyname = agencyname[0].toUpperCase() + agencyname.substring(1);
-      activeScreen = homeScreenWidget();
+      agencyname = agencyname![0].toUpperCase() + agencyname!.substring(1);
+
+      // rescuseLineBarCount = double.parse(rescueCount) /
+      //     (double.parse(rescueCount) + double.parse(eventsCount));
+
+      // eventsLineBarCount = double.parse(eventsCount) /
+      //     (double.parse(rescueCount) + double.parse(eventsCount));
+      // print(rescuseLineBarCount);
+      // print(eventsLineBarCount);
     });
   }
 
-  Widget homeScreenWidget() {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Expanded(
@@ -104,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 5,
                       ),
                       Text(
-                        agencyname,
+                        agencyname ?? 'Loading...',
                         // email,
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontSize: 18,
@@ -120,7 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 21,
             ),
             EventRescueCountCard(
-                eventCount: eventsCount, rescueCount: rescueCount),
+                eventCount: eventsCount ?? '0',
+                rescueCount: rescueCount ?? '0'),
             const SizedBox(
               height: 21,
             ),
@@ -197,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       modalBottomSheet.openModal(
                         context: context,
                         widget: History(
-                            token: widget.token, agencyName: agencyname),
+                            token: widget.token, agencyName: agencyname!),
                       );
                     },
                     lineColor1: Colors.blue.shade400,
@@ -231,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () => Navigator.of(context).push(
                     CustomSlideTransition(
                       direction: AxisDirection.left,
-                      child: ManageEventsScreen(agencyName: agencyname),
+                      child: ManageEventsScreen(agencyName: agencyname!),
                     ),
                   ),
                 ),
@@ -260,10 +267,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return activeScreen;
   }
 }

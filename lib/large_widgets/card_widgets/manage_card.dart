@@ -9,6 +9,7 @@ class ManageCard extends StatelessWidget {
     required this.showModal,
     required this.lineColor1,
     required this.lineColor2,
+    this.stop1 = 0.5,
   });
 
   final void Function() showModal;
@@ -17,6 +18,7 @@ class ManageCard extends StatelessWidget {
   final String text2;
   final Color lineColor1;
   final Color lineColor2;
+  final double stop1;
 
   @override
   Widget build(BuildContext context) {
