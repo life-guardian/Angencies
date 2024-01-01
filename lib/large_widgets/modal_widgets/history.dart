@@ -8,6 +8,7 @@ import 'package:agencies_app/large_widgets/modal_widgets/filter_history.dart';
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/small_widgets/listview_builder/build_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,6 +42,7 @@ class _HistoryState extends State<History> {
 
   List<AlertHistory> alertHistoryData = [];
   List<EventHistory> eventHistoryData = [];
+  List<OperationHistory> operationHistoryData = [];
 
   Widget activeWidget = const Center(
     child: CircularProgressIndicator(
@@ -61,6 +63,8 @@ class _HistoryState extends State<History> {
     getEventHistoryData().then(
       (value) => eventHistoryData.addAll(value),
     );
+    getOperationHistoryData()
+        .then((value) => operationHistoryData.addAll(value));
   }
 
   void initializeTokenHeader() {
@@ -102,6 +106,25 @@ class _HistoryState extends State<History> {
 
       for (var jsonData in jsonResponse) {
         data.add(EventHistory.fromJson(jsonData));
+      }
+    }
+
+    return data;
+  }
+
+  Future<List<OperationHistory>> getOperationHistoryData() async {
+    var response = await http.get(
+      Uri.parse(operationHistoryUrl),
+      headers: headers,
+    );
+
+    List<OperationHistory> data = [];
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      for (var jsonData in jsonResponse) {
+        data.add(OperationHistory.fromJson(jsonData));
       }
     }
 
@@ -194,8 +217,9 @@ class _HistoryState extends State<History> {
                                           list: eventHistoryData);
                                     } else {
                                       // rescue history widget
-                                      activeWidget = const Center(
-                                          child: Text('Need to work on this'));
+                                      activeWidget =
+                                          BuildOperationHistoryListView(
+                                              list: operationHistoryData);
                                     }
                                   });
                                 },

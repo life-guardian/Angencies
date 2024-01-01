@@ -148,8 +148,7 @@ class _SendAlertState extends State<SendAlert> {
       setState(() {
         setButtonText();
       });
-      customShowDialog(
-          context: context, titleText: 'Error', contentText: e.toString());
+      debugPrint("Exception occured: ${e.toString()}");
     }
     buttonEnabled = true;
   }

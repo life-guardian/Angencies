@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     showModal: () async {
                       await modalBottomSheet.openModal(
                         context: context,
-                        widget: const RescueOperation(),
+                        widget: RescueOperation(token: widget.token),
                       );
                       getAgencyDataFromServer();
                     },
@@ -238,7 +238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () => Navigator.of(context).push(
                     CustomSlideTransition(
                       direction: AxisDirection.left,
-                      child: ManageEventsScreen(agencyName: agencyname!),
+                      child: ManageEventsScreen(
+                          agencyName: agencyname!, token: widget.token),
                     ),
                   ),
                 ),

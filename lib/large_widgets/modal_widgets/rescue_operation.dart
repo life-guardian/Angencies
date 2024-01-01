@@ -1,3 +1,8 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
+
+import 'dart:convert';
+
+import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
@@ -8,9 +13,14 @@ import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widge
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
+import 'package:http/http.dart' as http;
 
 class RescueOperation extends StatefulWidget {
-  const RescueOperation({super.key});
+  const RescueOperation({
+    super.key,
+    required this.token,
+  });
+  final token;
 
   @override
   State<RescueOperation> createState() => _RescueOperationState();
@@ -39,6 +49,14 @@ class _RescueOperationState extends State<RescueOperation> {
     descController.dispose();
   }
 
+  void setButtonText() {
+    activeButtonText = Text(
+      'START OPERATION',
+      style: GoogleFonts.mulish(
+          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+    );
+  }
+
   void openMaps() async {
     PickedData pickedLocationData = await customGoogleMapsDialog(
         context: context, titleText: 'Select Location to send alert');
@@ -63,7 +81,7 @@ class _RescueOperationState extends State<RescueOperation> {
     }
   }
 
-  void startOperation() {
+  void startOperation() async {
     // code to send data to server setState(() {
     setState(() {
       buttonEnabled = false;
@@ -75,7 +93,59 @@ class _RescueOperationState extends State<RescueOperation> {
         ),
       );
     });
-    // make sure to buttonEnabled=true
+
+    final jwtToken = widget.token;
+    var serverMessage;
+
+    var reqBody = {
+      "name": operationNameController.text,
+      "description": descController.text,
+      "latitude": lat,
+      "longitude": lng,
+      "rescueTeamSize": teamSizeController.text.toString()
+    };
+
+    try {
+      var response = await http.post(
+        Uri.parse(rescueOperationUrl),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $jwtToken',
+        },
+        body: json.encode(reqBody),
+      );
+
+      var jsonResponse = jsonDecode(response.body);
+
+      serverMessage = jsonResponse['message'];
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(serverMessage.toString()),
+          ),
+        );
+      } else {
+        setState(() {
+          setButtonText();
+        });
+
+        customShowDialog(
+          context: context,
+          titleText: 'Something went wrong',
+          contentText: serverMessage.toString(),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        setButtonText();
+      });
+
+      debugPrint("Exception occured: ${e.toString()}");
+    }
+
+    buttonEnabled = true;
   }
 
   @override

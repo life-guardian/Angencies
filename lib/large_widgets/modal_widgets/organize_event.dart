@@ -148,8 +148,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         setButtonText();
       });
 
-      customShowDialog(
-          context: context, titleText: 'Error', contentText: e.toString());
+      debugPrint("Exception occured: ${e.toString()}");
     }
     buttonEnabled = true;
   }
