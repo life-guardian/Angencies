@@ -3,12 +3,10 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/models/event_history.dart';
 import 'package:agencies_app/models/event_list.dart';
-import 'package:agencies_app/small_widgets/listview_builder/build_listview.dart';
+import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class ManageEventsScreen extends StatefulWidget {
@@ -45,7 +43,10 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
         eventList.addAll(value);
         // active widget
         setState(() {
-          activeScreen = BuildManageEventListView(list: eventList);
+          activeScreen = BuildManageEventListView(
+            eventList: eventList,
+            token: widget.token,
+          );
         });
       },
     );
