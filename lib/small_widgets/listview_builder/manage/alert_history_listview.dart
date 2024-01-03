@@ -18,7 +18,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
         return Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(8),
           ),
           color: Theme.of(context).colorScheme.secondary,
           child: Padding(

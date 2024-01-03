@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.18.1
   http: ^0.13.5
   open_street_map_search_and_pick: ^0.1.0
+  geocoding: ^2.1.1
 
 dev_dependencies:
   flutter_test:

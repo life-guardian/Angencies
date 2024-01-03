@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
+import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
@@ -34,6 +35,7 @@ class _RescueOperationState extends State<RescueOperation> {
   double? lng;
   String? address;
   bool buttonEnabled = true;
+  ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
     'START OPERATION',
@@ -62,9 +64,8 @@ class _RescueOperationState extends State<RescueOperation> {
         context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
-    setState(() {
-      address = pickedLocationData.address.toString().trim();
-    });
+    address = await exactLocation.locality(lat: lat!, lng: lng!);
+    setState(() {});
   }
 
   void _submitForm() {

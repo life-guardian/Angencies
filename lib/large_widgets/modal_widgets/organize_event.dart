@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
+import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/api_urls/config.dart';
@@ -29,6 +30,7 @@ class OrganizeEvent extends StatefulWidget {
 class _OrganizeEventState extends State<OrganizeEvent> {
   TextEditingController descController = TextEditingController();
   TextEditingController eventNameController = TextEditingController();
+  ExactLocation exactLocation = ExactLocation();
   double? lat;
   double? lng;
 
@@ -70,9 +72,8 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
-    setState(() {
-      address = pickedLocationData.address.toString().trim();
-    });
+    address = await exactLocation.locality(lat: lat!, lng: lng!);
+    setState(() {});
   }
 
   void _submitForm() {

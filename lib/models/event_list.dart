@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_collection_literals
+
 class EventList {
   String? eventId;
   String? eventName;
   List<double>? eventPlace;
   String? eventDate;
+  String? locality;
 
   EventList({this.eventId, this.eventName, this.eventPlace, this.eventDate});
 
@@ -14,7 +17,7 @@ class EventList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['eventId'] = eventId;
     data['eventName'] = eventName;
     data['eventPlace'] = eventPlace;

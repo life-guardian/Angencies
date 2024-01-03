@@ -3,36 +3,36 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
-import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:agencies_app/models/registered_users.dart';
+import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class ManageEventsScreen extends StatefulWidget {
-  const ManageEventsScreen({
+class EventRegisteredUsersScreen extends StatefulWidget {
+  const EventRegisteredUsersScreen({
     super.key,
-    required this.agencyName,
     required this.token,
+    required this.agencyName,
+    required this.eventId,
   });
 
   final String agencyName;
   final token;
+  final String eventId;
 
   @override
-  State<ManageEventsScreen> createState() => _ManageEventsScreenState();
+  State<EventRegisteredUsersScreen> createState() =>
+      _EventRegisteredListState();
 }
 
-class _ManageEventsScreenState extends State<ManageEventsScreen> {
+class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
   late final jwtToken;
   late Map<String, String> headers;
-  List<EventList> eventList = [];
-  List<String> eventsLocality = [];
-
+  // List<EventList> eventList = [];
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
-  String filterValue = 'Events';
+  List<RegisteredUsers> registeredUsersList = [];
 
   Widget activeWidget = const Center(
     child: CircularProgressIndicator(
@@ -44,15 +44,12 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
   void initState() {
     super.initState();
     initializeTokenHeader();
-    getEventList().then(
+    getEventRegisteredUsersList(id: widget.eventId).then(
       (value) {
-        eventList.addAll(value);
-        // active widget
+        registeredUsersList.addAll(value);
         setState(() {
-          activeWidget = BuildManageEventListView(
-            eventList: eventList,
-            token: widget.token,
-            agencyName: widget.agencyName,
+          activeWidget = BuildRegisteredUsersListView(
+            registeredUsersList: registeredUsersList,
           );
         });
       },
@@ -67,57 +64,22 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
     };
   }
 
-  Future<List<EventList>> getEventList() async {
+  Future<List<RegisteredUsers>> getEventRegisteredUsersList(
+      {required String id}) async {
     var response = await http.get(
-      Uri.parse(manageEventHistoryUrl),
+      Uri.parse('$eventRegisteredUsersList$id'),
       headers: headers,
     );
 
-    List<EventList> data = [];
+    List<RegisteredUsers> data = [];
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
 
       for (var jsonData in jsonResponse) {
-        data.add(EventList.fromJson(jsonData));
+        data.add(RegisteredUsers.fromJson(jsonData));
       }
     }
-
-    return getEventsLocality(data: data);
-  }
-
-  Future<List<EventList>> getEventsLocality(
-      {required List<EventList> data}) async {
-    List<List<double>> coordinates = [];
-
-    for (var event in data) {
-      coordinates.add(event.eventPlace!);
-    }
-
-    // print(coordinates.toList());
-
-    List<String> localities = [];
-
-    for (List<double> coordinate in coordinates) {
-      try {
-        List<Placemark> placemarks =
-            await placemarkFromCoordinates(coordinate[1], coordinate[0]);
-        Placemark placemark = placemarks[0];
-        String? locality = placemark.locality;
-        localities.add(locality!);
-      } catch (error) {
-        print("Error fetching locality for coordinates: $coordinate");
-        localities.add("Unknown"); // Add a placeholder for unknown localities
-      }
-    }
-
-    // eventList.ad
-
-    for (int i = 0; i < data.length; i++) {
-      data[i].locality = localities[i];
-    }
-
-    // print(data);
 
     return data;
   }
@@ -216,14 +178,27 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Text(
-                                filterValue,
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Events Registrations',
+                                  style: GoogleFonts.plusJakartaSans().copyWith(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Fire and Safety drill',
+                                  style: GoogleFonts.plusJakartaSans().copyWith(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                             Container(
                               width: 22,

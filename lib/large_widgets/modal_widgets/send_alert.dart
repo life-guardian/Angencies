@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
+import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
 import 'package:agencies_app/custom_functions/datepicker_function.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
@@ -37,6 +38,7 @@ class _SendAlertState extends State<SendAlert> {
   String? address;
   bool buttonEnabled = true;
   bool dateSelected = false;
+  ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
     'SEND ALERT',
@@ -71,9 +73,8 @@ class _SendAlertState extends State<SendAlert> {
         context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
-    setState(() {
-      address = pickedLocationData.address.toString().trim();
-    });
+    address = await exactLocation.locality(lat: lat!, lng: lng!);
+    setState(() {});
   }
 
   void _submitForm() {

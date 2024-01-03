@@ -15,5 +15,6 @@ var alertHistoryUrl = '$baseUrl/api/history/agency/alerts';
 var eventHistoryUrl = '$baseUrl/api/history/agency/events';
 var operationHistoryUrl = '$baseUrl/api/history/agency/operations';
 var manageEventHistoryUrl = '$baseUrl/api/event/agency/list';
+var eventRegisteredUsersList = '$baseUrl/api/event/agency/registrations/';
 
 var googleMapsApiKey = 'AIzaSyCSpvganhtdZCMngmIVVuGFxr_tE533K4s';
