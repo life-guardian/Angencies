@@ -41,7 +41,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   bool buttonEnabled = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
-    'PUBLISH',
+    'PUBLISH EVENT',
     style: GoogleFonts.mulish(
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
@@ -61,7 +61,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   void setButtonText() {
     activeButtonText = Text(
-      'PUBLISH',
+      'PUBLISH EVENT',
       style: GoogleFonts.mulish(
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );

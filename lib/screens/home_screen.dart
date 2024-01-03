@@ -71,14 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
       rescueCount = jsonResponse['rescueOperationsCount'].toString();
       agencyname = jsonResponse['agencyName'].toString();
       agencyname = agencyname![0].toUpperCase() + agencyname!.substring(1);
-
-      // rescuseLineBarCount = double.parse(rescueCount) /
-      //     (double.parse(rescueCount) + double.parse(eventsCount));
-
-      // eventsLineBarCount = double.parse(eventsCount) /
-      //     (double.parse(rescueCount) + double.parse(eventsCount));
-      // print(rescuseLineBarCount);
-      // print(eventsLineBarCount);
     });
   }
 
@@ -99,7 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 21,
                   ),
                   Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -145,27 +136,28 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   ManageCard(
-                    text1: 'Alert for disaster',
-                    text2: 'Send Alert',
-                    showModal: () {
-                      modalBottomSheet.openModal(
-                        context: context,
-                        widget: SendAlert(token: widget.token),
-                      );
-                    },
-                    lineColor1: Colors.red.shade400,
-                    lineColor2: Colors.red.shade50,
-                  ),
-                  const SizedBox(
-                    width: 11,
-                  ),
-                  ManageCard(
                     text1: 'Rescue Operation',
                     text2: 'Start',
                     showModal: () async {
                       await modalBottomSheet.openModal(
                         context: context,
                         widget: RescueOperation(token: widget.token),
+                      );
+                      getAgencyDataFromServer();
+                    },
+                    lineColor1: Colors.yellow.shade400,
+                    lineColor2: Colors.yellow.shade50,
+                  ),
+                  const SizedBox(
+                    width: 11,
+                  ),
+                  ManageCard(
+                    text1: 'Awareness Event',
+                    text2: 'Organize Event',
+                    showModal: () async {
+                      await modalBottomSheet.openModal(
+                        context: context,
+                        widget: OrganizeEvent(token: widget.token),
                       );
                       getAgencyDataFromServer();
                     },
@@ -182,17 +174,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   ManageCard(
-                    text1: 'Awareness Event',
-                    text2: 'Organize Event',
-                    showModal: () async {
-                      await modalBottomSheet.openModal(
+                    text1: 'Alert for disaster',
+                    text2: 'Send Alert',
+                    showModal: () {
+                      modalBottomSheet.openModal(
                         context: context,
-                        widget: OrganizeEvent(token: widget.token),
+                        widget: SendAlert(token: widget.token),
                       );
-                      getAgencyDataFromServer();
                     },
-                    lineColor1: Colors.yellow.shade400,
-                    lineColor2: Colors.yellow.shade50,
+                    lineColor1: Colors.red.shade400,
+                    lineColor2: Colors.red.shade50,
                   ),
                   const SizedBox(
                     width: 11,
@@ -217,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 31,
             ),
             Text(
-              'Events',
+              'View',
               style: GoogleFonts.plusJakartaSans().copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
