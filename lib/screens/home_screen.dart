@@ -16,6 +16,7 @@ import 'package:agencies_app/large_widgets/card_widgets/manage_card.dart';
 
 import 'package:agencies_app/large_widgets/modal_widgets/history.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Expanded(
@@ -134,6 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: Row(
+                mainAxisAlignment: kIsWeb
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
                 children: [
                   ManageCard(
                     text1: 'Rescue Operation',
@@ -172,6 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: Row(
+                mainAxisAlignment: kIsWeb
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
                 children: [
                   ManageCard(
                     text1: 'Alert for disaster',
@@ -218,7 +226,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 21,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: kIsWeb
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.center,
               children: [
                 EventCard(
                   text1: 'E',

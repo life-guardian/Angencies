@@ -8,6 +8,7 @@ import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -128,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -152,9 +154,11 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
+            child: const Expanded(
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 20,
+              ),
             ),
           ),
         ),
@@ -215,28 +219,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 31,
                   ),
-                  TextFieldWidget(
-                    labelText: 'Email / Phone',
-                    controllerText: agencyLoginEmail,
-                    checkValidation: (value) =>
-                        validateTextField(value, 'Email / Phone'),
+                  SizedBox(
+                    width: kIsWeb ? screenWidth / 2 : null,
+                    child: TextFieldWidget(
+                      labelText: 'Email / Phone',
+                      controllerText: agencyLoginEmail,
+                      checkValidation: (value) =>
+                          validateTextField(value, 'Email / Phone'),
+                    ),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  TextFieldWidget(
-                    labelText: 'Password',
-                    controllerText: agencyPassword,
-                    checkValidation: (value) =>
-                        validateTextField(value, 'Password'),
-                    obsecureIcon: true,
-                    hideText: true,
+                  SizedBox(
+                    width: kIsWeb ? screenWidth / 2 : null,
+                    child: TextFieldWidget(
+                      labelText: 'Password',
+                      controllerText: agencyPassword,
+                      checkValidation: (value) =>
+                          validateTextField(value, 'Password'),
+                      obsecureIcon: true,
+                      hideText: true,
+                    ),
                   ),
                   const SizedBox(
                     height: 42,
                   ),
                   SizedBox(
-                    width: double.infinity,
+                    width: kIsWeb ? screenWidth / 4 : double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       onPressed: buttonEnabled ? _submitButton : () {},
