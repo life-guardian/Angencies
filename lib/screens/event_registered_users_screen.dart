@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -86,6 +88,7 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -214,7 +217,10 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
                         ),
                       ),
                       Expanded(
-                        child: activeWidget,
+                        child: SizedBox(
+                          width: kIsWeb ? screenWidth / 1.5 : double.infinity,
+                          child: activeWidget,
+                        ),
                       ),
                     ],
                   ),

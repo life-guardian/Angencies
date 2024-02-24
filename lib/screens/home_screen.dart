@@ -8,6 +8,7 @@ import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/send_alert.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/providers/agencyname_provider.dart';
 
 import 'package:agencies_app/screens/managae_events_screen.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
@@ -16,20 +17,22 @@ import 'package:agencies_app/large_widgets/card_widgets/manage_card.dart';
 
 import 'package:agencies_app/large_widgets/modal_widgets/history.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 // import 'package:jwt_decoder/jwt_decoder.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key, required this.token});
   final token;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   late String userId;
   String? eventsCount;
   String? rescueCount;
@@ -71,11 +74,24 @@ class _HomeScreenState extends State<HomeScreen> {
       rescueCount = jsonResponse['rescueOperationsCount'].toString();
       agencyname = jsonResponse['agencyName'].toString();
       agencyname = agencyname![0].toUpperCase() + agencyname!.substring(1);
+      ref
+          .read(agencyNameProvider.notifier)
+          .update((state) => agencyname ?? 'Loading...');
     });
+
+    ref
+        .read(eventsCountProvider.notifier)
+        .update((state) => [eventsCount ?? '0', rescueCount ?? '0']);
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    ThemeData themeData = Theme.of(context);
+    agencyname = ref.watch(agencyNameProvider);
+    eventsCount = ref.watch(eventsCountProvider.notifier).state[0];
+    rescueCount = ref.watch(eventsCountProvider.notifier).state[1];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Expanded(
@@ -134,6 +150,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: Row(
+                mainAxisAlignment: kIsWeb
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
                 children: [
                   ManageCard(
                     text1: 'Rescue Operation',
@@ -172,6 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: Row(
+                mainAxisAlignment: kIsWeb
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
                 children: [
                   ManageCard(
                     text1: 'Alert for disaster',
@@ -218,7 +240,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 21,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: kIsWeb
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.center,
               children: [
                 EventCard(
                   text1: 'E',
@@ -226,6 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   text3: 'Events',
                   color1: const Color.fromARGB(232, 224, 144, 131),
                   color2: const Color.fromARGB(232, 224, 83, 61),
+                  circleColor: themeData.brightness == Brightness.dark
+                      ? Theme.of(context).colorScheme.primary
+                      : const Color.fromARGB(206, 255, 255, 255),
                   onTap: () => Navigator.of(context).push(
                     CustomSlideTransition(
                       direction: AxisDirection.left,
@@ -243,6 +270,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   text3: 'Map',
                   color1: const Color.fromARGB(225, 226, 167, 178),
                   color2: const Color.fromARGB(228, 231, 140, 157),
+                  circleColor: themeData.brightness == Brightness.dark
+                      ? Theme.of(context).colorScheme.primary
+                      : const Color.fromARGB(206, 255, 255, 255),
                   onTap: () => Navigator.of(context).push(
                     CustomSlideTransition(
                       direction: AxisDirection.left,

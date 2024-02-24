@@ -7,11 +7,13 @@ class CustomTextWidget extends StatelessWidget {
     required this.text,
     this.fontSize = 12,
     this.fontWeight = FontWeight.bold,
+    this.color = Colors.transparent,
   });
 
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,9 @@ class CustomTextWidget extends StatelessWidget {
       style: GoogleFonts.mulish(
         fontWeight: fontWeight,
         fontSize: fontSize,
+        color: color == Colors.transparent
+            ? Theme.of(context).colorScheme.onBackground
+            : color,
       ),
     );
   }

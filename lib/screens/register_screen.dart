@@ -6,6 +6,7 @@ import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -207,6 +208,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
@@ -215,7 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -230,9 +232,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             onPressed: popScreen,
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
+            child: const Expanded(
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 20,
+              ),
             ),
           ),
         ),
@@ -255,73 +259,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        TextFieldWidget(
-                          labelText: 'Agency Name',
-                          controllerText: agencyName,
-                          checkValidation: (value) =>
-                              validateName(value, 'Name'),
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Agency Email',
-                          controllerText: agencyEmail,
-                          checkValidation: (value) =>
-                              validateEmail(value, 'Email'),
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Agency Ph No',
-                          controllerText: agencyPhone,
-                          checkValidation: (value) =>
-                              validatePhoneNo(value, 'Phone Number'),
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Agency Address',
-                          controllerText: agencyAddress,
-                          checkValidation: (value) =>
-                              validateTextField(value, 'Address'),
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Representative Name',
-                          controllerText: representativeName,
-                          checkValidation: (value) =>
-                              validateName(value, 'Representative name'),
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Password',
-                          controllerText: agencyPassword,
-                          checkValidation: (value) =>
-                              validatePassword(value, 'Password'),
-                          hideText: true,
-                        ),
-                        const SizedBox(
-                          height: 21,
-                        ),
-                        TextFieldWidget(
-                          labelText: 'Confirm Password',
-                          controllerText: agencyConfirmPassword,
-                          checkValidation: (value) => validateConfirmPassword(
-                              value, 'Confirm Password'),
-                          hideText: true,
-                        ),
-                      ],
+                  child: SizedBox(
+                    width: kIsWeb ? screenWidth / 2 : null,
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          TextFieldWidget(
+                            labelText: 'Agency Name',
+                            controllerText: agencyName,
+                            checkValidation: (value) =>
+                                validateName(value, 'Name'),
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Agency Email',
+                            controllerText: agencyEmail,
+                            checkValidation: (value) =>
+                                validateEmail(value, 'Email'),
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Agency Ph No',
+                            controllerText: agencyPhone,
+                            checkValidation: (value) =>
+                                validatePhoneNo(value, 'Phone Number'),
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Agency Address',
+                            controllerText: agencyAddress,
+                            checkValidation: (value) =>
+                                validateTextField(value, 'Address'),
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Representative Name',
+                            controllerText: representativeName,
+                            checkValidation: (value) =>
+                                validateName(value, 'Representative name'),
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Password',
+                            controllerText: agencyPassword,
+                            checkValidation: (value) =>
+                                validatePassword(value, 'Password'),
+                            hideText: true,
+                          ),
+                          const SizedBox(
+                            height: 21,
+                          ),
+                          TextFieldWidget(
+                            labelText: 'Confirm Password',
+                            controllerText: agencyConfirmPassword,
+                            checkValidation: (value) => validateConfirmPassword(
+                                value, 'Confirm Password'),
+                            hideText: true,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -330,7 +337,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 31,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width,
+                width: kIsWeb
+                    ? screenWidth / 4
+                    : MediaQuery.of(context).size.width,
                 height: 55,
                 child: ElevatedButton(
                   onPressed: buttonEnabled ? submitForm : () {},

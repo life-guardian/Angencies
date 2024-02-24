@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -124,6 +126,7 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -239,7 +242,10 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
                         ),
                       ),
                       Expanded(
-                        child: activeWidget,
+                        child: SizedBox(
+                          width: kIsWeb ? screenWidth / 1.5 : double.infinity,
+                          child: activeWidget,
+                        ),
                       ),
                     ],
                   ),
