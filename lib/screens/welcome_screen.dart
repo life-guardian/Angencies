@@ -31,12 +31,6 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-// MediaQuery.platformBrightnessOf(context) == Brightness.dark
-    // if (kIsWeb) {
-    //   print("web");
-    // } else {
-    //   print("Not web");
-    // }
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
