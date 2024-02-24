@@ -10,6 +10,7 @@ class EventCard extends StatelessWidget {
     required this.color1,
     required this.color2,
     required this.onTap,
+    required this.circleColor,
   });
   final String text1;
 
@@ -17,6 +18,7 @@ class EventCard extends StatelessWidget {
   final String text3;
   final Color color1;
   final Color color2;
+  final Color circleColor;
   final void Function() onTap;
 
   @override
@@ -50,18 +52,19 @@ class EventCard extends StatelessWidget {
               Container(
                 width: 30,
                 height: 30,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color.fromARGB(171, 255, 255, 255),
+                  color: circleColor,
                 ),
                 child: Center(
-                    child: Text(
-                  text1,
-                  style: GoogleFonts.inter().copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  child: Text(
+                    text1,
+                    style: GoogleFonts.inter().copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )),
+                ),
               ),
               Column(
                 children: [
