@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
@@ -8,7 +9,6 @@ import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
+    bool kIsMobile = (screenWidth <= mobileScreenWidth);
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -220,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 31,
                   ),
                   SizedBox(
-                    width: kIsWeb ? screenWidth / 2 : null,
+                    width: !kIsMobile ? screenWidth / 2 : null,
                     child: TextFieldWidget(
                       labelText: 'Email / Phone',
                       controllerText: agencyLoginEmail,
@@ -232,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 12,
                   ),
                   SizedBox(
-                    width: kIsWeb ? screenWidth / 2 : null,
+                    width: !kIsMobile ? screenWidth / 2 : null,
                     child: TextFieldWidget(
                       labelText: 'Password',
                       controllerText: agencyPassword,
@@ -246,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 42,
                   ),
                   SizedBox(
-                    width: kIsWeb ? screenWidth / 4 : double.infinity,
+                    width: !kIsMobile ? screenWidth / 4 : double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       onPressed: buttonEnabled ? _submitButton : () {},

@@ -1,3 +1,3 @@
-const double kScreenWidth = 600;
+const double mobileScreenWidth = 600;
 
-
+bool kIsMobile = true;

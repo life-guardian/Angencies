@@ -1,4 +1,5 @@
 // import 'package:agencies_app/constants/sizes.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
@@ -31,114 +32,120 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
+    bool kIsMobile = (screenWidth <= mobileScreenWidth);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
-      body: !kIsWeb
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 40),
-                    width: double.infinity,
-                    child: Image.asset('assets/images/disasterImage1.png'),
-                  ),
-                  Image.asset('assets/images/disasterImage2.jpg'),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    'Life Guardian',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(0.0, 7.0),
-                          blurRadius: 15.0,
-                          color: Color.fromARGB(57, 0, 0, 0),
-                        ),
-                      ],
+      body: kIsMobile
+          ? SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 40),
+                      width: double.infinity,
+                      child: Image.asset('assets/images/disasterImage1.png'),
                     ),
-                  ),
-                  Text(
-                    'For Agencies',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 26,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(0.0, 7.0),
-                          blurRadius: 15.0,
-                          color: Color.fromARGB(57, 0, 0, 0),
-                        ),
-                      ],
+                    Image.asset('assets/images/disasterImage2.jpg'),
+                    const SizedBox(
+                      height: 12,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 31,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _login(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                    Text(
+                      'Life Guardian',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(0.0, 7.0),
+                            blurRadius: 15.0,
+                            color: Color.fromARGB(57, 0, 0, 0),
+                          ),
+                        ],
                       ),
-                      child: const Text('Login'),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        _register(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    Text(
+                      'For Agencies',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(0.0, 7.0),
+                            blurRadius: 15.0,
+                            color: Color.fromARGB(57, 0, 0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 31,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _login(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                        foregroundColor:
-                            (themeData.brightness == Brightness.light)
+                        child: const Text('Login'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 18,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          _register(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          foregroundColor:
+                              (themeData.brightness == Brightness.light)
+                                  ? const Color(0xff1E232C)
+                                  : Colors.white,
+                          side: BorderSide(
+                            color: (themeData.brightness == Brightness.light)
                                 ? const Color(0xff1E232C)
                                 : Colors.white,
-                        side: BorderSide(
-                          color: (themeData.brightness == Brightness.light)
-                              ? const Color(0xff1E232C)
-                              : Colors.white,
+                          ),
+                        ),
+                        child: const Text("Register"),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 31,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: const Text(
+                        'Jai Hind !',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      child: const Text("Register"),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: const Text(
-                      'Jai Hind !',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           : welcomScreenWeb(
@@ -157,6 +164,7 @@ class WelcomeScreen extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

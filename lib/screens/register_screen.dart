@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
@@ -209,9 +210,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool kIsMobile = (screenWidth <= mobileScreenWidth);
 
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: kIsMobile ? true : false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         elevation: 0,
@@ -232,150 +235,189 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             onPressed: popScreen,
-            child: const Expanded(
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 20,
-              ),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 20,
             ),
           ),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: !kIsMobile
+            ? SingleChildScrollView(
+                child: registerScreenWidget(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    kIsMobile: kIsMobile),
+              )
+            : registerScreenWidget(
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+                kIsMobile: kIsMobile,
+              ),
+      ),
+    );
+  }
+
+  Widget registerScreenWidget(
+      {required double screenHeight,
+      required double screenWidth,
+      required bool kIsMobile}) {
+    return SizedBox(
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Hello! Register agency to get started',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          const SizedBox(
+            height: 21,
+          ),
+          kIsMobile
+              ? Expanded(
+                  child: registerScreenFormWidget(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    kIsMobile: kIsMobile,
+                  ),
+                )
+              : registerScreenFormWidget(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  kIsMobile: kIsMobile,
+                ),
+          !kIsMobile
+              ? const SizedBox(
+                  height: 91,
+                )
+              : const SizedBox(
+                  height: 11,
+                ),
+          SizedBox(
+            width: !kIsMobile
+                ? screenWidth / 4
+                : MediaQuery.of(context).size.width,
+            height: 55,
+            child: ElevatedButton(
+              onPressed: buttonEnabled ? submitForm : () {},
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: activeButtonWidget,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Already have an account?',
+                  style: TextStyle(fontSize: 16),
+                ),
+                TextButton(
+                  onPressed: goToLoginPage,
+                  child: const Text(
+                    'Login Now',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget registerScreenFormWidget(
+      {required double screenHeight,
+      required double screenWidth,
+      required bool kIsMobile}) {
+    return SizedBox(
+      height: screenHeight / 2,
+      child: SingleChildScrollView(
         child: SizedBox(
-          child: Column(
-            children: [
-              Text(
-                'Hello! Register agency to get started',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+          width: !kIsMobile ? screenWidth / 2 : null,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                TextFieldWidget(
+                  labelText: 'Agency Name',
+                  controllerText: agencyName,
+                  checkValidation: (value) => validateName(value, 'Name'),
                 ),
-              ),
-              const SizedBox(
-                height: 21,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    width: kIsWeb ? screenWidth / 2 : null,
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          TextFieldWidget(
-                            labelText: 'Agency Name',
-                            controllerText: agencyName,
-                            checkValidation: (value) =>
-                                validateName(value, 'Name'),
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Agency Email',
-                            controllerText: agencyEmail,
-                            checkValidation: (value) =>
-                                validateEmail(value, 'Email'),
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Agency Ph No',
-                            controllerText: agencyPhone,
-                            checkValidation: (value) =>
-                                validatePhoneNo(value, 'Phone Number'),
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Agency Address',
-                            controllerText: agencyAddress,
-                            checkValidation: (value) =>
-                                validateTextField(value, 'Address'),
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Representative Name',
-                            controllerText: representativeName,
-                            checkValidation: (value) =>
-                                validateName(value, 'Representative name'),
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Password',
-                            controllerText: agencyPassword,
-                            checkValidation: (value) =>
-                                validatePassword(value, 'Password'),
-                            hideText: true,
-                          ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          TextFieldWidget(
-                            labelText: 'Confirm Password',
-                            controllerText: agencyConfirmPassword,
-                            checkValidation: (value) => validateConfirmPassword(
-                                value, 'Confirm Password'),
-                            hideText: true,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 21,
                 ),
-              ),
-              const SizedBox(
-                height: 31,
-              ),
-              SizedBox(
-                width: kIsWeb
-                    ? screenWidth / 4
-                    : MediaQuery.of(context).size.width,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: buttonEnabled ? submitForm : () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: activeButtonWidget,
+                TextFieldWidget(
+                  labelText: 'Agency Email',
+                  controllerText: agencyEmail,
+                  checkValidation: (value) => validateEmail(value, 'Email'),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Already have an account?',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    TextButton(
-                      onPressed: goToLoginPage,
-                      child: const Text(
-                        'Login Now',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 21,
                 ),
-              ),
-            ],
+                TextFieldWidget(
+                  labelText: 'Agency Ph No',
+                  controllerText: agencyPhone,
+                  checkValidation: (value) =>
+                      validatePhoneNo(value, 'Phone Number'),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                TextFieldWidget(
+                  labelText: 'Agency Address',
+                  controllerText: agencyAddress,
+                  checkValidation: (value) =>
+                      validateTextField(value, 'Address'),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                TextFieldWidget(
+                  labelText: 'Representative Name',
+                  controllerText: representativeName,
+                  checkValidation: (value) =>
+                      validateName(value, 'Representative name'),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                TextFieldWidget(
+                  labelText: 'Password',
+                  controllerText: agencyPassword,
+                  checkValidation: (value) =>
+                      validatePassword(value, 'Password'),
+                  hideText: true,
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                TextFieldWidget(
+                  labelText: 'Confirm Password',
+                  controllerText: agencyConfirmPassword,
+                  checkValidation: (value) =>
+                      validateConfirmPassword(value, 'Confirm Password'),
+                  hideText: true,
+                ),
+              ],
+            ),
           ),
         ),
       ),
