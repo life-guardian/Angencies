@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
@@ -108,7 +107,7 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
         String? locality = placemark.locality;
         localities.add(locality!);
       } catch (error) {
-        print("Error fetching locality for coordinates: $coordinate");
+       
         localities.add("Unknown"); // Add a placeholder for unknown localities
       }
     }

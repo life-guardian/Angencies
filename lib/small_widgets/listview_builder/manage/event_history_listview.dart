@@ -1,20 +1,23 @@
-import 'package:agencies_app/models/event_history.dart';
+import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class BuildEventHistoryListView extends StatelessWidget {
-  const BuildEventHistoryListView({super.key, required this.list});
+  const BuildEventHistoryListView({super.key, required this.ref});
 
-  final List<EventHistory> list;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final eventList=ref.watch(eventHistoryProvider);
+
     return ListView.builder(
-      itemCount: list.length,
+      itemCount: eventList.length,
       itemBuilder: (context, index) {
-        final eventData = list.elementAt(index);
+        final event = eventList.elementAt(index);
         return Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -34,7 +37,7 @@ class BuildEventHistoryListView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventData.eventName.toString(),
+                        event.eventName.toString(),
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -44,7 +47,7 @@ class BuildEventHistoryListView extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        eventData.description.toString(),
+                        event.description.toString(),
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           color: Colors.grey,
                           fontSize: 12,
@@ -60,7 +63,7 @@ class BuildEventHistoryListView extends StatelessWidget {
                 ),
                 Text(
                   DateFormat('dd/MM/yy')
-                      .format(DateTime.parse(eventData.eventDate.toString())),
+                      .format(DateTime.parse(event.eventDate.toString())),
                   style: GoogleFonts.plusJakartaSans().copyWith(
                     fontWeight: FontWeight.bold,
                     color: (themeData.brightness == Brightness.light)

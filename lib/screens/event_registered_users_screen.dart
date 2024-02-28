@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';

@@ -4,7 +4,7 @@ import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show Platform;
+// import 'package:flutter/foundation.dart' show Platform;
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -157,7 +157,6 @@ class WelcomeScreen extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +199,9 @@ class WelcomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 21,
+              ),
               Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: const Text(

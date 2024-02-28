@@ -1,20 +1,23 @@
-import 'package:agencies_app/models/operation_history.dart';
+import 'package:agencies_app/providers/rescue_history_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class BuildOperationHistoryListView extends StatelessWidget {
-  const BuildOperationHistoryListView({super.key, required this.list});
+class BuildRescueHistoryListView extends StatelessWidget {
+  const BuildRescueHistoryListView({super.key, required this.ref});
 
-  final List<OperationHistory> list;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
+    final rescueList =ref.watch(rescueHistoryProvider);
+
     ThemeData themeData = Theme.of(context);
     return ListView.builder(
-      itemCount: list.length,
+      itemCount: rescueList.length,
       itemBuilder: (context, index) {
-        final eventData = list.elementAt(index);
+        final rescueOperation = rescueList.elementAt(index);
         return Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -34,7 +37,7 @@ class BuildOperationHistoryListView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventData.name.toString(),
+                        rescueOperation.name.toString(),
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -44,7 +47,7 @@ class BuildOperationHistoryListView extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        eventData.description.toString(),
+                        rescueOperation.description.toString(),
                         style: GoogleFonts.plusJakartaSans().copyWith(
                           color: Colors.grey,
                           fontSize: 12,
@@ -60,7 +63,7 @@ class BuildOperationHistoryListView extends StatelessWidget {
                 ),
                 Text(
                   DateFormat('dd/MM/yy')
-                      .format(DateTime.parse(eventData.createdAt.toString())),
+                      .format(DateTime.parse(rescueOperation.createdAt.toString())),
                   style: GoogleFonts.plusJakartaSans().copyWith(
                     fontWeight: FontWeight.bold,
                     color: (themeData.brightness == Brightness.light)

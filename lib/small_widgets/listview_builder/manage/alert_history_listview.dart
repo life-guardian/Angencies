@@ -1,20 +1,23 @@
-import 'package:agencies_app/models/alert_history.dart';
+import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class BuildAlertHistoryListView extends StatelessWidget {
-  const BuildAlertHistoryListView({super.key, required this.list});
+  const BuildAlertHistoryListView({super.key, required this.ref});
 
-  final List<AlertHistory> list;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final alertList = ref.watch(alertHistoryProvider);
+
     return ListView.builder(
-      itemCount: list.length,
+      itemCount: alertList.length,
       itemBuilder: (context, index) {
-        final alertData = list.elementAt(index);
+        final alert = alertList.elementAt(index);
         return Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -33,7 +36,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      alertData.alertName.toString(),
+                      alert.alertName.toString(),
                       style: GoogleFonts.plusJakartaSans().copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -43,7 +46,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      alertData.alertSeverity.toString(),
+                      alert.alertSeverity.toString(),
                       style: GoogleFonts.plusJakartaSans().copyWith(
                         color: Colors.grey,
                         fontSize: 12,
@@ -53,7 +56,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
                 ),
                 Text(
                   DateFormat('dd/MM/yy').format(
-                      DateTime.parse(alertData.alertForDate.toString())),
+                      DateTime.parse(alert.alertForDate.toString())),
                   style: GoogleFonts.plusJakartaSans().copyWith(
                     fontWeight: FontWeight.bold,
                     color: (themeData.brightness == Brightness.light)

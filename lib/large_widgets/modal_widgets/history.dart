@@ -9,14 +9,18 @@ import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/operation_history.dart';
+import 'package:agencies_app/providers/alert_history_provider.dart';
+import 'package:agencies_app/providers/event_history_provider.dart';
+import 'package:agencies_app/providers/rescue_history_provider.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class History extends StatefulWidget {
+class History extends ConsumerStatefulWidget {
   const History({
     super.key,
     required this.token,
@@ -27,10 +31,10 @@ class History extends StatefulWidget {
   final String agencyName;
 
   @override
-  State<History> createState() => _HistoryState();
+  ConsumerState<History> createState() => _HistoryState();
 }
 
-class _HistoryState extends State<History> {
+class _HistoryState extends ConsumerState<History> {
   late final jwtToken;
   late Map<String, String> headers;
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
@@ -42,31 +46,34 @@ class _HistoryState extends State<History> {
   ];
   String filterValue = 'Alert History';
 
-  List<AlertHistory> alertHistoryData = [];
-  List<EventHistory> eventHistoryData = [];
   List<OperationHistory> operationHistoryData = [];
+  late Widget activeWidget;
 
-  Widget activeWidget = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  void assignActiveWidget() {
+    setState(() {
+      activeWidget = ref.read(alertHistoryProvider).isNotEmpty
+          ? BuildAlertHistoryListView(
+              ref: ref,
+            )
+          : const Center(
+              child: CircularProgressIndicator(
+                color: Colors.grey,
+              ),
+            );
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+
+    assignActiveWidget();
     initializeTokenHeader();
-    getAlertHistoryData().then((value) {
-      setState(() {
-        alertHistoryData.addAll(value);
-        activeWidget = BuildAlertHistoryListView(list: alertHistoryData);
-      });
-    });
-    getEventHistoryData().then(
-      (value) => eventHistoryData.addAll(value),
-    );
-    getOperationHistoryData()
-        .then((value) => operationHistoryData.addAll(value));
+
+    // Get list of data from server
+    getAlertHistoryData();
+    getEventHistoryData();
+    getOperationHistoryData();
   }
 
   void initializeTokenHeader() {
@@ -77,7 +84,7 @@ class _HistoryState extends State<History> {
     };
   }
 
-  Future<List<AlertHistory>> getAlertHistoryData() async {
+  Future<void> getAlertHistoryData() async {
     var response = await http.get(
       Uri.parse(alertHistoryUrl),
       headers: headers,
@@ -92,10 +99,12 @@ class _HistoryState extends State<History> {
       }
     }
 
-    return data;
+    ref.read(alertHistoryProvider.notifier).addList(data);
+    assignActiveWidget();
+    setState(() {});
   }
 
-  Future<List<EventHistory>> getEventHistoryData() async {
+  Future<void> getEventHistoryData() async {
     var response = await http.get(
       Uri.parse(eventHistoryUrl),
       headers: headers,
@@ -110,11 +119,10 @@ class _HistoryState extends State<History> {
         data.add(EventHistory.fromJson(jsonData));
       }
     }
-
-    return data;
+    ref.read(eventHistoryProvider.notifier).addList(data);
   }
 
-  Future<List<OperationHistory>> getOperationHistoryData() async {
+  Future<void> getOperationHistoryData() async {
     var response = await http.get(
       Uri.parse(operationHistoryUrl),
       headers: headers,
@@ -130,7 +138,7 @@ class _HistoryState extends State<History> {
       }
     }
 
-    return data;
+    ref.read(rescueHistoryProvider.notifier).addList(data);
   }
 
   @override
@@ -212,16 +220,18 @@ class _HistoryState extends State<History> {
                                     filterValue = value;
                                     if (filterValue == 'Alert History') {
                                       activeWidget = BuildAlertHistoryListView(
-                                          list: alertHistoryData);
+                                        ref: ref,
+                                      );
                                     } else if (filterValue == 'Event History') {
                                       // eventhistory widget;
                                       activeWidget = BuildEventHistoryListView(
-                                          list: eventHistoryData);
+                                        ref: ref,
+                                      );
                                     } else {
                                       // rescue history widget
-                                      activeWidget =
-                                          BuildOperationHistoryListView(
-                                              list: operationHistoryData);
+                                      activeWidget = BuildRescueHistoryListView(
+                                        ref: ref,
+                                      );
                                     }
                                   });
                                 },

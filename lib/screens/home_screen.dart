@@ -37,6 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String? eventsCount;
   String? rescueCount;
   String? agencyname;
+  double _screenWidth = 0;
 
   // late double rescuseLineBarCount;
   // late double eventsLineBarCount;
@@ -86,160 +87,161 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    _screenWidth = MediaQuery.of(context).size.width;
     ThemeData themeData = Theme.of(context);
     agencyname = ref.watch(agencyNameProvider);
     eventsCount = ref.watch(eventsCountProvider.notifier).state[0];
     rescueCount = ref.watch(eventsCountProvider.notifier).state[1];
 
+    double manageEventWidth = _screenWidth / 3;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Expanded(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/logos/indiaflaglogo.png'),
-                  const SizedBox(
-                    width: 21,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jai Hind!',
-                        style: GoogleFonts.inter().copyWith(fontSize: 12),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/logos/indiaflaglogo.png'),
+                const SizedBox(
+                  width: 21,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Jai Hind!',
+                      style: GoogleFonts.inter().copyWith(fontSize: 12),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      agencyname ?? 'Loading...',
+                      // email,
+                      style: GoogleFonts.plusJakartaSans().copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        agencyname ?? 'Loading...',
-                        // email,
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 21,
+          ),
+          const SizedBox(
+            height: 21,
+          ),
+          EventRescueCountCard(
+              eventCount: eventsCount ?? '0', rescueCount: rescueCount ?? '0'),
+          const SizedBox(
+            height: 21,
+          ),
+          Text(
+            'Manage',
+            style: GoogleFonts.plusJakartaSans().copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            EventRescueCountCard(
-                eventCount: eventsCount ?? '0',
-                rescueCount: rescueCount ?? '0'),
-            const SizedBox(
-              height: 21,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: kIsWeb
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.center,
+              children: [
+                ManageCard(
+                  text1: 'Rescue Operation',
+                  text2: 'Start',
+                  showModal: () async {
+                    await modalBottomSheet.openModal(
+                      context: context,
+                      widget: RescueOperation(token: widget.token),
+                    );
+                    getAgencyDataFromServer();
+                  },
+                  lineColor1: Colors.yellow.shade400,
+                  lineColor2: Colors.yellow.shade50,
+                ),
+                const SizedBox(
+                  width: 11,
+                ),
+                ManageCard(
+                  text1: 'Awareness Event',
+                  text2: 'Organize Event',
+                  showModal: () async {
+                    await modalBottomSheet.openModal(
+                      context: context,
+                      widget: OrganizeEvent(token: widget.token),
+                    );
+                    getAgencyDataFromServer();
+                  },
+                  lineColor1: Colors.green.shade400,
+                  lineColor2: Colors.green.shade50,
+                ),
+              ],
             ),
-            Text(
-              'Manage',
-              style: GoogleFonts.plusJakartaSans().copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: kIsWeb
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.center,
+              children: [
+                ManageCard(
+                  text1: 'Alert for disaster',
+                  text2: 'Send Alert',
+                  showModal: () {
+                    modalBottomSheet.openModal(
+                      context: context,
+                      widget: SendAlert(token: widget.token),
+                    );
+                  },
+                  lineColor1: Colors.red.shade400,
+                  lineColor2: Colors.red.shade50,
+                ),
+                const SizedBox(
+                  width: 11,
+                ),
+                ManageCard(
+                  text1: 'History',
+                  text2: 'History',
+                  showModal: () {
+                    modalBottomSheet.openModal(
+                      context: context,
+                      widget:
+                          History(token: widget.token, agencyName: agencyname!),
+                    );
+                  },
+                  lineColor1: Colors.blue.shade400,
+                  lineColor2: Colors.blue.shade50,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 15,
+          ),
+          const SizedBox(
+            height: 31,
+          ),
+          Text(
+            'View',
+            style: GoogleFonts.plusJakartaSans().copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: kIsWeb
-                    ? MainAxisAlignment.spaceAround
-                    : MainAxisAlignment.center,
-                children: [
-                  ManageCard(
-                    text1: 'Rescue Operation',
-                    text2: 'Start',
-                    showModal: () async {
-                      await modalBottomSheet.openModal(
-                        context: context,
-                        widget: RescueOperation(token: widget.token),
-                      );
-                      getAgencyDataFromServer();
-                    },
-                    lineColor1: Colors.yellow.shade400,
-                    lineColor2: Colors.yellow.shade50,
-                  ),
-                  const SizedBox(
-                    width: 11,
-                  ),
-                  ManageCard(
-                    text1: 'Awareness Event',
-                    text2: 'Organize Event',
-                    showModal: () async {
-                      await modalBottomSheet.openModal(
-                        context: context,
-                        widget: OrganizeEvent(token: widget.token),
-                      );
-                      getAgencyDataFromServer();
-                    },
-                    lineColor1: Colors.green.shade400,
-                    lineColor2: Colors.green.shade50,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: kIsWeb
-                    ? MainAxisAlignment.spaceAround
-                    : MainAxisAlignment.center,
-                children: [
-                  ManageCard(
-                    text1: 'Alert for disaster',
-                    text2: 'Send Alert',
-                    showModal: () {
-                      modalBottomSheet.openModal(
-                        context: context,
-                        widget: SendAlert(token: widget.token),
-                      );
-                    },
-                    lineColor1: Colors.red.shade400,
-                    lineColor2: Colors.red.shade50,
-                  ),
-                  const SizedBox(
-                    width: 11,
-                  ),
-                  ManageCard(
-                    text1: 'History',
-                    text2: 'History',
-                    showModal: () {
-                      modalBottomSheet.openModal(
-                        context: context,
-                        widget: History(
-                            token: widget.token, agencyName: agencyname!),
-                      );
-                    },
-                    lineColor1: Colors.blue.shade400,
-                    lineColor2: Colors.blue.shade50,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            Text(
-              'View',
-              style: GoogleFonts.plusJakartaSans().copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            Row(
+          ),
+          const SizedBox(
+            height: 21,
+          ),
+          Expanded(
+            child: Row(
               mainAxisAlignment: kIsWeb
                   ? MainAxisAlignment.spaceAround
                   : MainAxisAlignment.center,
@@ -248,8 +250,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   text1: 'E',
                   text2: 'Manage',
                   text3: 'Events',
-                  color1: const Color.fromARGB(232, 224, 144, 131),
-                  color2: const Color.fromARGB(232, 224, 83, 61),
+                  color1: const Color.fromARGB(232, 213, 128, 115),
+                  color2: const Color.fromARGB(232, 214, 70, 47),
                   circleColor: themeData.brightness == Brightness.dark
                       ? Theme.of(context).colorScheme.primary
                       : const Color.fromARGB(206, 255, 255, 255),
@@ -268,8 +270,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   text1: 'M',
                   text2: 'Rescue',
                   text3: 'Map',
-                  color1: const Color.fromARGB(225, 226, 167, 178),
-                  color2: const Color.fromARGB(228, 231, 140, 157),
+                  color1: const Color.fromARGB(223, 226, 168, 180),
+                  color2: const Color.fromARGB(226, 215, 123, 140),
                   circleColor: themeData.brightness == Brightness.dark
                       ? Theme.of(context).colorScheme.primary
                       : const Color.fromARGB(206, 255, 255, 255),
@@ -282,11 +284,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 21,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 21,
+          ),
+        ],
       ),
     );
   }

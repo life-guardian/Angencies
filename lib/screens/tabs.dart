@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/user_account_details.dart';
@@ -25,6 +26,7 @@ class TabsBottom extends StatefulWidget {
 class _TabsBottomState extends State<TabsBottom> {
   late Widget activePage;
   int _currentIndx = 0;
+  double _screenWidth = 0;
 
   @override
   void initState() {
@@ -49,53 +51,56 @@ class _TabsBottomState extends State<TabsBottom> {
         ),
       ),
     );
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-      'Authorization': 'Bearer ${widget.myToken}'
-    };
+    // Map<String, String> headers = {
+    //   "Content-Type": "application/json",
+    //   'Authorization': 'Bearer ${widget.myToken}'
+    // };
 
-    var response = await http.delete(
-      Uri.parse(logoutUserUrl),
-      headers: headers,
+    // var response = await http.delete(
+    //   Uri.parse(logoutUserUrl),
+    //   headers: headers,
+    // );
+
+    // var jsonResponse = jsonDecode(response.body);
+
+    // String message = jsonResponse['message'];
+
+    // if (response.statusCode == 200 || response.statusCode != 200) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+
+    while (Navigator.canPop(context)) {
+      Navigator.of(context).pop();
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => const WelcomeScreen(),
+      ),
     );
 
-    var jsonResponse = jsonDecode(response.body);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => const LoginScreen(),
+      ),
+    );
 
-    String message = jsonResponse['message'];
-
-    if (response.statusCode == 200 || response.statusCode != 200) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.remove('token');
-
-      while (Navigator.canPop(context)) {
-        Navigator.of(context).pop();
-      }
-
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) => const WelcomeScreen(),
-        ),
-      );
-
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) => const LoginScreen(),
-        ),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
-    } else {
-      customShowDialog(
-          context: context, titleText: 'Ooops!', contentText: message);
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        // content: Text(message),
+        content: Text("Logged out succesfully"),
+      ),
+    );
+    // } else {
+    //   customShowDialog(
+    //       context: context, titleText: 'Ooops!', contentText: message);
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    _screenWidth = MediaQuery.of(context).size.width;
+
     if (_currentIndx == 1) {
       activePage = UserAccountDetails(
         logoutUser: _logoutUser,
@@ -105,36 +110,19 @@ class _TabsBottomState extends State<TabsBottom> {
     }
 
     return Scaffold(
-      // backgroundColor: Theme.of(context).colorScheme.background,
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       // kIsWeb
       //     ? Padding(
       //         padding: const EdgeInsets.all(12.0),
       //         child: activeScreenWeb(context: context),
       //       )
-      //     : activeScreen(),
-      body: kIsWeb
+      //     : activeScreenMobile(),
+      body: _screenWidth > kScreenWidth
           ? activeScreenWeb(context: context)
-          : SafeArea(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.background,
-                    ],
-                    stops: const [
-                      0.5,
-                      1,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-                child: activeScreen(),
-              ),
+          : Expanded(
+              child: activeScreenMobile(),
             ),
-      bottomNavigationBar: kIsWeb
+      bottomNavigationBar: _screenWidth > kScreenWidth
           ? null
           : Container(
               decoration: BoxDecoration(
@@ -173,62 +161,64 @@ class _TabsBottomState extends State<TabsBottom> {
   Widget navigationBarWeb({required BuildContext context}) {
     return Padding(
       padding: const EdgeInsets.only(right: 10, top: 8, bottom: 8),
-      child: Card(
-        color: Theme.of(context).colorScheme.secondary,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _currentIndx = 0;
-                      });
-                    },
-                    icon: Icon(
-                      _currentIndx == 0
-                          ? Icons.home_rounded
-                          : Icons.home_outlined,
-                      color: Colors.grey,
-                      size: _currentIndx == 0 ? 50 : 40,
+      child: SizedBox(
+        child: Card(
+          color: Theme.of(context).colorScheme.secondary,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentIndx = 0;
+                        });
+                      },
+                      icon: Icon(
+                        _currentIndx == 0
+                            ? Icons.home_rounded
+                            : Icons.home_outlined,
+                        color: Colors.grey,
+                        size: _currentIndx == 0 ? 50 : 40,
+                      ),
                     ),
-                  ),
-                  const CustomTextWidget(
-                    text: "Home",
-                    color: Colors.grey,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _currentIndx = 1;
-                      });
-                    },
-                    icon: Icon(
-                      _currentIndx == 0
-                          ? Icons.account_circle_outlined
-                          : Icons.account_circle_rounded,
+                    const CustomTextWidget(
+                      text: "Home",
                       color: Colors.grey,
-                      size: _currentIndx == 1 ? 50 : 40,
-                    ),
-                  ),
-                  const CustomTextWidget(
-                    text: "Account",
-                    color: Colors.grey,
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentIndx = 1;
+                        });
+                      },
+                      icon: Icon(
+                        _currentIndx == 0
+                            ? Icons.account_circle_outlined
+                            : Icons.account_circle_rounded,
+                        color: Colors.grey,
+                        size: _currentIndx == 1 ? 50 : 40,
+                      ),
+                    ),
+                    const CustomTextWidget(
+                      text: "Account",
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -241,14 +231,14 @@ class _TabsBottomState extends State<TabsBottom> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: activeScreen(),
+            child: activeScreenMobile(),
           ),
         ),
       ],
     );
   }
 
-  Widget activeScreen() {
+  Widget activeScreenMobile() {
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
