@@ -106,108 +106,117 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    return ListView.builder(
-      itemCount: widget.eventList.length,
-      itemBuilder: (context, index) {
-        final eventData = widget.eventList.elementAt(index);
-        return InkWell(
-          onTap: () {
-            navigateToRegisteredUsers(id: eventData.eventId.toString());
-          },
-          child: Card(
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+    return widget.eventList.isEmpty
+        ? const Center(
+            child: Text(
+              "Sorry No Data found!",
             ),
-            color: Theme.of(context).colorScheme.secondary,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 20,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          )
+        : ListView.builder(
+            itemCount: widget.eventList.length,
+            itemBuilder: (context, index) {
+              final eventData = widget.eventList.elementAt(index);
+              return InkWell(
+                onTap: () {
+                  navigateToRegisteredUsers(id: eventData.eventId.toString());
+                },
+                child: Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          eventData.eventName.toString(),
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                eventData.eventName.toString(),
+                                style: GoogleFonts.plusJakartaSans().copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                // code here to show exact location
+                                eventData.locality.toString(),
+                                style: GoogleFonts.plusJakartaSans().copyWith(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 1,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                DateFormat('dd/MM/yy').format(DateTime.parse(
+                                    eventData.eventDate.toString())),
+                                style: GoogleFonts.plusJakartaSans().copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: (themeData.brightness ==
+                                          Brightness.light)
+                                      ? const Color.fromARGB(255, 224, 28, 14)
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          // code here to show exact location
-                          eventData.locality.toString(),
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            overflow: TextOverflow.ellipsis,
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color.fromARGB(224, 210, 85, 74),
+                                Color.fromARGB(210, 228, 53, 37)
+                              ],
+                            ),
                           ),
-                          maxLines: 1,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          DateFormat('dd/MM/yy').format(
-                              DateTime.parse(eventData.eventDate.toString())),
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: (themeData.brightness == Brightness.light)
-                                ? const Color.fromARGB(255, 224, 28, 14)
-                                : Theme.of(context).colorScheme.onBackground,
-                            fontSize: 14,
+                          child: IconButton(
+                            onPressed: () {
+                              customLogoutDialog(
+                                  context: context,
+                                  titleText: 'Confirm Delete !',
+                                  onTap: () {
+                                    // delete from server
+                                    deleteEvent(
+                                        id: eventData.eventId.toString(),
+                                        index: index);
+                                  },
+                                  actionText2: 'Yes',
+                                  contentText:
+                                      'Deleting an event cancels all registrations. This action cannot be undone.');
+                            },
+                            icon: const Icon(
+                              Icons.delete_rounded,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color.fromARGB(224, 210, 85, 74),
-                          Color.fromARGB(210, 228, 53, 37)
-                        ],
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        customLogoutDialog(
-                            context: context,
-                            titleText: 'Confirm Delete !',
-                            onTap: () {
-                              // delete from server
-                              deleteEvent(
-                                  id: eventData.eventId.toString(),
-                                  index: index);
-                            },
-                            actionText2: 'Yes',
-                            contentText:
-                                'Deleting an event cancels all registrations. This action cannot be undone.');
-                      },
-                      icon: const Icon(
-                        Icons.delete_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+                ),
+              );
+            },
+          );
   }
 }

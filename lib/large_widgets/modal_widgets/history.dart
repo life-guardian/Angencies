@@ -12,6 +12,7 @@ import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
+import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';
@@ -47,27 +48,16 @@ class _HistoryState extends ConsumerState<History> {
   String filterValue = 'Alert History';
 
   List<OperationHistory> operationHistoryData = [];
-  late Widget activeWidget;
-
-  void assignActiveWidget() {
-    setState(() {
-      activeWidget = ref.read(alertHistoryProvider).isNotEmpty
-          ? BuildAlertHistoryListView(
-              ref: ref,
-            )
-          : const Center(
-              child: CircularProgressIndicator(
-                color: Colors.grey,
-              ),
-            );
-    });
-  }
+  Widget activeWidget = const Center(
+    child: CircularProgressIndicator(
+      color: Colors.grey,
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
 
-    assignActiveWidget();
     initializeTokenHeader();
 
     // Get list of data from server
@@ -94,14 +84,19 @@ class _HistoryState extends ConsumerState<History> {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
+
       for (var jsonData in jsonResponse) {
         data.add(AlertHistory.fromJson(jsonData));
       }
     }
 
     ref.read(alertHistoryProvider.notifier).addList(data);
-    assignActiveWidget();
-    setState(() {});
+
+    setState(() {
+      activeWidget = BuildAlertHistoryListView(
+        ref: ref,
+      );
+    });
   }
 
   Future<void> getEventHistoryData() async {

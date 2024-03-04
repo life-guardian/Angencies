@@ -14,62 +14,68 @@ class BuildAlertHistoryListView extends StatelessWidget {
     ThemeData themeData = Theme.of(context);
     final alertList = ref.watch(alertHistoryProvider);
 
-    return ListView.builder(
-      itemCount: alertList.length,
-      itemBuilder: (context, index) {
-        final alert = alertList.elementAt(index);
-        return Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          color: Theme.of(context).colorScheme.secondary,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 20,
+    return alertList.isEmpty
+        ? const Center(
+            child: Text(
+              "Sorry No Data found!",
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      alert.alertName.toString(),
-                      style: GoogleFonts.plusJakartaSans().copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      alert.alertSeverity.toString(),
-                      style: GoogleFonts.plusJakartaSans().copyWith(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+          )
+        : ListView.builder(
+            itemCount: alertList.length,
+            itemBuilder: (context, index) {
+              final alert = alertList.elementAt(index);
+              return Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                Text(
-                  DateFormat('dd/MM/yy').format(
-                      DateTime.parse(alert.alertForDate.toString())),
-                  style: GoogleFonts.plusJakartaSans().copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: (themeData.brightness == Brightness.light)
-                        ? const Color.fromARGB(255, 224, 28, 14)
-                        : Theme.of(context).colorScheme.onBackground,
-                    fontSize: 14,
+                color: Theme.of(context).colorScheme.secondary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            alert.alertName.toString(),
+                            style: GoogleFonts.plusJakartaSans().copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            alert.alertSeverity.toString(),
+                            style: GoogleFonts.plusJakartaSans().copyWith(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        DateFormat('dd/MM/yy').format(
+                            DateTime.parse(alert.alertForDate.toString())),
+                        style: GoogleFonts.plusJakartaSans().copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: (themeData.brightness == Brightness.light)
+                              ? const Color.fromARGB(255, 224, 28, 14)
+                              : Theme.of(context).colorScheme.onBackground,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+              );
+            },
+          );
   }
 }

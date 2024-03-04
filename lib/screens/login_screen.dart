@@ -89,38 +89,44 @@ class _LoginScreenState extends State<LoginScreen> {
       "username": agencyLoginEmail.text,
       "password": agencyPassword.text,
     };
+
     String serverMessage;
 
-    var response = await http.post(
-      Uri.parse(loginUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(reqBody),
-    );
-    // print(response.statusCode);
-    // var jsonResponse = jsonDecode(response.body);
-    var jsonResponse = jsonDecode(response.body);
-    serverMessage = jsonResponse['message'];
-
-    if (response.statusCode == 200) {
-      //storin user login data in local variable
-      var myToken = jsonResponse['token'];
-      prefs.setString('token', myToken);
-
-      // Navigator.of(context).pop();
-      _navigateToHomeScreen(myToken);
-      //success
-    } else {
-      // something went wrong
-      setState(() {
-        activeButtonWidget = const Text('Login');
-      });
-
-      buttonPressed = await customShowDialog(
-        context: context,
-        titleText: 'Ooops!',
-        contentText: serverMessage.toString(),
+    try {
+      var response = await http.post(
+        Uri.parse(loginUrl),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(reqBody),
       );
+      // print(response.statusCode);
+      // var jsonResponse = jsonDecode(response.body);
+      var jsonResponse = jsonDecode(response.body);
+      serverMessage = jsonResponse['message'];
+
+      if (response.statusCode == 200) {
+        //storin user login data in local variable
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+
+        // Navigator.of(context).pop();
+        _navigateToHomeScreen(myToken);
+        //success
+      } else {
+        // something went wrong
+        setState(() {
+          activeButtonWidget = const Text('Login');
+        });
+
+        buttonPressed = await customShowDialog(
+          context: context,
+          titleText: 'Ooops!',
+          contentText: serverMessage.toString(),
+        );
+      }
+    } catch (error) {
+      print("Error occured while logging in: ${error.toString()}");
     }
+
     setState(() {
       buttonEnabled = true;
     });

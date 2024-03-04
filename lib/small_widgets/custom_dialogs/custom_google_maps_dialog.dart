@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 Future customGoogleMapsDialog({
   required BuildContext context,
-  required String titleText,
+   String? titleText,
 }) =>
     showDialog(
       context: context,

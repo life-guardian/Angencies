@@ -69,7 +69,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   void openMaps() async {
     PickedData pickedLocationData = await customGoogleMapsDialog(
-        context: context, titleText: 'Select Location to send alert');
+        context: context);
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
     address = await exactLocation.locality(lat: lat!, lng: lng!);

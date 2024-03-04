@@ -11,72 +11,78 @@ class BuildRescueHistoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rescueList =ref.watch(rescueHistoryProvider);
+    final rescueList = ref.watch(rescueHistoryProvider);
 
     ThemeData themeData = Theme.of(context);
-    return ListView.builder(
-      itemCount: rescueList.length,
-      itemBuilder: (context, index) {
-        final rescueOperation = rescueList.elementAt(index);
-        return Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          color: Theme.of(context).colorScheme.secondary,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 20,
+    return rescueList.isEmpty
+        ? const Center(
+            child: Text(
+              "Sorry No Data found!",
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          )
+        : ListView.builder(
+            itemCount: rescueList.length,
+            itemBuilder: (context, index) {
+              final rescueOperation = rescueList.elementAt(index);
+              return Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                color: Theme.of(context).colorScheme.secondary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        rescueOperation.name.toString(),
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              rescueOperation.name.toString(),
+                              style: GoogleFonts.plusJakartaSans().copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              rescueOperation.description.toString(),
+                              style: GoogleFonts.plusJakartaSans().copyWith(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 10,
                       ),
                       Text(
-                        rescueOperation.description.toString(),
+                        DateFormat('dd/MM/yy').format(DateTime.parse(
+                            rescueOperation.createdAt.toString())),
                         style: GoogleFonts.plusJakartaSans().copyWith(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                          color: (themeData.brightness == Brightness.light)
+                              ? const Color.fromARGB(255, 224, 28, 14)
+                              : Theme.of(context).colorScheme.onBackground,
+                          fontSize: 14,
                         ),
-                        maxLines: 1,
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  DateFormat('dd/MM/yy')
-                      .format(DateTime.parse(rescueOperation.createdAt.toString())),
-                  style: GoogleFonts.plusJakartaSans().copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: (themeData.brightness == Brightness.light)
-                        ? const Color.fromARGB(255, 224, 28, 14)
-                        : Theme.of(context).colorScheme.onBackground,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+              );
+            },
+          );
   }
 }
