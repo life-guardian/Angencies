@@ -41,14 +41,11 @@ class _TabsBottomState extends State<TabsBottom> {
   Future<void> getDeviceLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      debugPrint('Location Access Denied');
-      await Geolocator.requestPermission();
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-      globalLat = currentPosition.latitude;
-      globallng = currentPosition.longitude;
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        debugPrint("Location permission denied");
+      }
     } else {
       Position currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best);

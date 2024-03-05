@@ -7,7 +7,7 @@ class OpenStreetMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenStreetMapSearchAndPick(
-        center: const LatLong(16.401627, 74.2368399),
+        center: const LatLong(16.397634859397915, 74.191539028536),
         buttonColor: Colors.blue,
         buttonText: 'Pick Location',
         onPicked: (pickedData) {
