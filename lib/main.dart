@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final myToken = prefs.getString('token');
-
+// provider scope
   runApp(
     ProviderScope(
       child: MyApp(
