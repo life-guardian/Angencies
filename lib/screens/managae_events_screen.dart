@@ -5,14 +5,16 @@ import 'dart:convert';
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class ManageEventsScreen extends StatefulWidget {
+class ManageEventsScreen extends ConsumerStatefulWidget {
   const ManageEventsScreen({
     super.key,
     required this.agencyName,
@@ -23,10 +25,10 @@ class ManageEventsScreen extends StatefulWidget {
   final token;
 
   @override
-  State<ManageEventsScreen> createState() => _ManageEventsScreenState();
+  ConsumerState<ManageEventsScreen> createState() => _ManageEventsScreenState();
 }
 
-class _ManageEventsScreenState extends State<ManageEventsScreen> {
+class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
   late final jwtToken;
   late Map<String, String> headers;
   List<EventList> eventList = [];
@@ -35,29 +37,28 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
   String filterValue = 'Events';
 
-  Widget activeWidget = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  late Widget activeWidget;
 
   @override
   void initState() {
     super.initState();
+    assignActiveWidget();
     initializeTokenHeader();
-    getEventList().then(
-      (value) {
-        eventList.addAll(value);
-        // active widget
-        setState(() {
-          activeWidget = BuildManageEventListView(
-            eventList: eventList,
+    getEventList();
+  }
+
+  void assignActiveWidget() {
+    activeWidget = ref.read(manageEventsProvider).isNotEmpty
+        ? BuildManageEventListView(
+            ref: ref,
             token: widget.token,
             agencyName: widget.agencyName,
+          )
+        : const Center(
+            child: CircularProgressIndicator(
+              color: Colors.grey,
+            ),
           );
-        });
-      },
-    );
   }
 
   void initializeTokenHeader() {
@@ -68,7 +69,7 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
     };
   }
 
-  Future<List<EventList>> getEventList() async {
+  Future<void> getEventList() async {
     var response = await http.get(
       Uri.parse(manageEventHistoryUrl),
       headers: headers,
@@ -84,7 +85,15 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
       }
     }
 
-    return getEventsLocality(data: data);
+    ref.read(manageEventsProvider.notifier).addList(data);
+
+    setState(() {
+      activeWidget = BuildManageEventListView(
+        ref: ref,
+        token: widget.token,
+        agencyName: widget.agencyName,
+      );
+    });
   }
 
   Future<List<EventList>> getEventsLocality(
@@ -107,7 +116,6 @@ class _ManageEventsScreenState extends State<ManageEventsScreen> {
         String? locality = placemark.locality;
         localities.add(locality!);
       } catch (error) {
-       
         localities.add("Unknown"); // Add a placeholder for unknown localities
       }
     }

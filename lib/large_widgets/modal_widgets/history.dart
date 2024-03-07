@@ -48,22 +48,30 @@ class _HistoryState extends ConsumerState<History> {
   String filterValue = 'Alert History';
 
   List<OperationHistory> operationHistoryData = [];
-  Widget activeWidget = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  late Widget activeWidget;
 
   @override
   void initState() {
     super.initState();
 
+    assignActiveWidget();
     initializeTokenHeader();
-
     // Get list of data from server
     getAlertHistoryData();
     getEventHistoryData();
     getOperationHistoryData();
+  }
+
+  void assignActiveWidget() {
+    activeWidget = ref.read(alertHistoryProvider).isNotEmpty
+        ? activeWidget = BuildAlertHistoryListView(
+            ref: ref,
+          )
+        : const Center(
+            child: CircularProgressIndicator(
+              color: Colors.grey,
+            ),
+          );
   }
 
   void initializeTokenHeader() {

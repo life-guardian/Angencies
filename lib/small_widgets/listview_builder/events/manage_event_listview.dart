@@ -4,11 +4,13 @@ import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/models/event_list.dart';
+import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -17,12 +19,12 @@ import 'package:http/http.dart' as http;
 class BuildManageEventListView extends StatefulWidget {
   const BuildManageEventListView({
     super.key,
-    required this.eventList,
+    required this.ref,
     required this.token,
     required this.agencyName,
   });
 
-  final List<EventList> eventList;
+  final WidgetRef ref;
   final token;
   final String agencyName;
 
@@ -62,7 +64,8 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
     if (response.statusCode == 200) {
       setState(() {
         Navigator.of(context).pop();
-        widget.eventList.removeAt(index);
+        widget.ref.read(manageEventsProvider.notifier).removeAt(id: id);
+        // widget.eventList.removeAt(index);
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -106,16 +109,17 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    return widget.eventList.isEmpty
+    final eventList= widget.ref.watch(manageEventsProvider);
+    return eventList.isEmpty
         ? const Center(
             child: Text(
               "Sorry No Data found!",
             ),
           )
         : ListView.builder(
-            itemCount: widget.eventList.length,
+            itemCount: eventList.length,
             itemBuilder: (context, index) {
-              final eventData = widget.eventList.elementAt(index);
+              final eventData = eventList.elementAt(index);
               return InkWell(
                 onTap: () {
                   navigateToRegisteredUsers(id: eventData.eventId.toString());
