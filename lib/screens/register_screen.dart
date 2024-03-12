@@ -7,7 +7,6 @@ import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';

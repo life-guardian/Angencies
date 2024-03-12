@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
@@ -86,6 +87,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     ThemeData themeData = Theme.of(context);
     agencyname = ref.watch(agencyNameProvider);
     eventsCount = ref.watch(eventsCountProvider.notifier).state[0];

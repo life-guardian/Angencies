@@ -184,22 +184,22 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Events Registrations',
+                                  'Registered Users',
                                   style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  'Fire and Safety drill',
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                // const SizedBox(
+                                //   height: 16,
+                                // ),
+                                // Text(
+                                //   'Fire and Safety drill',
+                                //   style: GoogleFonts.plusJakartaSans().copyWith(
+                                //     fontSize: 15,
+                                //     fontWeight: FontWeight.w600,
+                                //   ),
+                                // ),
                               ],
                             ),
                             Container(

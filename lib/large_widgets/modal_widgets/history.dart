@@ -12,7 +12,6 @@ import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
-import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';

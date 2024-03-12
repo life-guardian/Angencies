@@ -9,6 +9,10 @@ class AlertHistoryNotifier extends StateNotifier<List<AlertHistory>> {
   void addList(List<AlertHistory> list) {
     state = list;
   }
+
+  void reset(){
+    state=[];
+  }
 }
 
 final alertHistoryProvider =

@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (error) {
-      print("Error occured while logging in: ${error.toString()}");
+      debugPrint("Error occured while logging in: ${error.toString()}");
     }
 
     setState(() {
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -161,11 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Expanded(
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 20,
-              ),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 20,
             ),
           ),
         ),

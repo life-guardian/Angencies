@@ -68,11 +68,17 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   }
 
   void openMaps() async {
-    PickedData pickedLocationData = await customGoogleMapsDialog(
-        context: context);
+    PickedData pickedLocationData =
+        await customGoogleMapsDialog(context: context);
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
-    address = await exactLocation.locality(lat: lat!, lng: lng!);
+    try {
+      address = await exactLocation.locality(lat: lat!, lng: lng!);
+    } catch (e) {
+      address = pickedLocationData
+          .addressName; // if failed to fetch address then assign value from osm address
+      debugPrint('Failed to fetch address: ${e.toString()}');
+    }
     setState(() {});
   }
 

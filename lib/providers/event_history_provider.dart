@@ -9,6 +9,9 @@ class EventHistoryNotifier extends StateNotifier<List<EventHistory>> {
   void addList(List<EventHistory> list) {
     state = list;
   }
+  void reset(){
+    state=[];
+  }
 }
 
 final eventHistoryProvider =

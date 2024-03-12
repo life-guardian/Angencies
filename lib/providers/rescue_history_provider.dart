@@ -9,6 +9,10 @@ class RescueHistoryNotifier extends StateNotifier<List<OperationHistory>> {
   void addList(List<OperationHistory> list) {
     state = list;
   }
+
+  void reset(){
+    state=[];
+  }
 }
 
 final rescueHistoryProvider =

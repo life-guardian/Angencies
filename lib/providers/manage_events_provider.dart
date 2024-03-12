@@ -17,6 +17,9 @@ class ManageEventsNotifier extends StateNotifier<List<EventList>> {
         )
         .toList();
   }
+  void reset(){
+    state=[];
+  }
 }
 
 final manageEventsProvider =

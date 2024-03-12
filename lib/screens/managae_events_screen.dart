@@ -85,6 +85,10 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
       }
     }
 
+    await getEventsLocality(data: data).then((eventListWithLocalities) {
+      data = eventListWithLocalities;
+    });
+
     ref.read(manageEventsProvider.notifier).addList(data);
 
     setState(() {
