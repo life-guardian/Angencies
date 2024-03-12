@@ -38,7 +38,7 @@ class _RescueOperationState extends State<RescueOperation> {
   ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
-    'START OPERATION',
+    'START',
     style: GoogleFonts.mulish(
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
@@ -53,7 +53,7 @@ class _RescueOperationState extends State<RescueOperation> {
 
   void setButtonText() {
     activeButtonText = Text(
-      'START OPERATION',
+      'START',
       style: GoogleFonts.mulish(
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );
