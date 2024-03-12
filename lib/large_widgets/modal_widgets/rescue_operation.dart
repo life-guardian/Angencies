@@ -64,7 +64,13 @@ class _RescueOperationState extends State<RescueOperation> {
         context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
-    address = await exactLocation.locality(lat: lat!, lng: lng!);
+    try {
+      address = await exactLocation.locality(lat: lat!, lng: lng!);
+    } catch (e) {
+      address = pickedLocationData
+          .addressName; // if failed to fetch address then assign value from osm address
+      debugPrint('Failed to fetch address: ${e.toString()}');
+    }
     setState(() {});
   }
 

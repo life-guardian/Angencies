@@ -23,7 +23,6 @@ class EventRescueCountCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: Row(
-        // crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Row(
@@ -59,11 +58,10 @@ class EventRescueCountCard extends StatelessWidget {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: VerticalDivider(
-              color: Colors.white,
-            ),
+          const VerticalDivider(
+            color: Colors.white,
+            indent: 15,
+            endIndent: 15,
           ),
           Row(
             children: [

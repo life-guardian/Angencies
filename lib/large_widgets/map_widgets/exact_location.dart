@@ -13,8 +13,7 @@ class ExactLocation {
       Placemark placemark = placemarks[0];
       locality = placemark.locality;
     } catch (error) {
-      print(
-          "Error fetching locality for coordinates: ${error.toString()}"); // Add a placeholder for unknown localities
+      // catched error while fetching exact location
     }
     return locality!;
   }

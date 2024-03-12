@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 
 Future customGoogleMapsDialog({
   required BuildContext context,
-  required String titleText,
+  String? titleText,
 }) =>
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(20.0), // Set borderRadius to desired value
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: const OpenStreetMap(),
       ),

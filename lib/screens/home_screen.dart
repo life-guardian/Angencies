@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
@@ -87,6 +88,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     ThemeData themeData = Theme.of(context);
     agencyname = ref.watch(agencyNameProvider);
     eventsCount = ref.watch(eventsCountProvider.notifier).state[0];
@@ -94,7 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Expanded(
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -148,7 +150,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 15,
             ),
-            Expanded(
+            SizedBox(
+              // width: manageEventWidth,
+              height: 140,
               child: Row(
                 mainAxisAlignment: kIsWeb
                     ? MainAxisAlignment.spaceAround
@@ -189,7 +193,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 15,
             ),
-            Expanded(
+            SizedBox(
+              height: 140,
+              // width: manageEventWidth,
               child: Row(
                 mainAxisAlignment: kIsWeb
                     ? MainAxisAlignment.spaceAround
@@ -239,48 +245,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 21,
             ),
-            Row(
-              mainAxisAlignment: kIsWeb
-                  ? MainAxisAlignment.spaceAround
-                  : MainAxisAlignment.center,
-              children: [
-                EventCard(
-                  text1: 'E',
-                  text2: 'Manage',
-                  text3: 'Events',
-                  color1: const Color.fromARGB(232, 224, 144, 131),
-                  color2: const Color.fromARGB(232, 224, 83, 61),
-                  circleColor: themeData.brightness == Brightness.dark
-                      ? Theme.of(context).colorScheme.primary
-                      : const Color.fromARGB(206, 255, 255, 255),
-                  onTap: () => Navigator.of(context).push(
-                    CustomSlideTransition(
-                      direction: AxisDirection.left,
-                      child: ManageEventsScreen(
-                          agencyName: agencyname!, token: widget.token),
+            SizedBox(
+              height: 140,
+              child: Row(
+                mainAxisAlignment: kIsWeb
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
+                children: [
+                  EventCard(
+                    text1: 'E',
+                    text2: 'Manage',
+                    text3: 'Events',
+                    color1: const Color.fromARGB(232, 213, 128, 115),
+                    color2: const Color.fromARGB(232, 214, 70, 47),
+                    circleColor: themeData.brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.primary
+                        : const Color.fromARGB(206, 255, 255, 255),
+                    onTap: () => Navigator.of(context).push(
+                      CustomSlideTransition(
+                        direction: AxisDirection.left,
+                        child: ManageEventsScreen(
+                            agencyName: agencyname!, token: widget.token),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 25,
-                ),
-                EventCard(
-                  text1: 'M',
-                  text2: 'Rescue',
-                  text3: 'Map',
-                  color1: const Color.fromARGB(225, 226, 167, 178),
-                  color2: const Color.fromARGB(228, 231, 140, 157),
-                  circleColor: themeData.brightness == Brightness.dark
-                      ? Theme.of(context).colorScheme.primary
-                      : const Color.fromARGB(206, 255, 255, 255),
-                  onTap: () => Navigator.of(context).push(
-                    CustomSlideTransition(
-                      direction: AxisDirection.left,
-                      child: const RescueMapScreen(),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  EventCard(
+                    text1: 'M',
+                    text2: 'Rescue',
+                    text3: 'Map',
+                    color1: const Color.fromARGB(223, 226, 168, 180),
+                    color2: const Color.fromARGB(226, 215, 123, 140),
+                    circleColor: themeData.brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.primary
+                        : const Color.fromARGB(206, 255, 255, 255),
+                    onTap: () => Navigator.of(context).push(
+                      CustomSlideTransition(
+                        direction: AxisDirection.left,
+                        child: const RescueMapScreen(),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(
               height: 21,

@@ -10,6 +10,8 @@ class ManageCard extends StatelessWidget {
     required this.lineColor1,
     required this.lineColor2,
     this.stop1 = 0.5,
+    this.width,
+    this.height,
   });
 
   final void Function() showModal;
@@ -19,6 +21,8 @@ class ManageCard extends StatelessWidget {
   final Color lineColor1;
   final Color lineColor2;
   final double stop1;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,8 @@ class ManageCard extends StatelessWidget {
       child: InkWell(
         onTap: showModal,
         child: Container(
-          // height: 100,
-          // width: 200,
+          height: height,
+          width: width,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(10),

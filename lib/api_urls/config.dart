@@ -1,4 +1,9 @@
-var baseUrl = 'https://lifeguardian.cyclic.app';
+// var baseUrl = 'https://lifeguardian.cyclic.app';
+var baseUrl = 'https://lifeguardianapi.pratikjpatil.me';
+
+// global lat, lng
+double globalLat = 37.4219983;
+double globallng = -122.084;
 
 // sending data to server
 var registerurl = '$baseUrl/api/agency/register';

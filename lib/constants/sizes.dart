@@ -1,5 +1,3 @@
-import 'dart:io';
+const double mobileScreenWidth = 600;
 
-const double kScreenWidth = 600;
-
-
+const double kWebMinWidth = 900;
