@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
@@ -224,37 +225,42 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
                     children: [
-                      Padding(
+                      Container(
+                        margin: screenWidth > mobileScreenWidth
+                            ? EdgeInsets.only(left: screenWidth / 6.5)
+                            : null,
                         padding: const EdgeInsets.only(
                             left: 16, right: 16, top: 5, bottom: 15),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Text(
-                                filterValue,
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  filterValue,
+                                  style: GoogleFonts.plusJakartaSans().copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              width: 22,
-                              height: 22,
-                              margin: const EdgeInsets.only(top: 4),
-                              child: Image.asset(
-                                'assets/logos/settings-sliders.png',
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
+                                Text(
+                                  "Tap on the event to see registered users",
+                                  style: GoogleFonts.plusJakartaSans().copyWith(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                       Expanded(
                         child: SizedBox(
-                          width: kIsWeb ? screenWidth / 1.5 : double.infinity,
+                          width: screenWidth > mobileScreenWidth
+                              ? screenWidth / 1.5
+                              : double.infinity,
                           child: activeWidget,
                         ),
                       ),

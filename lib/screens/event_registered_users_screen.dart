@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/api_urls/config.dart';
+import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
@@ -190,34 +191,16 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
                                     fontWeight: FontWeight.w900,
                                   ),
                                 ),
-                                // const SizedBox(
-                                //   height: 16,
-                                // ),
-                                // Text(
-                                //   'Fire and Safety drill',
-                                //   style: GoogleFonts.plusJakartaSans().copyWith(
-                                //     fontSize: 15,
-                                //     fontWeight: FontWeight.w600,
-                                //   ),
-                                // ),
                               ],
-                            ),
-                            Container(
-                              width: 22,
-                              height: 22,
-                              margin: const EdgeInsets.only(top: 4),
-                              child: Image.asset(
-                                'assets/logos/settings-sliders.png',
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
                             ),
                           ],
                         ),
                       ),
                       Expanded(
                         child: SizedBox(
-                          width: kIsWeb ? screenWidth / 1.5 : double.infinity,
+                          width: screenWidth > mobileScreenWidth
+                              ? screenWidth / 1.5
+                              : double.infinity,
                           child: activeWidget,
                         ),
                       ),

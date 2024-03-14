@@ -4,6 +4,7 @@ import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/providers/agencyname_provider.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
+import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
 import 'package:agencies_app/screens/home_screen.dart';
@@ -25,7 +26,7 @@ class TabsBottom extends ConsumerStatefulWidget {
 }
 
 class _TabsBottomState extends ConsumerState<TabsBottom> {
-  bool dataLoaded = true;
+  bool dataLoaded = false;
   Widget activePage = const Center(
     child: CircularProgressIndicator(
       color: Colors.grey,
@@ -58,24 +59,26 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       }
     } else {
       Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-      globalLat = currentPosition.latitude;
-      globallng = currentPosition.longitude;
+          desiredAccuracy: LocationAccuracy.high);
+
+      ref.read(deviceLocationProvider.notifier).state = [
+        currentPosition.latitude,
+        currentPosition.longitude
+      ];
 
       debugPrint(
-          "Latitude: ${globalLat.toString()} , Longitude: ${globallng.toString()}");
+          "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
     }
+
     setState(() {
       dataLoaded = true;
     });
-    // Navigator.of(context).pop();
   }
 
   void cleanAllProviders() {
     // resetting all the provider when logging out
     ref.read(agencyNameProvider.notifier).state = "Loading...";
     ref.read(eventsCountProvider.notifier).state = ['0', '0'];
-
     ref.read(alertHistoryProvider.notifier).reset();
     ref.read(eventHistoryProvider.notifier).reset();
     ref.read(manageEventsProvider.notifier).reset();
@@ -126,7 +129,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   Widget build(BuildContext context) {
     _screenWidth = MediaQuery.of(context).size.width;
 
-    if (dataLoaded) {
+    if (dataLoaded == true) {
       if (_currentIndx == 1) {
         activePage = UserAccountDetails(
           logoutUser: _logoutUser,

@@ -151,7 +151,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               height: 15,
             ),
             SizedBox(
-              // width: manageEventWidth,
               height: 140,
               child: Row(
                 mainAxisAlignment: kIsWeb

@@ -235,34 +235,34 @@ class _OrganizeEventState extends State<OrganizeEvent> {
               const SizedBox(
                 height: 5,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    // width: 2,
-                    color: Colors.grey,
-                    style: BorderStyle.solid,
+              GestureDetector(
+                onTap: _presentDatePicker,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      // width: 2,
+                      color: Colors.grey,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextInTextField(
-                        selectedText: (_selectedDate == null)
-                            ? null
-                            : formatter.format(_selectedDate!),
-                        initialText: 'Pick Date',
-                      ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      GestureDetector(
-                        onTap: _presentDatePicker,
-                        child: const Icon(Icons.calendar_month_outlined),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextInTextField(
+                          selectedText: (_selectedDate == null)
+                              ? null
+                              : formatter.format(_selectedDate!),
+                          initialText: 'Pick Date',
+                        ),
+                        const SizedBox(
+                          width: 11,
+                        ),
+                        const Icon(Icons.calendar_month_outlined),
+                      ],
+                    ),
                   ),
                 ),
               ),
