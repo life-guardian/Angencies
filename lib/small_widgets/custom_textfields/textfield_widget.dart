@@ -42,18 +42,20 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       controller: widget.controllerText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       cursorColor: Theme.of(context).colorScheme.onBackground,
+      cursorErrorColor: Colors.red,
       validator: (value) => widget.checkValidation(value),
+      selectionControls: DesktopTextSelectionControls(),
       decoration: InputDecoration(
         suffixIcon: widget.obsecureIcon
             ? IconButton(
                 onPressed: _obscuretxt,
                 icon: selectedObscure
                     ? const Icon(
-                        Icons.visibility_off,
+                        Icons.lock_rounded,
                         color: Colors.grey,
                       )
                     : const Icon(
-                        Icons.visibility,
+                        Icons.lock_open_rounded,
                         color: Colors.grey,
                       ),
               )
