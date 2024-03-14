@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'dart:convert';
-
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/filter_history.dart';
 
 import 'package:agencies_app/models/alert_history.dart';
@@ -16,6 +14,7 @@ import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history
 import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -82,6 +81,8 @@ class _HistoryState extends ConsumerState<History> {
   }
 
   Future<void> getAlertHistoryData() async {
+    String alertHistoryUrl = dotenv.get("alertHistoryUrl");
+
     var response = await http.get(
       Uri.parse(alertHistoryUrl),
       headers: headers,
@@ -107,6 +108,8 @@ class _HistoryState extends ConsumerState<History> {
   }
 
   Future<void> getEventHistoryData() async {
+    String eventHistoryUrl = dotenv.get("eventHistoryUrl");
+
     var response = await http.get(
       Uri.parse(eventHistoryUrl),
       headers: headers,
@@ -125,6 +128,8 @@ class _HistoryState extends ConsumerState<History> {
   }
 
   Future<void> getOperationHistoryData() async {
+    String operationHistoryUrl = dotenv.get("operationHistoryUrl");
+
     var response = await http.get(
       Uri.parse(operationHistoryUrl),
       headers: headers,

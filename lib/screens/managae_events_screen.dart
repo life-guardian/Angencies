@@ -2,14 +2,13 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,6 +68,9 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
       'Authorization': 'Bearer $jwtToken'
     };
   }
+
+      String manageEventHistoryUrl = dotenv.get("manageEventHistoryUrl");
+
 
   Future<void> getEventList() async {
     var response = await http.get(

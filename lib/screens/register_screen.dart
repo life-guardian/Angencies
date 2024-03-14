@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +162,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "address": agencyAddress.text.toString(),
       "representativeName": representativeName.text.toString(),
     };
+
+    String registerurl = dotenv.get("registerurl");
 
     var response = await http.post(
       Uri.parse(registerurl),

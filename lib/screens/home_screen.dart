@@ -2,8 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/api_urls/config.dart';
-import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
@@ -20,6 +18,7 @@ import 'package:agencies_app/large_widgets/modal_widgets/history.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -64,6 +63,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Authorization': 'Bearer $jwtToken'
     };
 
+    String getAgencyHomeScreenUrl = dotenv.get("getAgencyHomeScreenUrl");
+
     var response = await http.get(
       Uri.parse(getAgencyHomeScreenUrl),
       headers: headers,
@@ -87,7 +88,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenWidth = MediaQuery.of(context).size.width;
 
     ThemeData themeData = Theme.of(context);
     agencyname = ref.watch(agencyNameProvider);
