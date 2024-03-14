@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
 import 'package:agencies_app/custom_functions/datepicker_function.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_modal.dart';
@@ -120,6 +120,9 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     };
 
     try {
+                      String awarenessEventUrl = dotenv.get("awarenessEventUrl");
+
+
       var response = await http.post(
         Uri.parse(awarenessEventUrl),
         headers: {

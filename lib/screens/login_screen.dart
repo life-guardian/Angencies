@@ -5,11 +5,11 @@ import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,6 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
     };
 
     String serverMessage;
+
+    var loginUrl = dotenv.get("loginUrl");
 
     try {
       var response = await http.post(

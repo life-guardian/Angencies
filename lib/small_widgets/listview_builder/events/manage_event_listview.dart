@@ -2,13 +2,13 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -45,6 +45,9 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
         child: CircularProgressIndicator(),
       ),
     );
+
+            String cancelEventUrl = dotenv.get("cancelEventUrl");
+
 
     var response = await http.delete(
       Uri.parse('$cancelEventUrl$id'),

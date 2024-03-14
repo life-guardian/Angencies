@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
@@ -14,6 +13,7 @@ import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dar
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/text_in_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -120,6 +120,8 @@ class _SendAlertState extends State<SendAlert> {
     };
 
     try {
+      String sendAlertUrl = dotenv.get("sendAlertUrl");
+
       var response = await http.post(
         Uri.parse(sendAlertUrl),
         headers: {

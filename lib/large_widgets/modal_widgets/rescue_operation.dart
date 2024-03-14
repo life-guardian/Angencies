@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/api_urls/config.dart';
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
@@ -12,6 +11,7 @@ import 'package:agencies_app/small_widgets/custom_textfields/select_map_location
 import 'package:agencies_app/small_widgets/custom_textfields/textfield_modal.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'package:http/http.dart' as http;
@@ -113,6 +113,8 @@ class _RescueOperationState extends State<RescueOperation> {
     };
 
     try {
+                            String rescueOperationUrl = dotenv.get("rescueOperationUrl");
+
       var response = await http.post(
         Uri.parse(rescueOperationUrl),
         headers: {

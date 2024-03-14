@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 ThemeData lightTheme = ThemeData(
   textButtonTheme: const TextButtonThemeData(
@@ -60,10 +59,8 @@ ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   textSelectionTheme: const TextSelectionThemeData(
     cursorColor: Colors.white,
-    
     selectionColor: Color.fromARGB(116, 255, 255, 255),
   ),
-  
   colorScheme: const ColorScheme.dark(
     background: Color(0xff0F172A),
     primary: Color(0xff0D2136),
