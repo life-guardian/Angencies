@@ -120,10 +120,10 @@ class _SendAlertState extends State<SendAlert> {
     };
 
     try {
-      String sendAlertUrl = dotenv.get("sendAlertUrl");
+      String baseUrl = dotenv.get("BASE_URL");
 
       var response = await http.post(
-        Uri.parse(sendAlertUrl),
+        Uri.parse('$baseUrl/api/alert/agency/sendalert'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $jwtToken',
