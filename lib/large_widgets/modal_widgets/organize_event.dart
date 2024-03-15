@@ -120,10 +120,10 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     };
 
     try {
-      String BASE_URL = dotenv.get("BASE_URL");
+      String baseUrl = dotenv.get("BASE_URL");
 
       var response = await http.post(
-        Uri.parse('$BASE_URL/api/event/agency/add'),
+        Uri.parse('$baseUrl/api/event/agency/add'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $jwtToken',

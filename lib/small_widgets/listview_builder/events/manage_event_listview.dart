@@ -46,10 +46,10 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
       ),
     );
 
-    String BASE_URL = dotenv.get("BASE_URL");
+    String baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.delete(
-      Uri.parse('$BASE_URL/api/event/agency/cancel/$id'),
+      Uri.parse('$baseUrl/api/event/agency/cancel/$id'),
       headers: {
         "Content-Type": "application/json",
         'Authorization': 'Bearer ${widget.token}'

@@ -63,10 +63,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Authorization': 'Bearer $jwtToken'
     };
 
-    String BASE_URL = dotenv.get("BASE_URL");
+    String baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.get(
-      Uri.parse('$BASE_URL/api/agency/eventroperationcount'),
+      Uri.parse('$baseUrl/api/agency/eventroperationcount'),
       headers: headers,
     );
 

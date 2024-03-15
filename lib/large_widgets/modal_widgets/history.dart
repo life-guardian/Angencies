@@ -80,11 +80,11 @@ class _HistoryState extends ConsumerState<History> {
     };
   }
 
-  String BASE_URL = dotenv.get("BASE_URL");
+  String baseUrl = dotenv.get("BASE_URL");
 
   Future<void> getAlertHistoryData() async {
     var response = await http.get(
-      Uri.parse('$BASE_URL/api/history/agency/alerts'),
+      Uri.parse('$baseUrl/api/history/agency/alerts'),
       headers: headers,
     );
 
@@ -109,7 +109,7 @@ class _HistoryState extends ConsumerState<History> {
 
   Future<void> getEventHistoryData() async {
     var response = await http.get(
-      Uri.parse('$BASE_URL/api/history/agency/events'),
+      Uri.parse('$baseUrl/api/history/agency/events'),
       headers: headers,
     );
 
@@ -127,7 +127,7 @@ class _HistoryState extends ConsumerState<History> {
 
   Future<void> getOperationHistoryData() async {
     var response = await http.get(
-      Uri.parse('$BASE_URL/api/history/agency/operations'),
+      Uri.parse('$baseUrl/api/history/agency/operations'),
       headers: headers,
     );
 
