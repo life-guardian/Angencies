@@ -135,6 +135,7 @@ class _RescueOperationState extends State<RescueOperation> {
             content: Text(serverMessage.toString()),
           ),
         );
+        
       } else {
         setState(() {
           setButtonText();
