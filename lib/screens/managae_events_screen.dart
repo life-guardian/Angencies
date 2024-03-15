@@ -69,12 +69,11 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
     };
   }
 
-      String manageEventHistoryUrl = dotenv.get("manageEventHistoryUrl");
-
+  String BASE_URL = dotenv.get("BASE_URL");
 
   Future<void> getEventList() async {
     var response = await http.get(
-      Uri.parse(manageEventHistoryUrl),
+      Uri.parse('$BASE_URL/api/event/agency/list'),
       headers: headers,
     );
 

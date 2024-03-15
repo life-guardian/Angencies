@@ -163,10 +163,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "representativeName": representativeName.text.toString(),
     };
 
-    String registerurl = dotenv.get("registerurl");
+    String BASE_URL = dotenv.get("BASE_URL");
 
     var response = await http.post(
-      Uri.parse(registerurl),
+      Uri.parse('$BASE_URL/api/agency/register'),
       headers: {"Content-Type": "application/json"},
       body: json.encode(regBody),
     );

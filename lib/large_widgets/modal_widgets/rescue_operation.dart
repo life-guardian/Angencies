@@ -113,10 +113,10 @@ class _RescueOperationState extends State<RescueOperation> {
     };
 
     try {
-                            String rescueOperationUrl = dotenv.get("rescueOperationUrl");
+      String BASE_URL = dotenv.get("BASE_URL");
 
       var response = await http.post(
-        Uri.parse(rescueOperationUrl),
+        Uri.parse('$BASE_URL/api/rescueops/agency/start'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $jwtToken',
@@ -135,7 +135,6 @@ class _RescueOperationState extends State<RescueOperation> {
             content: Text(serverMessage.toString()),
           ),
         );
-        
       } else {
         setState(() {
           setButtonText();

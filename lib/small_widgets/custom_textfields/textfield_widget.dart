@@ -42,7 +42,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       controller: widget.controllerText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       cursorColor: Theme.of(context).colorScheme.onBackground,
-      cursorErrorColor: Colors.red,
+      // cursorErrorColor: Colors.red,
       validator: (value) => widget.checkValidation(value),
       selectionControls: DesktopTextSelectionControls(),
       decoration: InputDecoration(
