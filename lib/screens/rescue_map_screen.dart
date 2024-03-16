@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
@@ -28,8 +29,8 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   late IO.Socket socket;
   late String token;
-  late Timer locationTimer;
   bool isSocketDisconnected = false;
+  StreamSubscription<Position>? positionStreamSubscription;
 
   late List<double> latLng;
   List<LiveAgencies> liveAgencies = [];
@@ -43,6 +44,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   @override
   void dispose() {
     super.dispose();
+    positionStreamSubscription?.cancel();
     disconnect();
   }
 
@@ -63,47 +65,51 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     });
     socket.connect();
     socket.onConnect((data) {
-      // debugPrint("Socket Connected");
+      debugPrint("Socket Connected");
       getAgencyLocation();
-    });
-
-    locationTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      getDeviceLocation();
+      startTrackingLocation();
     });
   }
 
   void disconnect() async {
     isSocketDisconnected = true;
-    locationTimer.cancel();
     socket.disconnect();
-    socket.close();
     socket.onDisconnect((data) {
-      // print("Socket dis Connected");
+      debugPrint("Socket Dissconnected");
     });
   }
 
-  Future<void> getDeviceLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-
+  void startTrackingLocation() async {
+    // 1. Check and Request Permissions (if necessary)
+    LocationPermission permission = await geo.Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        if (!isSocketDisconnected) {
-          ref.read(accessLiveLocationProvider.notifier).state = false;
-          debugPrint("Location permission denied");
-        }
-      }
-    } else {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      if (!isSocketDisconnected) {
+      permission = await geo.Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      // 2. Start Location Stream with Desired Accuracy
+      geo.LocationSettings locationSettings = const geo.LocationSettings(
+        accuracy: geo.LocationAccuracy.high,
+        distanceFilter: 10, // Update every 10 meters
+      );
+      positionStreamSubscription = geo.Geolocator.getPositionStream(
+        locationSettings: locationSettings,
+      ).listen((Position position) {
+        // 3. Update Location State or Provider
         ref.read(deviceLocationProvider.notifier).state = [
-          currentPosition.latitude,
-          currentPosition.longitude
+          position.latitude,
+          position.longitude
         ];
-        emitLocationUpdate(currentPosition.latitude, currentPosition.longitude);
-      }
-      setState(() {});
+
+        // 4. Emit Location Update (if applicable)
+        emitLocationUpdate(position.latitude, position.longitude);
+        setState(() {});
+
+        // 5. Update UI if Necessary (consider performance)
+      }); // Update UI sparingly for efficiency
+    } else {
+      debugPrint("Location permission denied - cannot track location.");
     }
   }
 
@@ -112,16 +118,15 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void getAgencyLocation() {
-    setState(() {
-      socket.on("agencyLocationUpdate", (data) {
-        // print(data);
+    socket.on("agencyLocationUpdate", (data) {
+      setState(() {
+        print(data);
         bool isPlotted = false;
         for (int i = 0; i < liveAgencies.length; i++) {
           if (liveAgencies[i].agencyId == data["agencyId"]) {
             liveAgencies[i].lat = data["lat"];
             liveAgencies[i].lng = data["lng"];
             isPlotted = true;
-            break;
           }
         }
 
@@ -168,24 +173,19 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 builder: (
                   context,
                 ) {
-                  return GestureDetector(
-                    onTap: () {
-                      // openModalBottomSheet(liveAgencies: );
-                    },
-                    child: const Column(
-                      children: [
-                        Icon(
-                          Icons.location_pin,
-                          size: 40,
-                          color: Colors.green,
-                        ),
-                        CustomTextWidget(
-                          text: "Me",
-                          fontSize: 12,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
+                  return const Column(
+                    children: [
+                      Icon(
+                        Icons.location_pin,
+                        size: 40,
+                        color: Colors.blue,
+                      ),
+                      CustomTextWidget(
+                        text: "Me",
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                    ],
                   );
                 },
               ),
@@ -210,10 +210,12 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                             size: 40,
                             color: Colors.green,
                           ),
-                          CustomTextWidget(
-                            text: liveAgency.agencyName!,
-                            fontSize: 12,
-                            color: Colors.black,
+                          Flexible(
+                            child: CustomTextWidget(
+                              text: liveAgency.agencyName!,
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),

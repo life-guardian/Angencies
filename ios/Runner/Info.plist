@@ -49,5 +49,7 @@
 	<array>
   		<string>tel</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App requires background location access for continuous location tracking.</string>
 </dict>
 </plist>
