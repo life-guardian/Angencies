@@ -120,7 +120,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   void getAgencyLocation() {
     socket.on("agencyLocationUpdate", (data) {
       setState(() {
-        print(data);
+        debugPrint(data);
         bool isPlotted = false;
         for (int i = 0; i < liveAgencies.length; i++) {
           if (liveAgencies[i].agencyId == data["agencyId"]) {
