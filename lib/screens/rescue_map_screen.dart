@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:agencies_app/models/active_locations.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
-import 'package:agencies_app/providers/live_location_tracking_provider.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
