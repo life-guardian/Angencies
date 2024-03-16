@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:agencies_app/models/active_locations.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/providers/live_location_tracking_provider.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +61,14 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     var baseUrl = dotenv.get("BASE_URL");
     socket = IO.io(baseUrl, <String, dynamic>{
       'transports': ['websocket'],
-      'autoConnect': true,
+      'autoConnect': false,
       'extraHeaders': {'Authorization': 'Bearer $token'}
     });
     socket.connect();
-    socket.onConnect((data) {
+    socket.onConnect((data) async {
+      // emit location on connecetd once
+      latLng = ref.read(deviceLocationProvider);
+      emitLocationUpdate(latLng[0], latLng[1]);
       debugPrint("Socket Connected");
       getAgencyLocation();
       startTrackingLocation();
@@ -119,17 +123,18 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   void getAgencyLocation() {
     socket.on("agencyLocationUpdate", (data) {
-      setState(() {
-        debugPrint(data);
-        bool isPlotted = false;
-        for (int i = 0; i < liveAgencies.length; i++) {
-          if (liveAgencies[i].agencyId == data["agencyId"]) {
-            liveAgencies[i].lat = data["lat"];
-            liveAgencies[i].lng = data["lng"];
-            isPlotted = true;
-          }
-        }
+      debugPrint(data["agencyId"]);
 
+      debugPrint("Got agency");
+      bool isPlotted = false;
+      for (int i = 0; i < liveAgencies.length; i++) {
+        if (liveAgencies[i].agencyId == data["agencyId"]) {
+          liveAgencies[i].lat = data["lat"];
+          liveAgencies[i].lng = data["lng"];
+          isPlotted = true;
+        }
+      }
+      setState(() {
         if (!isPlotted) {
           liveAgencies.add(LiveAgencies.fromJson(data));
         }
@@ -190,7 +195,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 },
               ),
 
-              for (LiveAgencies liveAgency in liveAgencies)
+              for (var liveAgency in liveAgencies)
                 Marker(
                   point: LatLng(liveAgency.lat!, liveAgency.lng!),
                   width: 60,
