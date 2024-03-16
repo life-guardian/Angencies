@@ -42,7 +42,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   }
 
   void addTokenProvider() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       ref.read(tokenProvider.notifier).state = widget.myToken;
     });
   }

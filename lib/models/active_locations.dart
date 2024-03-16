@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 class LiveAgencies {
   double? lat;
   double? lng;

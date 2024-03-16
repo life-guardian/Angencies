@@ -63,7 +63,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     });
     socket.connect();
     socket.onConnect((data) {
-      print("Socket Connected");
+      // debugPrint("Socket Connected");
       getAgencyLocation();
     });
 
@@ -77,7 +77,9 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     locationTimer.cancel();
     socket.disconnect();
     socket.close();
-    socket.onDisconnect((data) => print("Socket dis Connected"));
+    socket.onDisconnect((data) {
+      // print("Socket dis Connected");
+    });
   }
 
   Future<void> getDeviceLocation() async {
@@ -112,7 +114,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   void getAgencyLocation() {
     setState(() {
       socket.on("agencyLocationUpdate", (data) {
-        print(data);
+        // print(data);
         bool isPlotted = false;
         for (int i = 0; i < liveAgencies.length; i++) {
           if (liveAgencies[i].agencyId == data["agencyId"]) {
