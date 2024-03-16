@@ -92,11 +92,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     String serverMessage;
 
-    var loginUrl = dotenv.get("loginUrl");
+    var baseUrl = dotenv.get("BASE_URL");
 
     try {
       var response = await http.post(
-        Uri.parse(loginUrl),
+        Uri.parse('$baseUrl/api/agency/login'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(reqBody),
       );

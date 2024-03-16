@@ -7,6 +7,7 @@ import 'package:agencies_app/models/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
@@ -54,7 +55,8 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   void connectSocket() {
     token = ref.read(tokenProvider);
-    socket = IO.io('https://lifeguardianapi.pratikjpatil.me', <String, dynamic>{
+    var baseUrl = dotenv.get("BASE_URL");
+    socket = IO.io(baseUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
       'extraHeaders': {'Authorization': 'Bearer $token'}

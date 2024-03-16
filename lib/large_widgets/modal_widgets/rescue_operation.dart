@@ -146,10 +146,10 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
 
     if (hasAccessLiveLocation) {
       try {
-        String rescueOperationUrl = dotenv.get("rescueOperationUrl");
+        String baseUrl = dotenv.get("BASE_URL");
 
         var response = await http.post(
-          Uri.parse(rescueOperationUrl),
+          Uri.parse('$baseUrl/api/rescueops/agency/start'),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer $jwtToken',

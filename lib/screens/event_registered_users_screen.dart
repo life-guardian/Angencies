@@ -67,10 +67,10 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
 
   Future<List<RegisteredUsers>> getEventRegisteredUsersList(
       {required String id}) async {
-    String eventRegisteredUsersList = dotenv.get("eventRegisteredUsersList");
+    String baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.get(
-      Uri.parse('$eventRegisteredUsersList$id'),
+      Uri.parse('$baseUrl/api/event/agency/registrations/$id'),
       headers: headers,
     );
 
