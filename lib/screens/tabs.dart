@@ -38,6 +38,13 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   void initState() {
     super.initState();
     getDeviceLocation();
+    addTokenProvider();
+  }
+
+  void addTokenProvider() {
+    Future.delayed(Duration(seconds: 3), () {
+      ref.read(tokenProvider.notifier).state = widget.myToken;
+    });
   }
 
   void onSelectedTab(int index) {
