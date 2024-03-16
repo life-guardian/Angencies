@@ -5,4 +5,4 @@ final deviceLocationProvider =
 
 final accessLiveLocationProvider = StateProvider<bool>((ref) => false);
 
-final tokenProvider = StateProvider<String>((ref) => "");
+

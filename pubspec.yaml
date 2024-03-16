@@ -82,6 +82,7 @@ flutter:
   assets:
     - assets/images/
     - assets/logos/
+    - assets/images/rescue_map/
     - .env
   #   - images/a_dot_ham.jpeg
 

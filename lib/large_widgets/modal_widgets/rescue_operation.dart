@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:agencies_app/custom_functions/validate_textfield.dart';
 import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
+import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
@@ -19,7 +20,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'package:http/http.dart' as http;
-
 
 class RescueOperation extends ConsumerStatefulWidget {
   const RescueOperation({
@@ -48,7 +48,6 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
 
-
   @override
   void dispose() {
     super.dispose();
@@ -57,8 +56,6 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     descController.dispose();
   }
 
-  
-
   void setButtonText() {
     activeButtonText = Text(
       'START',
@@ -66,8 +63,6 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );
   }
-
-  
 
   Future<void> getDeviceLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -85,12 +80,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
       lat = currentPosition.latitude;
       lng = currentPosition.longitude;
       ref.read(accessLiveLocationProvider.notifier).state = true;
-      Navigator.of(context).pushReplacement(
-        CustomSlideTransition(
-          direction: AxisDirection.up,
-          child: const RescueMapScreen(),
-        ),
-      );
+
       debugPrint(
           "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
     }
@@ -162,10 +152,18 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
         serverMessage = jsonResponse['message'];
 
         if (response.statusCode == 200) {
-          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(serverMessage.toString()),
+            ),
+          );
+          String? rescueId = await getRescueOperationDetails();
+          ref.read(isRescueOperationOnGoingProvider.notifier).state = true;
+          ref.read(rescueOperationIdProvider.notifier).state = rescueId;
+          Navigator.of(context).pushReplacement(
+            CustomSlideTransition(
+              direction: AxisDirection.left,
+              child: const RescueMapScreen(),
             ),
           );
         } else {
@@ -195,6 +193,23 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     }
 
     buttonEnabled = true;
+  }
+
+  Future<String?> getRescueOperationDetails() async {
+    var baseUrl = dotenv.get("BASE_URL");
+
+    var response = await http.get(
+      Uri.parse('$baseUrl/api/rescueops/agency/isongoing'),
+      headers: {"Authorization": "Bearer ${widget.token}"},
+    );
+
+    debugPrint("Status code: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      return jsonResponse["rescueOpsId"];
+    }
+
+    return null;
   }
 
   @override

@@ -6,10 +6,10 @@ class LiveAgencies {
   String? agencyId;
   String? agencyName;
   int? phoneNumber;
-  String? representativeName;
-  String? rescueOpsName;
-  String? rescueOpsDescription;
-  int? rescueTeamSize;
+  String? representativeName; 
+  String? rescueOpsName; // can be null
+  String? rescueOpsDescription; // can be null
+  int? rescueTeamSize; // can be null
 
   LiveAgencies(
       {this.lat,
