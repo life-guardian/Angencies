@@ -178,7 +178,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void getAgenciesLocationInitialConnect() {
-    socket.on("initialConnectReceiveNearbyUsers", (data) {
+    socket.on("initialConnectReceiveNearbyAgencies", (data) {
       for (var liveAgency in data) {
         debugPrint(liveAgency);
         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
