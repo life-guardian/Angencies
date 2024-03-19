@@ -4,7 +4,7 @@ class LiveAgencies {
   double? lat;
   double? lng;
   String? agencyId;
-  String? agencyName;
+  String? userName;
   int? phoneNumber;
   String? representativeName; 
   String? rescueOpsName; // can be null
@@ -15,7 +15,7 @@ class LiveAgencies {
       {this.lat,
         this.lng,
         this.agencyId,
-        this.agencyName,
+        this.userName,
         this.phoneNumber,
         this.representativeName,
         this.rescueOpsName,
@@ -26,7 +26,7 @@ class LiveAgencies {
     lat = json['lat'];
     lng = json['lng'];
     agencyId = json['agencyId'];
-    agencyName = json['agencyName'];
+    userName = json['userName'];
     phoneNumber = json['phoneNumber'];
     representativeName = json['representativeName'];
     rescueOpsName = json['rescueOpsName'];
@@ -39,7 +39,7 @@ class LiveAgencies {
     data['lat'] = lat;
     data['lng'] = lng;
     data['agencyId'] = agencyId;
-    data['agencyName'] = agencyName;
+    data['userName'] = userName;
     data['phoneNumber'] = phoneNumber;
     data['representativeName'] = representativeName;
     data['rescueOpsName'] = rescueOpsName;

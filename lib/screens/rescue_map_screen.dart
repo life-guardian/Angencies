@@ -79,13 +79,15 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     var baseUrl = dotenv.get("BASE_URL");
     socket = IO.io(baseUrl, <String, dynamic>{
       'transports': ['websocket'],
-      'autoConnect': false,
+      'autoConnect': true,
       'extraHeaders': {'Authorization': 'Bearer $token'}
     });
     socket.connect();
     socket.onConnect((data) async {
       debugPrint("Socket Connected");
-      await initialEmmitGetDeviceLocation();
+
+      await initialGetDeviceLocation();
+      // getInitialConnectAgenciesLocationLocation();
       getAgencyLocation();
       startTrackingLocation();
     });
@@ -136,7 +138,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
   }
 
-  Future<void> initialEmmitGetDeviceLocation() async {
+  Future<void> initialGetDeviceLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -154,20 +156,19 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           currentPosition.longitude
         ];
         initialConnectEmit(latLng[0], latLng[1]);
-        getAgenciesLocationInitialConnect();
       }
     }
-
     return;
   }
 
   void initialConnectEmit(double latitude, double longitude) {
+    debugPrint("Emmited intial location");
     socket.emit('initialConnect', {'lat': latitude, 'lng': longitude});
   }
 
   void getAgencyLocation() {
     socket.on("agencyLocationUpdate", (data) {
-      debugPrint(data["agencyId"]);
+      debugPrint(data.toString());
 
       debugPrint("Got agency");
       bool isPlotted = false;
@@ -189,10 +190,11 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     });
   }
 
-  void getAgenciesLocationInitialConnect() {
+  void getInitialConnectAgenciesLocationLocation() {
     socket.on("initialConnectReceiveNearbyAgencies", (data) {
+      debugPrint("Got initial connect agency");
+      print(data.toString());
       for (var liveAgency in data) {
-        debugPrint(liveAgency);
         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
       }
       if (mounted) {
@@ -303,7 +305,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                               ),
                               Flexible(
                                 child: CustomTextWidget(
-                                  text: liveAgency.agencyName!,
+                                  text: liveAgency.userName ?? "",
                                   fontSize: 12,
                                   color: Colors.black,
                                 ),
@@ -335,7 +337,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 },
                 enabled: true,
               ),
-            )
+            ),
         ],
       ),
     );
@@ -383,7 +385,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                       ),
                     ),
                     Text(
-                      liveAgency.agencyName!,
+                      liveAgency.userName!,
                       style: GoogleFonts.mulish().copyWith(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
