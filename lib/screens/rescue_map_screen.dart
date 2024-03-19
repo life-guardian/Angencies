@@ -193,7 +193,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   void getInitialConnectAgenciesLocationLocation() {
     socket.on("initialConnectReceiveNearbyAgencies", (data) {
       debugPrint("Got initial connect agency");
-      print(data.toString());
+      debugPrint(data.toString());
       for (var liveAgency in data) {
         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
       }
