@@ -50,15 +50,19 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void getRescueDetailsLocal() {
-    isRescueOnGoing = ref.read(isRescueOperationOnGoingProvider);
-    rescueId = ref.read(rescueOperationIdProvider);
+    if (mounted) {
+      isRescueOnGoing = ref.read(isRescueOperationOnGoingProvider);
+      rescueId = ref.read(rescueOperationIdProvider);
+    }
   }
 
   @override
   void dispose() {
+    if (positionStreamSubscription != null) {
+      positionStreamSubscription!.cancel();
+    }
+    disconnectSocket();
     super.dispose();
-    positionStreamSubscription?.cancel();
-    disconnect();
   }
 
   void openModalBottomSheet({required LiveAgencies liveAgency}) {
@@ -69,24 +73,25 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void connectSocket() {
-    token = ref.read(tokenProvider);
+    if (mounted) {
+      token = ref.read(tokenProvider);
+    }
     var baseUrl = dotenv.get("BASE_URL");
     socket = IO.io(baseUrl, <String, dynamic>{
       'transports': ['websocket'],
-      'autoConnect': true,
+      'autoConnect': false,
       'extraHeaders': {'Authorization': 'Bearer $token'}
     });
     socket.connect();
     socket.onConnect((data) async {
       debugPrint("Socket Connected");
-      initialEmmitGetDeviceLocation();
+      await initialEmmitGetDeviceLocation();
       getAgencyLocation();
       startTrackingLocation();
     });
   }
 
-  void disconnect() async {
-    isSocketDisconnected = true;
+  void disconnectSocket() async {
     socket.disconnect();
     socket.onDisconnect((data) {
       debugPrint("Socket Dissconnected");
@@ -111,15 +116,15 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         locationSettings: locationSettings,
       ).listen((Position position) {
         // 3. Update Location State or Provider
-        ref.read(deviceLocationProvider.notifier).state = [
-          position.latitude,
-          position.longitude
-        ];
+        if (mounted) {
+          ref.read(deviceLocationProvider.notifier).state = [
+            position.latitude,
+            position.longitude
+          ];
 
-        // 4. Emit Location Update (if applicable)
-        emitLocationUpdate(position.latitude, position.longitude);
-        setState(() {});
-
+          // 4. Emit Location Update (if applicable)
+          emitLocationUpdate(position.latitude, position.longitude);
+        }
         // 5. Update UI if Necessary (consider performance)
       }); // Update UI sparingly for efficiency
     } else {
@@ -143,13 +148,17 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       Position currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      ref.read(deviceLocationProvider.notifier).state = [
-        currentPosition.latitude,
-        currentPosition.longitude
-      ];
-      initialConnectEmit(latLng[0], latLng[1]);
-      getAgenciesLocationInitialConnect();
+      if (mounted) {
+        ref.read(deviceLocationProvider.notifier).state = [
+          currentPosition.latitude,
+          currentPosition.longitude
+        ];
+        initialConnectEmit(latLng[0], latLng[1]);
+        getAgenciesLocationInitialConnect();
+      }
     }
+
+    return;
   }
 
   void initialConnectEmit(double latitude, double longitude) {
@@ -166,14 +175,17 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         if (liveAgencies[i].agencyId == data["agencyId"]) {
           liveAgencies[i].lat = data["lat"];
           liveAgencies[i].lng = data["lng"];
+          liveAgencies[i].rescueOpsName = data[""];
           isPlotted = true;
         }
       }
-      setState(() {
-        if (!isPlotted) {
-          liveAgencies.add(LiveAgencies.fromJson(data));
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (!isPlotted) {
+            liveAgencies.add(LiveAgencies.fromJson(data));
+          }
+        });
+      }
     });
   }
 
@@ -183,7 +195,9 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         debugPrint(liveAgency);
         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -208,8 +222,10 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     );
 
     if (response.statusCode == 200) {
-      ref.read(isRescueOperationOnGoingProvider.notifier).state = false;
-      ref.read(rescueOperationIdProvider.notifier).state = null;
+      if (mounted) {
+        ref.read(isRescueOperationOnGoingProvider.notifier).state = false;
+        ref.read(rescueOperationIdProvider.notifier).state = null;
+      }
       String serverMessage = '';
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -222,8 +238,9 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    latLng = ref.watch(deviceLocationProvider);
-
+    if (mounted) {
+      latLng = ref.watch(deviceLocationProvider);
+    }
     return Scaffold(
       body: Stack(
         children: [
@@ -340,7 +357,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           Text(
             liveAgency.rescueOpsName == null
                 ? 'Agency Details'
-                : 'Rescue Started',
+                : 'Rescue Operation Started',
             style: GoogleFonts.mulish().copyWith(
               fontWeight: FontWeight.bold,
               color:
