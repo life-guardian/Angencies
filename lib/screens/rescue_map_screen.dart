@@ -87,7 +87,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       debugPrint("Socket Connected");
 
       await initialGetDeviceLocation();
-      // getInitialConnectAgenciesLocationLocation();
+      getInitialConnectAgenciesLocationLocation();
       getAgencyLocation();
       startTrackingLocation();
     });
@@ -101,7 +101,6 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void startTrackingLocation() async {
-    // 1. Check and Request Permissions (if necessary)
     LocationPermission permission = await geo.Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await geo.Geolocator.requestPermission();
@@ -109,7 +108,6 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
-      // 2. Start Location Stream with Desired Accuracy
       geo.LocationSettings locationSettings = const geo.LocationSettings(
         accuracy: geo.LocationAccuracy.high,
         distanceFilter: 10, // Update every 10 meters
@@ -117,14 +115,13 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       positionStreamSubscription = geo.Geolocator.getPositionStream(
         locationSettings: locationSettings,
       ).listen((Position position) {
-        // 3. Update Location State or Provider
         if (mounted) {
           ref.read(deviceLocationProvider.notifier).state = [
             position.latitude,
             position.longitude
           ];
 
-          // 4. Emit Location Update (if applicable)
+
           emitLocationUpdate(position.latitude, position.longitude);
         }
         // 5. Update UI if Necessary (consider performance)
@@ -168,9 +165,8 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   void getAgencyLocation() {
     socket.on("agencyLocationUpdate", (data) {
-      debugPrint(data.toString());
-
       debugPrint("Got agency");
+      debugPrint(data.toString());
       bool isPlotted = false;
       for (int i = 0; i < liveAgencies.length; i++) {
         if (liveAgencies[i].agencyId == data["agencyId"]) {
@@ -305,7 +301,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                               ),
                               Flexible(
                                 child: CustomTextWidget(
-                                  text: liveAgency.userName ?? "",
+                                  text: liveAgency.agencyName ?? "",
                                   fontSize: 12,
                                   color: Colors.black,
                                 ),
@@ -385,7 +381,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                       ),
                     ),
                     Text(
-                      liveAgency.userName!,
+                      liveAgency.agencyName!,
                       style: GoogleFonts.mulish().copyWith(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
