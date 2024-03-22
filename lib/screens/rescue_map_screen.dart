@@ -1,6 +1,7 @@
 // ignore_for_file: library_prefixes, use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:agencies_app/models/active_locations.dart';
 import 'package:agencies_app/models/modal_bottom_sheet.dart';
@@ -58,11 +59,11 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     if (positionStreamSubscription != null) {
       positionStreamSubscription!.cancel();
     }
     disconnectSocket();
-    super.dispose();
   }
 
   void openModalBottomSheet({required LiveAgencies liveAgency}) {
@@ -79,16 +80,15 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     var baseUrl = dotenv.get("BASE_URL");
     socket = IO.io(baseUrl, <String, dynamic>{
       'transports': ['websocket'],
-      'autoConnect': true,
+      'autoConnect': false,
       'extraHeaders': {'Authorization': 'Bearer $token'}
     });
+    // gets and sends details for intial connect
     socket.connect();
     socket.onConnect((data) async {
       debugPrint("Socket Connected");
-
-      await initialGetDeviceLocation();
-      getInitialConnectAgenciesLocationLocation();
-      getAgencyLocation();
+      await initialConnectGetSendDetails();
+      listenSocketOn();
       startTrackingLocation();
     });
   }
@@ -97,6 +97,43 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.disconnect();
     socket.onDisconnect((data) {
       debugPrint("Socket Dissconnected");
+    });
+  }
+
+  void listenSocketOn() {
+    socket.on("agencyLocationUpdate", (data) {
+      if (mounted) {
+        debugPrint("Got agency");
+        debugPrint(data.toString());
+        bool isPlotted = false;
+        for (int i = 0; i < liveAgencies.length; i++) {
+          if (liveAgencies[i].agencyId == data["agencyId"]) {
+            liveAgencies[i].lat = data["lat"];
+            liveAgencies[i].lng = data["lng"];
+            liveAgencies[i].rescueOpsName = data[""];
+            isPlotted = true;
+          }
+        }
+        setState(() {
+          if (!isPlotted) {
+            liveAgencies.add(LiveAgencies.fromJson(data));
+          }
+        });
+      }
+    });
+
+    socket.on("disconnected", (disconnectedAgencyId) {
+      debugPrint("Agency id disconnected $disconnectedAgencyId");
+
+      if (mounted) {
+        for (int i = 0; i < liveAgencies.length; i++) {
+          if (liveAgencies[i].agencyId == disconnectedAgencyId) {
+            liveAgencies.remove(liveAgencies[i]);
+            break;
+          }
+        }
+        setState(() {});
+      }
     });
   }
 
@@ -110,7 +147,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         permission == LocationPermission.whileInUse) {
       geo.LocationSettings locationSettings = const geo.LocationSettings(
         accuracy: geo.LocationAccuracy.high,
-        distanceFilter: 10, // Update every 10 meters
+        distanceFilter: 10,
       );
       positionStreamSubscription = geo.Geolocator.getPositionStream(
         locationSettings: locationSettings,
@@ -120,12 +157,9 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
             position.latitude,
             position.longitude
           ];
-
-
           emitLocationUpdate(position.latitude, position.longitude);
         }
-        // 5. Update UI if Necessary (consider performance)
-      }); // Update UI sparingly for efficiency
+      });
     } else {
       debugPrint("Location permission denied - cannot track location.");
     }
@@ -135,7 +169,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
   }
 
-  Future<void> initialGetDeviceLocation() async {
+  Future<void> initialConnectGetSendDetails() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -152,51 +186,45 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           currentPosition.latitude,
           currentPosition.longitude
         ];
-        initialConnectEmit(latLng[0], latLng[1]);
+        debugPrint("Initial lat ${latLng[0]} and lng: ${latLng[1]}");
+
+        await getInitialConnectAgenciesUsersLocation();
       }
     }
     return;
   }
 
-  void initialConnectEmit(double latitude, double longitude) {
-    debugPrint("Emmited intial location");
-    socket.emit('initialConnect', {'lat': latitude, 'lng': longitude});
-  }
+  Future<void> getInitialConnectAgenciesUsersLocation() async {
+    var baseUrl = dotenv.get("BASE_URL");
 
-  void getAgencyLocation() {
-    socket.on("agencyLocationUpdate", (data) {
-      debugPrint("Got agency");
-      debugPrint(data.toString());
-      bool isPlotted = false;
-      for (int i = 0; i < liveAgencies.length; i++) {
-        if (liveAgencies[i].agencyId == data["agencyId"]) {
-          liveAgencies[i].lat = data["lat"];
-          liveAgencies[i].lng = data["lng"];
-          liveAgencies[i].rescueOpsName = data[""];
-          isPlotted = true;
+    try {
+      var response = await http.get(
+        Uri.parse(
+          "$baseUrl/api/rescueops/initialconnect/${latLng[0]}/${latLng[1]}",
+        ),
+        headers: {"Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+
+        final initialAgencies = jsonResponse["agencies"];
+        debugPrint("Got initial connect agency");
+        debugPrint(initialAgencies.toString());
+
+        for (var liveAgency in initialAgencies) {
+          liveAgencies.add(LiveAgencies.fromJson(liveAgency));
+        }
+        if (mounted) {
+          setState(() {});
         }
       }
-      if (mounted) {
-        setState(() {
-          if (!isPlotted) {
-            liveAgencies.add(LiveAgencies.fromJson(data));
-          }
-        });
-      }
-    });
-  }
+    } catch (error) {
+      debugPrint(
+          "Error while fetching intial connect agencies and user ${error.toString()}");
+    }
 
-  void getInitialConnectAgenciesLocationLocation() {
-    socket.on("initialConnectReceiveNearbyAgencies", (data) {
-      debugPrint("Got initial connect agency");
-      debugPrint(data.toString());
-      for (var liveAgency in data) {
-        liveAgencies.add(LiveAgencies.fromJson(liveAgency));
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    });
+    return;
   }
 
   Future<void> launchPhoneDial({required int phoneNo}) async {
