@@ -5,7 +5,7 @@ import 'package:agencies_app/large_widgets/modal_widgets/filter_history.dart';
 
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
-import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/functions/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';

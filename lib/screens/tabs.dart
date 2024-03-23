@@ -62,6 +62,8 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       ref.read(rescueOperationIdProvider.notifier).state =
           jsonResponse["rescueOpsId"];
     }
+
+    return;
   }
 
   void addTokenProvider() {
@@ -160,7 +162,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   Widget build(BuildContext context) {
     _screenWidth = MediaQuery.of(context).size.width;
 
-    if (dataLoaded == true) {
+    if (dataLoaded) {
       if (_currentIndx == 1) {
         activePage = UserAccountDetails(
           logoutUser: _logoutUser,

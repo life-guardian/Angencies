@@ -35,17 +35,5 @@ class LiveAgencies {
     rescueTeamSize = json['rescueTeamSize'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['lat'] = lat;
-    data['lng'] = lng;
-    data['agencyId'] = agencyId;
-    data['agencyName'] = agencyName;
-    data['phoneNumber'] = phoneNumber;
-    data['representativeName'] = representativeName;
-    data['rescueOpsName'] = rescueOpsName;
-    data['rescueOpsDescription'] = rescueOpsDescription;
-    data['rescueTeamSize'] = rescueTeamSize;
-    return data;
-  }
+
 }

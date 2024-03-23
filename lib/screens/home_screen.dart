@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count.dart';
+import 'package:agencies_app/large_widgets/card_widgets/event_rescue_count_card.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/rescue_operation.dart';
 import 'package:agencies_app/large_widgets/modal_widgets/send_alert.dart';
-import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/functions/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 
 import 'package:agencies_app/screens/managae_events_screen.dart';

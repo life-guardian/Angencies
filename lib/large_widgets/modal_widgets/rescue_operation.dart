@@ -2,15 +2,15 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/custom_functions/validate_textfield.dart';
-import 'package:agencies_app/large_widgets/map_widgets/exact_location.dart';
+import 'package:agencies_app/functions/validate_textfield.dart';
+import 'package:agencies_app/classes/exact_location.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_google_maps_dialog.dart';
+import 'package:agencies_app/small_widgets/custom_dialogs/custom_osm_map_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/textfield_modal.dart';
+import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_modal.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +87,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
   }
 
   void openMaps() async {
-    PickedData pickedLocationData = await customGoogleMapsDialog(
+    PickedData pickedLocationData = await customOsmMapDialog(
         context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
@@ -242,7 +242,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
               const SizedBox(
                 height: 5,
               ),
-              TextfieldModal(
+              TextFormFieldModal(
                 hintText: 'Enter Rescue operation name',
                 controller: operationNameController,
                 checkValidation: (value) =>
@@ -257,7 +257,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
               const SizedBox(
                 height: 5,
               ),
-              TextfieldModal(
+              TextFormFieldModal(
                 keyboardType: TextInputType.number,
                 hintText: 'Enter rescue team size',
                 controller: teamSizeController,
@@ -273,7 +273,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
               const SizedBox(
                 height: 5,
               ),
-              TextfieldModal(
+              TextFormFieldModal(
                 hintText: 'Enter description',
                 controller: descController,
                 checkValidation: (value) =>

@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
-import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/functions/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
 import 'package:flutter/material.dart';
