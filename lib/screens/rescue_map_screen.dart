@@ -7,7 +7,8 @@ import 'package:agencies_app/models/active_locations.dart';
 import 'package:agencies_app/functions/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
-import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/manage_elevated_button.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/pop_screen_button.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -87,39 +88,44 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.connect();
     socket.onConnect((data) async {
       debugPrint("Socket Connected");
-      await initialConnectGetSendDetails();
+      await initialConnectSendGetDetails();
       listenSocketOn();
       startTrackingLocation();
     });
   }
 
   void disconnectSocket() async {
-    socket.disconnect();
-    socket.onDisconnect((data) {
-      debugPrint("Socket Dissconnected");
-    });
+    try {
+      socket.disconnect();
+      socket.onDisconnect((data) {
+        debugPrint("Socket Dissconnected");
+      });
+    } catch (e) {
+      debugPrint(
+          "Exception occured while socket disconnecting: ${e.toString()}");
+    }
   }
 
   void listenSocketOn() {
     socket.on("agencyLocationUpdate", (data) {
-      if (mounted) {
-        debugPrint("Got agency");
-        debugPrint(data.toString());
-        bool isPlotted = false;
-        for (int i = 0; i < liveAgencies.length; i++) {
-          if (liveAgencies[i].agencyId == data["agencyId"]) {
-            liveAgencies[i].lat = data["lat"];
-            liveAgencies[i].lng = data["lng"];
-            liveAgencies[i].rescueOpsName = data[""];
-            isPlotted = true;
-          }
+      // if (mounted) {
+      debugPrint("Got agency");
+      debugPrint(data.toString());
+      bool isPlotted = false;
+      for (int i = 0; i < liveAgencies.length; i++) {
+        if (liveAgencies[i].agencyId == data["agencyId"]) {
+          liveAgencies[i].lat = data["lat"];
+          liveAgencies[i].lng = data["lng"];
+          liveAgencies[i].rescueOpsName = data[""];
+          isPlotted = true;
         }
-        setState(() {
-          if (!isPlotted) {
-            liveAgencies.add(LiveAgencies.fromJson(data));
-          }
-        });
       }
+      setState(() {
+        if (!isPlotted) {
+          liveAgencies.add(LiveAgencies.fromJson(data));
+        }
+      });
+      // }
     });
 
     socket.on("disconnected", (disconnectedAgencyId) {
@@ -169,7 +175,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
   }
 
-  Future<void> initialConnectGetSendDetails() async {
+  Future<void> initialConnectSendGetDetails() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -195,6 +201,8 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   Future<void> getInitialConnectAgenciesUsersLocation() async {
+    emitLocationUpdate(latLng[0], latLng[1]);
+
     var baseUrl = dotenv.get("BASE_URL");
 
     try {
@@ -362,6 +370,11 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 enabled: true,
               ),
             ),
+          const Positioned(
+            top: 30,
+            left: 10,
+            child: PopScreenButton(),
+          ),
         ],
       ),
     );

@@ -30,48 +30,63 @@ class BuildAlertHistoryListView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 color: Theme.of(context).colorScheme.secondary,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(41, 106, 51, 47),
+                        Color.fromARGB(157, 177, 12, 0),
+                      ],
+                      stops: [
+                        0.1,
+                        0.9,
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            alert.alertName.toString(),
-                            style: GoogleFonts.plusJakartaSans().copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              alert.alertName.toString(),
+                              style: GoogleFonts.plusJakartaSans().copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            alert.alertSeverity.toString(),
-                            style: GoogleFonts.plusJakartaSans().copyWith(
-                              color: Colors.grey,
-                              fontSize: 12,
+                            const SizedBox(
+                              height: 5,
                             ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yy').format(
-                            DateTime.parse(alert.alertForDate.toString())),
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: (themeData.brightness == Brightness.light)
-                              ? const Color.fromARGB(255, 224, 28, 14)
-                              : Theme.of(context).colorScheme.onBackground,
-                          fontSize: 14,
+                            Text(
+                              alert.alertSeverity.toString(),
+                              style: GoogleFonts.plusJakartaSans().copyWith(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Text(
+                          DateFormat('dd/MM/yy').format(
+                              DateTime.parse(alert.alertForDate.toString())),
+                          style: GoogleFonts.plusJakartaSans().copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: (themeData.brightness == Brightness.light)
+                                ? Color.fromARGB(255, 158, 18, 8)
+                                : Theme.of(context).colorScheme.onBackground,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

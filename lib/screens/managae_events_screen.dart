@@ -6,6 +6,7 @@ import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/functions/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/custom_back_button.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -177,34 +178,7 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                     ],
                   ),
                   const Spacer(),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      foregroundColor:
-                          (themeData.brightness == Brightness.light)
-                              ? const Color.fromARGB(185, 30, 35, 44)
-                              : const Color(0xffe1dcd3),
-                      side: BorderSide(
-                        color: (themeData.brightness == Brightness.light)
-                            ? const Color.fromARGB(32, 30, 35, 44)
-                            : const Color(0xffE1DCD3),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios,
-                          size: 20,
-                        ),
-                        Text('back')
-                      ],
-                    ),
-                  ),
+                  const CustomBackButton(),
                 ],
               ),
             ),

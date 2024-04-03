@@ -10,6 +10,7 @@ import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/custom_back_button.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';
@@ -36,6 +37,8 @@ class History extends ConsumerStatefulWidget {
 class _HistoryState extends ConsumerState<History> {
   late final jwtToken;
   late Map<String, String> headers;
+  int _currentIndx = 0;
+  bool isAlertListEmpty = true;
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
   List<String> values = [
@@ -61,7 +64,9 @@ class _HistoryState extends ConsumerState<History> {
   }
 
   void assignActiveWidget() {
-    activeWidget = ref.read(alertHistoryProvider).isNotEmpty
+    isAlertListEmpty = ref.read(alertHistoryProvider).isEmpty;
+
+    activeWidget = !isAlertListEmpty
         ? activeWidget = BuildAlertHistoryListView(
             ref: ref,
           )
@@ -146,142 +151,147 @@ class _HistoryState extends ConsumerState<History> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset('assets/logos/indiaflaglogo.png'),
-              const SizedBox(
-                width: 21,
-              ),
-              Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
+    if (!isAlertListEmpty) {
+      if (_currentIndx == 0) {
+        filterValue = 'Alert History';
+        activeWidget = BuildAlertHistoryListView(ref: ref);
+      } else if (_currentIndx == 1) {
+        filterValue = 'Event History';
+        activeWidget = BuildEventHistoryListView(ref: ref);
+      } else {
+        filterValue = 'Rescue Operation History';
+        activeWidget = BuildRescueHistoryListView(ref: ref);
+      }
+    }
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Jai Hind!',
-                    style: GoogleFonts.inter().copyWith(fontSize: 12),
-                  ),
+                  Image.asset('assets/logos/indiaflaglogo.png'),
                   const SizedBox(
-                    height: 5,
+                    width: 21,
                   ),
-                  Text(
-                    widget.agencyName,
-                    // email,
-                    style: GoogleFonts.plusJakartaSans().copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Jai Hind!',
+                        style: GoogleFonts.inter().copyWith(fontSize: 12),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.agencyName,
+                        // email,
+                        style: GoogleFonts.plusJakartaSans().copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
+                  const Spacer(),
+                  const CustomBackButton(),
                 ],
+              ),
+            ),
+            const SizedBox(
+              height: 21,
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 18, left: 18, right: 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 12),
+                        child: Text(
+                          filterValue,
+                          style: GoogleFonts.plusJakartaSans().copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: activeWidget,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.secondary),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            unselectedItemColor: const Color.fromARGB(175, 158, 158, 158),
+            currentIndex: _currentIndx,
+            iconSize: 25,
+            onTap: (value) {
+              setState(() {
+                _currentIndx = value;
+              });
+            },
+            elevation: 5,
+            selectedItemColor: activeIconColor(),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add_alert_rounded),
+                activeIcon: Icon(Icons.add_alert_rounded),
+                label: 'Alerts',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_rounded),
+                activeIcon: Icon(Icons.event_rounded),
+                label: 'Events',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.star_border_rounded),
+                activeIcon: Icon(Icons.star_border_rounded),
+                label: 'Rescues',
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 21,
-        ),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 18, left: 18, right: 18),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            filterValue,
-                            style: GoogleFonts.plusJakartaSans().copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            modalBottomSheet.openModal(
-                              context: context,
-                              widget: FilterHistory(
-                                getFilterValue: (value) {
-                                  setState(() {
-                                    filterValue = value;
-                                    if (filterValue == 'Alert History') {
-                                      activeWidget = BuildAlertHistoryListView(
-                                        ref: ref,
-                                      );
-                                    } else if (filterValue == 'Event History') {
-                                      // eventhistory widget;
-                                      activeWidget = BuildEventHistoryListView(
-                                        ref: ref,
-                                      );
-                                    } else {
-                                      // rescue history widget
-                                      activeWidget = BuildRescueHistoryListView(
-                                        ref: ref,
-                                      );
-                                    }
-                                  });
-                                },
-                              ),
-                              isDismissible: true,
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                'Filter',
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                width: 22,
-                                height: 22,
-                                margin: const EdgeInsets.only(top: 4),
-                                child: Image.asset(
-                                  'assets/logos/settings-sliders.png',
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // listview here
-                  // BuildListView(list: temp),
-                  Expanded(
-                    child: activeWidget,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
+  }
+
+  Color activeIconColor() {
+    if (_currentIndx == 0) {
+      return Colors.red;
+    } else if (_currentIndx == 1) {
+      return Colors.blue;
+    }
+    return Colors.green;
   }
 }

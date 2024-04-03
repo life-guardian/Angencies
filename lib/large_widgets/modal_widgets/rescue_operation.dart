@@ -9,7 +9,7 @@ import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_osm_map_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_elevated_buttons/manage_elevated_button.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/manage_elevated_button.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_modal.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';

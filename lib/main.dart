@@ -12,12 +12,11 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final myToken = prefs.getString('token');
   await dotenv.load(fileName: ".env");
-// provider scope
+
   runApp(
     ProviderScope(
       child: MyApp(
         token: myToken,
-        // prefs: myToken,
       ),
     ),
   );
@@ -25,21 +24,20 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final token;
-  // final String? prefs;
 
   const MyApp({super.key, required this.token});
 
-  Widget startScreen() {
-    Widget activeScreen = const WelcomeScreen();
-    // (JwtDecoder.isExpired(token))
+  Widget activeScreen() {
+    Widget activeWidget = const WelcomeScreen();
+
     if (token != null) {
-      activeScreen = (token == ''
+      activeWidget = (token == ''
           ? const WelcomeScreen()
           : TabsBottom(
               myToken: token,
             ));
     }
-    return activeScreen;
+    return activeWidget;
   }
 
   @override
@@ -49,7 +47,7 @@ class MyApp extends StatelessWidget {
       title: 'Angencies',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: startScreen(),
+      home: activeScreen(),
     );
   }
 }

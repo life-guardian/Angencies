@@ -83,22 +83,27 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   Future<void> getDeviceLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    try {
       if (permission == LocationPermission.denied) {
-        debugPrint("Location permission denied");
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          debugPrint("Location permission denied");
+        }
+      } else {
+        Position currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+
+        ref.read(deviceLocationProvider.notifier).state = [
+          currentPosition.latitude,
+          currentPosition.longitude
+        ];
+
+        debugPrint(
+            "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
       }
-    } else {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      ref.read(deviceLocationProvider.notifier).state = [
-        currentPosition.latitude,
-        currentPosition.longitude
-      ];
-
+    } catch (e) {
       debugPrint(
-          "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
+          "Something went wrong while location permission: ${e.toString()}");
     }
 
     await getRescueOperationDetails();

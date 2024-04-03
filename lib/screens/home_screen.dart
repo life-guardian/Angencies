@@ -228,14 +228,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     width: 11,
                   ),
                   ManageCard(
-                    text1: 'History',
+                    text1: 'See All History',
                     text2: 'History',
                     showModal: () {
-                      modalBottomSheet.openModal(
-                        context: context,
-                        widget: History(
-                            token: widget.token, agencyName: agencyname!),
+                      Navigator.of(context).push(
+                        CustomSlideTransition(
+                          direction: AxisDirection.left,
+                          child: History(
+                              token: widget.token, agencyName: agencyname!),
+                        ),
                       );
+                      // modalBottomSheet.openModal(
+                      //   context: context,
+                      //   widget: History(
+                      //       token: widget.token, agencyName: agencyname!),
+                      // );
                     },
                     lineColor1: Colors.blue.shade400,
                     lineColor2: Colors.blue.shade50,

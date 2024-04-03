@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/pop_screen_button.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
@@ -136,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     bool kIsMobile = (screenWidth <= mobileScreenWidth);
     return Scaffold(
@@ -145,30 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              foregroundColor: (themeData.brightness == Brightness.light)
-                  ? const Color.fromARGB(185, 30, 35, 44)
-                  : const Color(0xffe1dcd3),
-              side: BorderSide(
-                color: (themeData.brightness == Brightness.light)
-                    ? const Color.fromARGB(32, 30, 35, 44)
-                    : const Color(0xffE1DCD3),
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
-          ),
-        ),
+        leading: const PopScreenButton(),
       ),
       body: Center(
         child: Padding(
