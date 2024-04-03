@@ -141,7 +141,6 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(

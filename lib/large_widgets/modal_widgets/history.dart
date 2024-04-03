@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'dart:convert';
-import 'package:agencies_app/large_widgets/modal_widgets/filter_history.dart';
 
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
@@ -38,7 +37,7 @@ class _HistoryState extends ConsumerState<History> {
   late final jwtToken;
   late Map<String, String> headers;
   int _currentIndx = 0;
-  bool isAlertListEmpty = true;
+
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
   List<String> values = [
@@ -50,6 +49,7 @@ class _HistoryState extends ConsumerState<History> {
 
   List<OperationHistory> operationHistoryData = [];
   late Widget activeWidget;
+  bool isAlertListEmpty = true;
 
   @override
   void initState() {
@@ -106,6 +106,7 @@ class _HistoryState extends ConsumerState<History> {
     ref.read(alertHistoryProvider.notifier).addList(data);
 
     setState(() {
+      isAlertListEmpty = false;
       activeWidget = BuildAlertHistoryListView(
         ref: ref,
       );

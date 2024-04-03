@@ -69,7 +69,7 @@ class BuildRescueHistoryListView extends StatelessWidget {
                               Text(
                                 rescueOperation.description.toString(),
                                 style: GoogleFonts.plusJakartaSans().copyWith(
-                                  color: Colors.grey,
+                                  color: const Color.fromARGB(255, 8, 72, 20),
                                   fontSize: 12,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -87,7 +87,7 @@ class BuildRescueHistoryListView extends StatelessWidget {
                           style: GoogleFonts.plusJakartaSans().copyWith(
                             fontWeight: FontWeight.bold,
                             color: (themeData.brightness == Brightness.light)
-                                ? Color.fromARGB(255, 8, 72, 20)
+                                ? const Color.fromARGB(255, 8, 72, 20)
                                 : Theme.of(context).colorScheme.onBackground,
                             fontSize: 14,
                           ),

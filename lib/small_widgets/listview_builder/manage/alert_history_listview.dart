@@ -68,7 +68,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
                             Text(
                               alert.alertSeverity.toString(),
                               style: GoogleFonts.plusJakartaSans().copyWith(
-                                color: Colors.grey,
+                                color: const Color.fromARGB(255, 158, 18, 8),
                                 fontSize: 12,
                               ),
                             ),
@@ -80,7 +80,7 @@ class BuildAlertHistoryListView extends StatelessWidget {
                           style: GoogleFonts.plusJakartaSans().copyWith(
                             fontWeight: FontWeight.bold,
                             color: (themeData.brightness == Brightness.light)
-                                ? Color.fromARGB(255, 158, 18, 8)
+                                ? const Color.fromARGB(255, 158, 18, 8)
                                 : Theme.of(context).colorScheme.onBackground,
                             fontSize: 14,
                           ),

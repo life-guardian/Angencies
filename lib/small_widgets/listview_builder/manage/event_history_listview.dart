@@ -35,8 +35,8 @@ class BuildEventHistoryListView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     gradient: const LinearGradient(
                       colors: [
-                        Color.fromARGB(77, 171, 160, 56),
-                        Color.fromARGB(149, 223, 202, 10),
+                        Color.fromARGB(88, 67, 92, 112),
+                        Color.fromARGB(178, 33, 149, 243),
                       ],
                       stops: [
                         0.1,
@@ -69,7 +69,7 @@ class BuildEventHistoryListView extends StatelessWidget {
                               Text(
                                 event.description.toString(),
                                 style: GoogleFonts.plusJakartaSans().copyWith(
-                                  color: Colors.grey,
+                                  color: const Color.fromARGB(255, 0, 58, 112),
                                   fontSize: 12,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -87,7 +87,7 @@ class BuildEventHistoryListView extends StatelessWidget {
                           style: GoogleFonts.plusJakartaSans().copyWith(
                             fontWeight: FontWeight.bold,
                             color: (themeData.brightness == Brightness.light)
-                                ? const Color.fromARGB(255, 128, 117, 17)
+                                ? const Color.fromARGB(255, 0, 58, 112)
                                 : Theme.of(context).colorScheme.onBackground,
                             fontSize: 14,
                           ),

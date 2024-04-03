@@ -97,6 +97,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   void disconnectSocket() async {
     try {
       socket.disconnect();
+      socket.dispose();
       socket.onDisconnect((data) {
         debugPrint("Socket Dissconnected");
       });
@@ -108,24 +109,24 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   void listenSocketOn() {
     socket.on("agencyLocationUpdate", (data) {
-      // if (mounted) {
-      debugPrint("Got agency");
-      debugPrint(data.toString());
-      bool isPlotted = false;
-      for (int i = 0; i < liveAgencies.length; i++) {
-        if (liveAgencies[i].agencyId == data["agencyId"]) {
-          liveAgencies[i].lat = data["lat"];
-          liveAgencies[i].lng = data["lng"];
-          liveAgencies[i].rescueOpsName = data[""];
-          isPlotted = true;
+      if (mounted) {
+        debugPrint("Got agency");
+        debugPrint(data.toString());
+        bool isPlotted = false;
+        for (int i = 0; i < liveAgencies.length; i++) {
+          if (liveAgencies[i].agencyId == data["agencyId"]) {
+            liveAgencies[i].lat = data["lat"];
+            liveAgencies[i].lng = data["lng"];
+            liveAgencies[i].rescueOpsName = data[""];
+            isPlotted = true;
+          }
         }
+        setState(() {
+          if (!isPlotted) {
+            liveAgencies.add(LiveAgencies.fromJson(data));
+          }
+        });
       }
-      setState(() {
-        if (!isPlotted) {
-          liveAgencies.add(LiveAgencies.fromJson(data));
-        }
-      });
-      // }
     });
 
     socket.on("disconnected", (disconnectedAgencyId) {
@@ -192,8 +193,9 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           currentPosition.latitude,
           currentPosition.longitude
         ];
-        debugPrint("Initial lat ${latLng[0]} and lng: ${latLng[1]}");
-
+        debugPrint(
+            "Initial lat ${currentPosition.latitude} and lng: ${currentPosition.longitude}");
+        emitLocationUpdate(currentPosition.latitude, currentPosition.longitude);
         await getInitialConnectAgenciesUsersLocation();
       }
     }
@@ -201,8 +203,6 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   Future<void> getInitialConnectAgenciesUsersLocation() async {
-    emitLocationUpdate(latLng[0], latLng[1]);
-
     var baseUrl = dotenv.get("BASE_URL");
 
     try {
