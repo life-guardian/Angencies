@@ -2,13 +2,14 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/animations/listview_shimmer_effect.dart';
+import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/custom_back_button.dart';
-import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:agencies_app/widgets/custom_buttons/custom_back_button.dart';
+import 'package:agencies_app/widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -194,48 +195,53 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: screenWidth > mobileScreenWidth
-                            ? EdgeInsets.only(left: screenWidth / 6.5)
-                            : null,
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, top: 5, bottom: 15),
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  filterValue,
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: screenWidth > mobileScreenWidth
+                              ? EdgeInsets.only(left: screenWidth / 6.5)
+                              : null,
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 5, bottom: 15),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    filterValue,
+                                    style:
+                                        GoogleFonts.plusJakartaSans().copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Tap on the event to see registered users",
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
+                                  Text(
+                                    "Tap on the event to see registered users",
+                                    style:
+                                        GoogleFonts.plusJakartaSans().copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          width: screenWidth > mobileScreenWidth
-                              ? screenWidth / 1.5
-                              : double.infinity,
-                          child: activeWidget,
+                        Expanded(
+                          child: SizedBox(
+                            width: screenWidth > mobileScreenWidth
+                                ? screenWidth / 1.5
+                                : double.infinity,
+                            child: activeWidget,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

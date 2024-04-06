@@ -2,11 +2,13 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_logout_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,10 +68,12 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
         widget.ref.read(manageEventsProvider.notifier).removeAt(id: id);
         // widget.eventList.removeAt(index);
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
+
+      showAwesomeSnackBarAnimation(
+        context: context,
+        title: "Rescue Operation!!",
+        message: message,
+        contentType: ContentType.success,
       );
     } else {
       customShowDialog(

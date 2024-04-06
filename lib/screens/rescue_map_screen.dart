@@ -1,14 +1,17 @@
 // ignore_for_file: library_prefixes, use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:agencies_app/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/models/active_agencies.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/active_rescue_users.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/Custom_elevated_button.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/pop_screen_button.dart';
-import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/custom_buttons/custom_elevated_button.dart';
+import 'package:agencies_app/widgets/custom_buttons/pop_screen_button.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -324,12 +327,15 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         ref.read(isRescueOperationOnGoingProvider.notifier).state = false;
         ref.read(rescueOperationIdProvider.notifier).state = null;
       }
-      String serverMessage = '';
+      String serverMessage = jsonDecode(response.body)['message'];
+
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(serverMessage.toString()),
-        ),
+
+      showAwesomeSnackBarAnimation(
+        context: context,
+        title: "Rescue Operation!!",
+        message: serverMessage,
+        contentType: ContentType.help,
       );
     }
   }

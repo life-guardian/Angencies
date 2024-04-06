@@ -4,11 +4,12 @@ import 'dart:convert';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_login_register.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_form_field_login_register.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -269,23 +270,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Hello! Register agency to get started',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
+          FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: Text(
+              'Hello! Register agency to get started',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
             ),
           ),
           const SizedBox(
             height: 21,
           ),
           kIsMobile
-              ? Expanded(
-                  child: registerScreenFormWidget(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
-                    kIsMobile: kIsMobile,
+              ? FadeInUp(
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 500),
+                  child: Expanded(
+                    child: registerScreenFormWidget(
+                      screenHeight: screenHeight,
+                      screenWidth: screenWidth,
+                      kIsMobile: kIsMobile,
+                    ),
                   ),
                 )
               : registerScreenFormWidget(
@@ -300,43 +308,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
               : const SizedBox(
                   height: 11,
                 ),
-          SizedBox(
-            width: !kIsMobile
-                ? screenWidth / 4
-                : MediaQuery.of(context).size.width,
-            height: 55,
-            child: ElevatedButton(
-              onPressed: buttonEnabled ? submitForm : () {},
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Theme.of(context).colorScheme.tertiary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: activeButtonWidget,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Already have an account?',
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextButton(
-                  onPressed: goToLoginPage,
-                  child: const Text(
-                    'Login Now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                    ),
+          FadeInUp(
+            delay: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 500),
+            child: SizedBox(
+              width: !kIsMobile
+                  ? screenWidth / 4
+                  : MediaQuery.of(context).size.width,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: buttonEnabled ? submitForm : () {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
+                child: activeButtonWidget,
+              ),
+            ),
+          ),
+          FadeInUp(
+            delay: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Already have an account?',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  TextButton(
+                    onPressed: goToLoginPage,
+                    child: const Text(
+                      'Login Now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

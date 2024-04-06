@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/animations/listview_shimmer_effect.dart';
+import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
@@ -10,10 +10,11 @@ import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/custom_back_button.dart';
-import 'package:agencies_app/small_widgets/listview_builder/manage/alert_history_listview.dart';
-import 'package:agencies_app/small_widgets/listview_builder/manage/event_history_listview.dart';
-import 'package:agencies_app/small_widgets/listview_builder/manage/rescue_operation_history_listview.dart';
+import 'package:agencies_app/widgets/custom_buttons/custom_back_button.dart';
+import 'package:agencies_app/widgets/listview_builder/manage/alert_history_listview.dart';
+import 'package:agencies_app/widgets/listview_builder/manage/event_history_listview.dart';
+import 'package:agencies_app/widgets/listview_builder/manage/rescue_operation_history_listview.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -216,24 +217,27 @@ class _HistoryState extends ConsumerState<History> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 18, left: 18, right: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 12),
-                        child: Text(
-                          filterValue,
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 12),
+                          child: Text(
+                            filterValue,
+                            style: GoogleFonts.plusJakartaSans().copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: activeWidget,
-                      ),
-                    ],
+                        Expanded(
+                          child: activeWidget,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

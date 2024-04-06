@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 
-import 'package:agencies_app/animations/listview_shimmer_effect.dart';
+import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
-import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
+import 'package:agencies_app/widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';

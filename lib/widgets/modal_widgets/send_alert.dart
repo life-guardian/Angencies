@@ -1,47 +1,49 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/functions/validate_textfield.dart';
 import 'package:agencies_app/classes/exact_location.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/select_map_location_field.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'package:agencies_app/small_widgets/custom_buttons/Custom_elevated_button.dart';
+import 'package:agencies_app/widgets/custom_buttons/custom_elevated_button.dart';
 import 'package:agencies_app/functions/datepicker_function.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_modal.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_osm_map_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/text_in_textfield.dart';
+import 'package:agencies_app/widgets/custom_textfields/select_map_location_field.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_form_field_modal.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_osm_map_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_in_textfield.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
-class OrganizeEvent extends StatefulWidget {
-  const OrganizeEvent({super.key, required this.token});
+class SendAlert extends StatefulWidget {
+  const SendAlert({super.key, required this.token});
   final token;
 
   @override
-  State<OrganizeEvent> createState() => _OrganizeEventState();
+  State<SendAlert> createState() => _SendAlertState();
 }
 
-class _OrganizeEventState extends State<OrganizeEvent> {
-  TextEditingController descController = TextEditingController();
-  TextEditingController eventNameController = TextEditingController();
-  ExactLocation exactLocation = ExactLocation();
+class _SendAlertState extends State<SendAlert> {
+  String? dropDownValue;
+  bool isPickeddropDownValue = false;
+  DateTime? _selectedDate;
+  final formatter = DateFormat.yMd();
+  TextEditingController alertNameController = TextEditingController();
   double? lat;
   double? lng;
-
   String? address;
-  final formatter = DateFormat.yMd();
-  DateTime? _selectedDate;
-
   bool buttonEnabled = true;
+  bool dateSelected = false;
+  ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget activeButtonText = Text(
-    'PUBLISH EVENT',
+    'SEND ALERT',
     style: GoogleFonts.mulish(
         fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
   );
@@ -49,26 +51,28 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   @override
   void dispose() {
     super.dispose();
-    descController.dispose();
-    eventNameController.dispose();
+    alertNameController.dispose();
   }
 
-  void _presentDatePicker() async {
+  void _presentDatePicker(BuildContext context) async {
     _selectedDate = await customDatePicker(context);
-
+    if (!(_selectedDate == null)) {
+      dateSelected = true;
+    }
     setState(() {});
   }
 
   void setButtonText() {
     activeButtonText = Text(
-      'PUBLISH EVENT',
+      'SEND ALERT',
       style: GoogleFonts.mulish(
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );
   }
 
   void openMaps() async {
-    PickedData pickedLocationData = await customOsmMapDialog(context: context);
+    PickedData pickedLocationData = await customOsmMapDialog(
+        context: context, titleText: 'Select Location to send alert');
     lat = pickedLocationData.latLong.latitude;
     lng = pickedLocationData.latLong.longitude;
     try {
@@ -83,19 +87,19 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (address == null || _selectedDate == null) {
+      if (address == null || _selectedDate == null || !isPickeddropDownValue) {
         customShowDialog(
             context: context,
             titleText: 'Something went wrong',
             contentText:
-                'Please check that you have proper inputed event location and picked date');
+                'Please check that you have proper inputed alerting area, alert severity and date.');
       } else {
-        _publishEvent();
+        _sendAlert();
       }
     }
   }
 
-  void _publishEvent() async {
+  Future<void> _sendAlert() async {
     setState(() {
       buttonEnabled = false;
       activeButtonText = const Center(
@@ -111,18 +115,17 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     var serverMessage;
 
     var reqBody = {
-      "eventName": eventNameController.text,
-      "description": descController.text,
-      "latitude": lat,
-      "longitude": lng,
-      "eventDate": _selectedDate.toString()
+      "locationCoordinates": [lng, lat],
+      "alertName": alertNameController.text.toString(),
+      "alertSeverity": dropDownValue.toString().toLowerCase(),
+      "alertForDate": _selectedDate.toString(),
     };
 
     try {
       String baseUrl = dotenv.get("BASE_URL");
 
       var response = await http.post(
-        Uri.parse('$baseUrl/api/event/agency/add'),
+        Uri.parse('$baseUrl/api/alert/agency/sendalert'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $jwtToken',
@@ -130,22 +133,24 @@ class _OrganizeEventState extends State<OrganizeEvent> {
         body: jsonEncode(reqBody),
       );
 
+      // var jsonResponse = jsonDecode(response.body);
       var jsonResponse = jsonDecode(response.body);
 
       serverMessage = jsonResponse['message'];
 
       if (response.statusCode == 200) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(serverMessage.toString()),
-          ),
+
+        showAwesomeSnackBarAnimation(
+          context: context,
+          title: "Alert for disaster!!",
+          message: serverMessage,
+          contentType: ContentType.failure,
         );
       } else {
         setState(() {
           setButtonText();
         });
-
         customShowDialog(
             context: context,
             titleText: 'Something went wrong',
@@ -155,7 +160,6 @@ class _OrganizeEventState extends State<OrganizeEvent> {
       setState(() {
         setButtonText();
       });
-
       debugPrint("Exception occured: ${e.toString()}");
     }
     buttonEnabled = true;
@@ -163,6 +167,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> values = ['High', 'Medium', 'Low'];
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -179,53 +184,92 @@ class _OrganizeEventState extends State<OrganizeEvent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CustomTextWidget(
-                text: 'Organize Awareness Event',
+                text: 'Send Emergency Alert',
                 fontSize: 20,
               ),
               const SizedBox(
                 height: 31,
               ),
               const CustomTextWidget(
-                text: 'LOCATION',
+                text: 'ALERTING AREA',
               ),
               const SizedBox(
                 height: 5,
               ),
-              // ontap , address
               SelectMapLocationField(
                 onTap: openMaps,
                 address: address,
-                initialText: 'Select Location',
+                initialText:
+                    'Area will be in radius of 2 km from the location point.',
               ),
               const SizedBox(
                 height: 21,
               ),
               const CustomTextWidget(
-                text: 'EVENT NAME',
+                text: 'ALERT NAME',
               ),
               const SizedBox(
                 height: 5,
               ),
               TextFormFieldModal(
-                hintText: 'Enter event name',
-                controller: eventNameController,
+                hintText: 'Fire and Safety Drill',
+                controller: alertNameController,
                 checkValidation: (value) =>
-                    validateTextField(value, 'Event Name'),
+                    validateTextField(value, 'Alert Name'),
               ),
               const SizedBox(
                 height: 21,
               ),
               const CustomTextWidget(
-                text: 'EVENT DESCRIPTION',
+                text: 'ALERT SEVERITY',
               ),
               const SizedBox(
                 height: 5,
               ),
-              TextFormFieldModal(
-                hintText: 'Enter event description',
-                controller: descController,
-                checkValidation: (value) =>
-                    validateTextField(value, 'Description'),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    // width: 2,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextInTextField(
+                        selectedText: dropDownValue,
+                        initialText: 'Select Severty',
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          underline: null,
+                          iconSize: 35,
+                          items: values
+                              .map(
+                                (value) => DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              isPickeddropDownValue = true;
+
+                              dropDownValue = newValue!;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                          icon: const Icon(Icons.arrow_drop_down_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 21,
@@ -237,7 +281,9 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 height: 5,
               ),
               GestureDetector(
-                onTap: _presentDatePicker,
+                onTap: () {
+                  _presentDatePicker(context);
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(

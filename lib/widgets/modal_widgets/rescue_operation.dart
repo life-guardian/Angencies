@@ -2,17 +2,19 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/functions/validate_textfield.dart';
 import 'package:agencies_app/classes/exact_location.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/screens/rescue_map_screen.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_osm_map_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/Custom_elevated_button.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_modal.dart';
-import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_osm_map_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/widgets/custom_buttons/custom_elevated_button.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_form_field_modal.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -152,11 +154,13 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
         serverMessage = jsonResponse['message'];
 
         if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(serverMessage.toString()),
-            ),
+          showAwesomeSnackBarAnimation(
+            context: context,
+            title: "Rescue Operation!!",
+            message: serverMessage,
+            contentType: ContentType.success,
           );
+
           String? rescueId = await getRescueOperationDetails();
           ref.read(isRescueOperationOnGoingProvider.notifier).state = true;
           ref.read(rescueOperationIdProvider.notifier).state = rescueId;

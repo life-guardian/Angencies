@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
-import 'package:agencies_app/animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/screens/welcome_screen.dart';
 import 'package:agencies_app/theme/custom_theme.dart';
