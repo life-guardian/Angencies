@@ -6,7 +6,7 @@ import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

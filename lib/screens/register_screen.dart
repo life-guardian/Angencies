@@ -5,7 +5,7 @@ import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_login_register.dart';

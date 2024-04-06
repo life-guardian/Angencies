@@ -49,6 +49,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   url_launcher: ^6.2.3
   socket_io_client: ^2.0.3
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

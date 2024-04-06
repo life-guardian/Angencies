@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, no_logic_in_create_state
 import 'dart:convert';
 
+import 'package:agencies_app/animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
@@ -31,11 +32,7 @@ class TabsBottom extends ConsumerStatefulWidget {
 class _TabsBottomState extends ConsumerState<TabsBottom> {
   bool dataLoaded = false;
   late SharedPreferences prefs;
-  Widget activePage = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  Widget activePage = const HomeScreenShimmerEffect();
   int _currentIndx = 0;
   double _screenWidth = 0;
 
@@ -165,6 +162,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLoading = ref.watch(isLoadingHomeScreen);
     _screenWidth = MediaQuery.of(context).size.width;
 
     if (dataLoaded) {
@@ -173,7 +171,9 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
           logoutUser: _logoutUser,
         );
       } else if (_currentIndx == 0) {
-        activePage = HomeScreen(token: widget.myToken);
+        activePage = HomeScreen(
+          token: widget.myToken,
+        );
       }
     }
 
@@ -183,7 +183,8 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
           : SafeArea(
               child: activeScreen(),
             ),
-      bottomNavigationBar: _screenWidth > mobileScreenWidth || !dataLoaded
+      bottomNavigationBar: (_screenWidth > mobileScreenWidth || !dataLoaded) ||
+              isLoading
           ? null
           : Container(
               decoration: BoxDecoration(

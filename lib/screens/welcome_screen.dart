@@ -2,7 +2,7 @@
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_screen.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/foundation.dart' show Platform;
 

@@ -7,7 +7,7 @@ import 'package:agencies_app/screens/tabs.dart';
 import 'package:agencies_app/small_widgets/custom_buttons/pop_screen_button.dart';
 import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/screens/register_screen.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/small_widgets/custom_textfields/text_form_field_login_register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: const PopScreenButton(),
+        leading: const CustomBackButton(),
       ),
       body: Center(
         child: Padding(

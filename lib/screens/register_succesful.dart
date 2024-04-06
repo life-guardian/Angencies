@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:agencies_app/screens/tabs.dart';
-import 'package:agencies_app/transitions_animations/custom_fade_animation.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_fade_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

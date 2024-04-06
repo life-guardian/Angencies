@@ -2,9 +2,10 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/models/event_history.dart';
-import 'package:agencies_app/functions/modal_bottom_sheet.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/operation_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
@@ -70,11 +71,7 @@ class _HistoryState extends ConsumerState<History> {
         ? activeWidget = BuildAlertHistoryListView(
             ref: ref,
           )
-        : const Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          );
+        : const ListviewShimmerEffect();
   }
 
   void initializeTokenHeader() {
@@ -245,8 +242,9 @@ class _HistoryState extends ConsumerState<History> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration:
-            BoxDecoration(color: Theme.of(context).colorScheme.secondary),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+        ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(25),

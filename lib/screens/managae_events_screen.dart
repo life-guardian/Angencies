@@ -2,9 +2,10 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
-import 'package:agencies_app/functions/modal_bottom_sheet.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/small_widgets/custom_buttons/custom_back_button.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
@@ -55,11 +56,7 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
             token: widget.token,
             agencyName: widget.agencyName,
           )
-        : const Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          );
+        : const ListviewShimmerEffect();
   }
 
   void initializeTokenHeader() {

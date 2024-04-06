@@ -1,13 +1,12 @@
 // ignore_for_file: library_prefixes, use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:agencies_app/models/active_locations.dart';
-import 'package:agencies_app/functions/modal_bottom_sheet.dart';
+import 'package:agencies_app/models/active_agencies.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
+import 'package:agencies_app/models/active_rescue_users.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/location_provider.dart';
-import 'package:agencies_app/small_widgets/custom_buttons/manage_elevated_button.dart';
+import 'package:agencies_app/small_widgets/custom_buttons/Custom_elevated_button.dart';
 import 'package:agencies_app/small_widgets/custom_buttons/pop_screen_button.dart';
 import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +35,14 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   late IO.Socket socket;
   late String token;
-  bool isSocketDisconnected = false;
+
   StreamSubscription<Position>? positionStreamSubscription;
   late bool isRescueOnGoing;
   String? rescueId;
 
   late List<double> latLng;
   List<LiveAgencies> liveAgencies = [];
+  List<LiveRescueUsers> liveRescueUsers = [];
 
   @override
   void initState() {
@@ -67,11 +67,14 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     disconnectSocket();
   }
 
-  void openModalBottomSheet({required LiveAgencies liveAgency}) {
-    modalBottomSheet.openModal(
-      context: context,
-      widget: markerPointDetails(liveAgency: liveAgency),
-    );
+  // <------------------------ <Socket Implementation> ------------------------>
+
+  void disconnectSocket() async {
+    socket.disconnect();
+    socket.dispose();
+    socket.onDisconnect((data) {
+      debugPrint("Socket Dissconnected");
+    });
   }
 
   void connectSocket() {
@@ -88,23 +91,66 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.connect();
     socket.onConnect((data) async {
       debugPrint("Socket Connected");
-      await initialConnectSendGetDetails();
-      listenSocketOn();
-      startTrackingLocation();
+      initialConnectSendGetDetails();
     });
   }
 
-  void disconnectSocket() async {
-    try {
-      socket.disconnect();
-      socket.dispose();
-      socket.onDisconnect((data) {
-        debugPrint("Socket Dissconnected");
-      });
-    } catch (e) {
-      debugPrint(
-          "Exception occured while socket disconnecting: ${e.toString()}");
+  Future<void> initialConnectSendGetDetails() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        debugPrint("Location permission denied");
+      }
+    } else {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      if (mounted) {
+        ref.read(deviceLocationProvider.notifier).state = [
+          currentPosition.latitude,
+          currentPosition.longitude
+        ];
+        debugPrint(
+            "Initial lat ${currentPosition.latitude} and lng: ${currentPosition.longitude}");
+        initialEmitLocationUpdate(
+            currentPosition.latitude, currentPosition.longitude);
+        onIntialConnectReceiveNearbyAgenciesUsers();
+      }
     }
+    return;
+  }
+
+  void initialEmitLocationUpdate(double latitude, double longitude) {
+    socket.emit('initialConnect', {'lat': latitude, 'lng': longitude});
+  }
+
+  void onIntialConnectReceiveNearbyAgenciesUsers() {
+    debugPrint("initial connect onIntialConnectReceiveNearbyAgenciesUsers");
+    socket.on("initialConnectReceiveNearbyUsers", (initialConnectUsers) {
+      if (mounted) {
+        debugPrint("Got initial connect Users");
+        debugPrint(initialConnectUsers.toString());
+        for (var liveAgency in initialConnectUsers) {
+          liveRescueUsers.add(LiveRescueUsers.fromJson(liveAgency));
+        }
+        setState(() {});
+      }
+    });
+
+    socket.on("initialConnectReceiveNearbyAgencies", (initialConnectAgencies) {
+      if (mounted) {
+        debugPrint("Got initial connect agency");
+        debugPrint(initialConnectAgencies.toString());
+        for (var liveAgency in initialConnectAgencies) {
+          liveAgencies.add(LiveAgencies.fromJson(liveAgency));
+        }
+        setState(() {});
+      }
+    });
+
+    listenSocketOn();
   }
 
   void listenSocketOn() {
@@ -129,19 +175,51 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       }
     });
 
+    socket.on("userLocationUpdate", (data) {
+      if (mounted) {
+        debugPrint("Got User");
+        debugPrint(data.toString());
+        bool isPlotted = false;
+        for (int i = 0; i < liveRescueUsers.length; i++) {
+          if (liveRescueUsers[i].userId == data["userId"]) {
+            liveRescueUsers[i].lat = data["lat"];
+            liveRescueUsers[i].lng = data["lng"];
+            isPlotted = true;
+          }
+        }
+        setState(() {
+          if (!isPlotted) {
+            liveRescueUsers.add(LiveRescueUsers.fromJson(data));
+          }
+        });
+      }
+    });
+
     socket.on("disconnected", (disconnectedAgencyId) {
       debugPrint("Agency id disconnected $disconnectedAgencyId");
 
       if (mounted) {
+        bool foundInAgencies = false;
         for (int i = 0; i < liveAgencies.length; i++) {
           if (liveAgencies[i].agencyId == disconnectedAgencyId) {
             liveAgencies.remove(liveAgencies[i]);
+            foundInAgencies = true;
             break;
+          }
+        }
+        if (!foundInAgencies) {
+          for (int i = 0; i < liveRescueUsers.length; i++) {
+            if (liveRescueUsers[i].userId == disconnectedAgencyId) {
+              liveRescueUsers.remove(liveRescueUsers[i]);
+              break;
+            }
           }
         }
         setState(() {});
       }
     });
+
+    startTrackingLocation();
   }
 
   void startTrackingLocation() async {
@@ -176,64 +254,50 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
   }
 
-  Future<void> initialConnectSendGetDetails() async {
-    LocationPermission permission = await Geolocator.checkPermission();
+  // <------------------------ </Socket Implementation> ------------------------>
 
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        debugPrint("Location permission denied");
-      }
-    } else {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      if (mounted) {
-        ref.read(deviceLocationProvider.notifier).state = [
-          currentPosition.latitude,
-          currentPosition.longitude
-        ];
-        debugPrint(
-            "Initial lat ${currentPosition.latitude} and lng: ${currentPosition.longitude}");
-        emitLocationUpdate(currentPosition.latitude, currentPosition.longitude);
-        await getInitialConnectAgenciesUsersLocation();
-      }
-    }
-    return;
+  void openModalBottomSheet(
+      {LiveAgencies? liveAgency, LiveRescueUsers? liveRescueUsers}) {
+    modalBottomSheet.openModal(
+      context: context,
+      widget: liveAgency != null
+          ? markerPointDetails(liveAgency: liveAgency)
+          : markerPointUsersDetails(liveRescueUsers: liveRescueUsers!),
+    );
   }
 
-  Future<void> getInitialConnectAgenciesUsersLocation() async {
-    var baseUrl = dotenv.get("BASE_URL");
+  // Future<void> getInitialConnectAgenciesUsersLocation() async {
+  //   var baseUrl = dotenv.get("BASE_URL");
 
-    try {
-      var response = await http.get(
-        Uri.parse(
-          "$baseUrl/api/rescueops/initialconnect/${latLng[0]}/${latLng[1]}",
-        ),
-        headers: {"Authorization": "Bearer $token"},
-      );
+  //   try {
+  //     var response = await http.get(
+  //       Uri.parse(
+  //         "$baseUrl/api/rescueops/initialconnect/${latLng[0]}/${latLng[1]}",
+  //       ),
+  //       headers: {"Authorization": "Bearer $token"},
+  //     );
 
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
+  //     if (response.statusCode == 200) {
+  //       var jsonResponse = jsonDecode(response.body);
 
-        final initialAgencies = jsonResponse["agencies"];
-        debugPrint("Got initial connect agency");
-        debugPrint(initialAgencies.toString());
+  //       final initialAgencies = jsonResponse["agencies"];
+  //       debugPrint("Got initial connect agency");
+  //       debugPrint(initialAgencies.toString());
 
-        for (var liveAgency in initialAgencies) {
-          liveAgencies.add(LiveAgencies.fromJson(liveAgency));
-        }
-        if (mounted) {
-          setState(() {});
-        }
-      }
-    } catch (error) {
-      debugPrint(
-          "Error while fetching intial connect agencies and user ${error.toString()}");
-    }
+  //       for (var liveAgency in initialAgencies) {
+  //         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
+  //       }
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //     }
+  //   } catch (error) {
+  //     debugPrint(
+  //         "Error while fetching intial connect agencies and user ${error.toString()}");
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
   Future<void> launchPhoneDial({required int phoneNo}) async {
     final Uri url = Uri(
@@ -347,6 +411,40 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                         );
                       },
                     ),
+
+                  for (var liveUser in liveRescueUsers)
+                    // if (liveUser.isInDanger!)
+                    Marker(
+                      point: LatLng(liveUser.lat!, liveUser.lng!),
+                      width: 100,
+                      height: 100,
+                      rotateAlignment: Alignment.centerLeft,
+                      builder: (
+                        context,
+                      ) {
+                        return GestureDetector(
+                          onTap: () {
+                            openModalBottomSheet(liveRescueUsers: liveUser);
+                          },
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Image.asset(
+                                  "assets/images/rescue_map/userDanger.PNG",
+                                ),
+                              ),
+                              Flexible(
+                                child: CustomTextWidget(
+                                  text: liveUser.userName ?? "",
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                 ],
               ),
             ],
@@ -373,7 +471,88 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           const Positioned(
             top: 30,
             left: 10,
-            child: PopScreenButton(),
+            child: CustomBackButton(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget markerPointUsersDetails({required LiveRescueUsers liveRescueUsers}) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 15,
+        left: 12,
+        right: 12,
+        bottom: 5,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Users Details',
+            style: GoogleFonts.mulish().copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontSize: 21,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SingleChildScrollView(
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'User Name'.toUpperCase(),
+                        style: GoogleFonts.mulish().copyWith(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        liveRescueUsers.userName!,
+                        style: GoogleFonts.mulish().copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  if (liveRescueUsers.rescueReason != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Reason To Rescue'.toUpperCase(),
+                          style: GoogleFonts.mulish().copyWith(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          liveRescueUsers.rescueReason!,
+                          style: GoogleFonts.mulish().copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -433,6 +612,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 const SizedBox(
                   height: 8,
                 ),
+
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -452,9 +632,10 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                if (liveAgency.rescueOpsName != null)
+                  const SizedBox(
+                    height: 8,
+                  ),
                 if (liveAgency.rescueOpsName != null)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -69,7 +69,12 @@ class BuildEventHistoryListView extends StatelessWidget {
                               Text(
                                 event.description.toString(),
                                 style: GoogleFonts.plusJakartaSans().copyWith(
-                                  color: const Color.fromARGB(255, 0, 58, 112),
+                                  color: (themeData.brightness ==
+                                          Brightness.light)
+                                      ? const Color.fromARGB(255, 0, 58, 112)
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                   fontSize: 12,
                                   overflow: TextOverflow.ellipsis,
                                 ),

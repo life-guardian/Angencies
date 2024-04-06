@@ -2,8 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
-import 'package:agencies_app/functions/modal_bottom_sheet.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,7 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
   List<RegisteredUsers> registeredUsersList = [];
 
-  Widget activeWidget = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  Widget activeWidget = const ListviewShimmerEffect();
 
   @override
   void initState() {
