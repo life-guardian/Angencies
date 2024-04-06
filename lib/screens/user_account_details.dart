@@ -1,11 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:agencies_app/database/database_helper_classs.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/dividers/horizontal_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -149,10 +147,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 0.3,
-                    ),
+                    const HorizontalDivider(),
                     InkWell(
                       onTap: () {
                         // navigate to help page
@@ -179,10 +174,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 0.3,
-                    ),
+                    const HorizontalDivider(),
                     InkWell(
                       onTap: () {
                         customLogoutDialog(
@@ -215,10 +207,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 0.5,
-                    ),
+                    const HorizontalDivider(thickness: 0.5),
                     InkWell(
                       onTap: () {
                         customLogoutDialog(

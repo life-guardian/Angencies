@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, no_logic_in_create_state
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
-import 'package:agencies_app/database/database_helper_classs.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
