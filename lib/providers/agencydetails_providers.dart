@@ -10,8 +10,24 @@ final tokenProvider = StateProvider<String>((ref) => "");
 final profileImageProvider = StateProvider<XFile?>((ref) => null);
 
 final isRescueOperationOnGoingProvider = StateProvider<bool>((ref) => false);
+
 final isLoadingHomeScreen = StateProvider<bool>((ref) => true);
+
+final greetingProvider = StateProvider<String>((ref) => getGreetingMessage());
 
 final rescueOperationIdProvider = StateProvider<String?>((ref) {
   return null;
 });
+
+String getGreetingMessage() {
+  final now = DateTime.now();
+  final hour = now.hour;
+
+  if (hour < 12) {
+    return 'Good Morning';
+  } else if (hour < 17) {
+    return 'Good Afternoon';
+  } else {
+    return 'Good Evening';
+  }
+}

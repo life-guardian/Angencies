@@ -53,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
     getAgencyDataFromServer();
   }
 
@@ -105,6 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     ThemeData themeData = Theme.of(context);
     agencyname = ref.watch(agencyNameProvider);
+    String grettingMessage = ref.watch(greetingProvider);
     eventsCount = ref.watch(eventsCountProvider.notifier).state[0];
     rescueCount = ref.watch(eventsCountProvider.notifier).state[1];
 
@@ -123,9 +125,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (_pickedImage != null)
-                            CircleAvatar(
-                              backgroundImage:
-                                  FileImage(File(_pickedImage!.path)),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FadeInUp(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      child: AlertDialog(
+                                        content: Image(
+                                          image: FileImage(
+                                            File(_pickedImage!.path),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    FileImage(File(_pickedImage!.path)),
+                              ),
                             ),
                           const SizedBox(
                             width: 21,
@@ -134,12 +157,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Jai Hind!',
+                                grettingMessage,
                                 style:
                                     GoogleFonts.inter().copyWith(fontSize: 12),
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 3,
                               ),
                               Text(
                                 agencyname ?? 'Loading...',
@@ -258,7 +281,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             width: 11,
                           ),
                           ManageCard(
-                            text1: 'See All History',
+                            text1: 'See all history',
                             text2: 'History',
                             showModal: () {
                               Navigator.of(context).push(

@@ -4,6 +4,7 @@ import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/widgets/dividers/horizontal_divider.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,232 +43,276 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CustomTextWidget(
-                  text: "Settings",
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 21,
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10), // changes position of shadow
+        child: FadeInUp(
+          duration: const Duration(milliseconds: 500),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CustomTextWidget(
+                    text: "Settings",
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundImage: _pickedImage != null
-                          ? FileImage(File(_pickedImage!.path))
-                          : null,
-                    ),
-                    const SizedBox(
-                      height: 31,
-                    ),
-                    CustomTextWidget(
-                      text: userName ?? "",
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(
+                height: 21,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10), // changes position of shadow
                     ),
                   ],
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10), // changes position of shadow
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 30,
+                    horizontal: 20,
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        _pickedImage = await pickImageFromGallery();
-                        if (_pickedImage != null) {
-                          widget.ref.read(profileImageProvider.notifier).state =
-                              _pickedImage;
-
-                          setState(() {});
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(Icons.camera_alt_outlined),
-                            const SizedBox(
-                              width: 21,
-                            ),
-                            Text(
-                              'Update Profile Photo',
-                              style: GoogleFonts.mulish(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios_rounded),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const HorizontalDivider(),
-                    InkWell(
-                      onTap: () {
-                        // navigate to help page
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(Icons.help_center_rounded),
-                            const SizedBox(
-                              width: 21,
-                            ),
-                            Text(
-                              'Learn More!',
-                              style: GoogleFonts.mulish(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios_rounded),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const HorizontalDivider(),
-                    InkWell(
-                      onTap: () {
-                        customLogoutDialog(
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
                             context: context,
-                            titleText: 'Forgot Password?',
-                            onTap: () {},
-                            actionText2: 'Yes',
-                            contentText:
-                                'Do you really want to reset your password');
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(Icons.lock_clock_rounded),
-                            const SizedBox(
-                              width: 21,
-                            ),
-                            Text(
-                              'Forgot Password?',
-                              style: GoogleFonts.mulish(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios_rounded),
-                          ],
+                            builder: (context) {
+                              return FadeInUp(
+                                duration: const Duration(milliseconds: 500),
+                                child: AlertDialog(
+                                  content: Image(
+                                    image: FileImage(
+                                      File(_pickedImage!.path),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundImage: _pickedImage != null
+                              ? Image(
+                                  image: FileImage(
+                                    File(
+                                      _pickedImage!.path,
+                                    ),
+                                  ),
+                                  fit: BoxFit.fitHeight,
+                                ).image
+                              : null,
                         ),
                       ),
-                    ),
-                    const HorizontalDivider(thickness: 0.5),
-                    InkWell(
-                      onTap: () {
-                        customLogoutDialog(
-                          context: context,
-                          titleText: 'Log out of your account?',
-                          contentText:
-                              'You will logged out and navigated to login dashboard',
-                          actionText2: 'Log Out',
-                          onTap: widget.logoutUser,
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(Icons.logout_rounded),
-                            const SizedBox(
-                              width: 21,
-                            ),
-                            Text(
-                              'Logout',
-                              style: GoogleFonts.mulish(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios_rounded),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 31,
                       ),
+                      CustomTextWidget(
+                        text: userName ?? "",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 31,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10), // changes position of shadow
                     ),
                   ],
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          _pickedImage = await pickImageFromGallery();
+                          if (_pickedImage != null) {
+                            widget.ref
+                                .read(profileImageProvider.notifier)
+                                .state = _pickedImage;
+
+                            setState(() {});
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(Icons.camera_alt_outlined),
+                              const SizedBox(
+                                width: 21,
+                              ),
+                              Text(
+                                'Update Profile Photo',
+                                style: GoogleFonts.mulish(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const HorizontalDivider(),
+                      InkWell(
+                        onTap: () {
+                          // navigate to help page
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(Icons.help_center_rounded),
+                              const SizedBox(
+                                width: 21,
+                              ),
+                              Text(
+                                'Learn More!',
+                                style: GoogleFonts.mulish(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const HorizontalDivider(),
+                      InkWell(
+                        onTap: () {
+                          customLogoutDialog(
+                              context: context,
+                              titleText: 'Change Password?',
+                              onTap: () {},
+                              actionText2: 'Yes',
+                              contentText:
+                                  'Do you really want to reset your password');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(Icons.lock_clock_rounded),
+                              const SizedBox(
+                                width: 21,
+                              ),
+                              Text(
+                                'Change Password?',
+                                style: GoogleFonts.mulish(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const HorizontalDivider(thickness: 0.5),
+                      InkWell(
+                        onTap: () {
+                          customLogoutDialog(
+                            context: context,
+                            titleText: 'Log out of your account?',
+                            contentText:
+                                'You will logged out and navigated to login dashboard',
+                            actionText2: 'Log Out',
+                            onTap: widget.logoutUser,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(Icons.logout_rounded),
+                              const SizedBox(
+                                width: 21,
+                              ),
+                              Text(
+                                'Logout',
+                                style: GoogleFonts.mulish(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 31,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Jai ',
-                  style: TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14),
-                ),
-                Text(
-                  'Hind !',
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16),
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(
+                height: 31,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Life ',
+                        style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15),
+                      ),
+                      const Text(
+                        'Guardian',
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        width: 25,
+                        child: Image.asset(
+                          'assets/images/disasterImage2.jpg',
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

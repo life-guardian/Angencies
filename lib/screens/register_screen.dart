@@ -244,20 +244,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: !kIsMobile
-            ? SingleChildScrollView(
-                child: registerScreenWidget(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
-                    kIsMobile: kIsMobile),
-              )
-            : registerScreenWidget(
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
-                kIsMobile: kIsMobile,
-              ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: !kIsMobile
+              ? registerScreenWidget(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  kIsMobile: kIsMobile)
+              : registerScreenWidget(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  kIsMobile: kIsMobile,
+                ),
+        ),
       ),
     );
   }
@@ -288,12 +288,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ? FadeInUp(
                   delay: const Duration(milliseconds: 300),
                   duration: const Duration(milliseconds: 500),
-                  child: Expanded(
-                    child: registerScreenFormWidget(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      kIsMobile: kIsMobile,
-                    ),
+                  child: registerScreenFormWidget(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    kIsMobile: kIsMobile,
                   ),
                 )
               : registerScreenFormWidget(
@@ -306,7 +304,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 91,
                 )
               : const SizedBox(
-                  height: 11,
+                  height: 51,
                 ),
           FadeInUp(
             delay: const Duration(milliseconds: 300),

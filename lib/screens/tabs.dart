@@ -15,10 +15,13 @@ import 'package:agencies_app/screens/user_account_details.dart';
 import 'package:agencies_app/screens/welcome_screen.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabsBottom extends ConsumerStatefulWidget {
@@ -39,8 +42,19 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   @override
   void initState() {
     super.initState();
+    getImageFileFromAssets('assets/images/no-profile-photo.jpeg')
+        .then((value) => ref.read(profileImageProvider.notifier).state = value);
     getDeviceLocation();
     addTokenProvider();
+  }
+
+  Future<XFile> getImageFileFromAssets(String path) async {
+    final ByteData byteData = await rootBundle.load(path);
+    byteData.buffer.asUint8List();
+    final tempDir = await getTemporaryDirectory();
+    final fileName = path.split('/').last; // Extracting filename from the path
+    final tempFilePath = '${tempDir.path}/$fileName';
+    return XFile(tempFilePath);
   }
 
   Future<void> getRescueOperationDetails() async {
