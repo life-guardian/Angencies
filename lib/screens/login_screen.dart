@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
-import 'package:agencies_app/widgets/custom_buttons/pop_screen_button.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/screens/register_screen.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
@@ -146,7 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: const CustomBackButton(),
       ),
       body: Center(
         child: Padding(

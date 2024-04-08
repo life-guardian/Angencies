@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({super.key});
+  const CustomBackButton({
+    super.key,
+    this.text,
+  });
+
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +26,17 @@ class CustomBackButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pop();
       },
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(
+          const Icon(
             Icons.arrow_back_ios,
             size: 20,
           ),
-          Text('back')
+          if (text != null)
+            Text(
+              text!,
+            )
         ],
       ),
     );

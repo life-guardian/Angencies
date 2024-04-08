@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, no_logic_in_create_state
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
@@ -50,10 +51,11 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
 
   Future<XFile> getImageFileFromAssets(String path) async {
     final ByteData byteData = await rootBundle.load(path);
-    byteData.buffer.asUint8List();
+    final List<int> bytes = byteData.buffer.asUint8List();
     final tempDir = await getTemporaryDirectory();
     final fileName = path.split('/').last; // Extracting filename from the path
     final tempFilePath = '${tempDir.path}/$fileName';
+    await File(tempFilePath).writeAsBytes(bytes);
     return XFile(tempFilePath);
   }
 
@@ -163,13 +165,6 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => const LoginScreen(),
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        // content: Text(message),
-        content: Text("Logged out succesfully"),
       ),
     );
   }

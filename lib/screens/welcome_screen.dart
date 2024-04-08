@@ -192,61 +192,63 @@ class WelcomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: screenWidth / 4,
-                margin: const EdgeInsets.only(top: 40),
-                child: Image.asset('assets/images/disasterImage1.png'),
-              ),
-              Image.asset(
-                'assets/images/disasterImage2.jpg',
-              ),
-              Text(
-                'Life Guardian',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(0.0, 7.0),
-                      blurRadius: 15.0,
-                      color: Color.fromARGB(57, 0, 0, 0),
-                    ),
-                  ],
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: screenWidth / 4,
+                  margin: const EdgeInsets.only(top: 40),
+                  child: Image.asset('assets/images/disasterImage1.png'),
                 ),
-              ),
-              Text(
-                'For Agencies',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(0.0, 7.0),
-                      blurRadius: 15.0,
-                      color: Color.fromARGB(57, 0, 0, 0),
-                    ),
-                  ],
+                Image.asset(
+                  'assets/images/disasterImage2.jpg',
                 ),
-              ),
-              const SizedBox(
-                height: 21,
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: const Text(
-                  'Jai Hind !',
+                Text(
+                  'Life Guardian',
                   style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(0.0, 7.0),
+                        blurRadius: 15.0,
+                        color: Color.fromARGB(57, 0, 0, 0),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Text(
+                  'For Agencies',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(0.0, 7.0),
+                        blurRadius: 15.0,
+                        color: Color.fromARGB(57, 0, 0, 0),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: const Text(
+                    'Jai Hind !',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             width: screenWidth / 7,

@@ -175,7 +175,9 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                     ],
                   ),
                   const Spacer(),
-                  const CustomBackButton(),
+                  const CustomBackButton(
+                    text: "back",
+                  ),
                 ],
               ),
             ),

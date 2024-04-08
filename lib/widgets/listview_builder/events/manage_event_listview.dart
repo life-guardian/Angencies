@@ -8,6 +8,7 @@ import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -101,10 +102,8 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
     ThemeData themeData = Theme.of(context);
     final eventList = widget.ref.watch(manageEventsProvider);
     return eventList.isEmpty
-        ? const Center(
-            child: Text(
-              "Sorry No Data found!",
-            ),
+        ? const NoDataFoundImage(
+            headingText: "No Events Found!",
           )
         : ListView.builder(
             itemCount: eventList.length,

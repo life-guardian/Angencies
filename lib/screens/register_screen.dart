@@ -210,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
+    Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     bool kIsMobile = (screenWidth <= mobileScreenWidth);
@@ -221,28 +221,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              foregroundColor: (themeData.brightness == Brightness.light)
-                  ? const Color.fromARGB(185, 30, 35, 44)
-                  : const Color(0xffe1dcd3),
-              side: BorderSide(
-                color: (themeData.brightness == Brightness.light)
-                    ? const Color.fromARGB(32, 30, 35, 44)
-                    : const Color(0xffE1DCD3),
-              ),
-            ),
-            onPressed: popScreen,
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

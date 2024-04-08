@@ -1,4 +1,5 @@
 import 'package:agencies_app/providers/alert_history_provider.dart';
+import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,10 +16,8 @@ class BuildAlertHistoryListView extends StatelessWidget {
     final alertList = ref.watch(alertHistoryProvider);
 
     return alertList.isEmpty
-        ? const Center(
-            child: Text(
-              "Sorry No Data found!",
-            ),
+        ? const NoDataFoundImage(
+            headingText: "No Alerts Found!",
           )
         : ListView.builder(
             itemCount: alertList.length,

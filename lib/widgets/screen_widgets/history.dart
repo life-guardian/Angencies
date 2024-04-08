@@ -198,7 +198,9 @@ class _HistoryState extends ConsumerState<History> {
                     ],
                   ),
                   const Spacer(),
-                  const CustomBackButton(),
+                  const CustomBackButton(
+                    text: "back",
+                  ),
                 ],
               ),
             ),
