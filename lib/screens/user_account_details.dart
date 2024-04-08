@@ -40,6 +40,8 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
   Widget build(BuildContext context) {
     String? userName = widget.ref.watch(agencyNameProvider);
     _pickedImage = widget.ref.watch(profileImageProvider);
+    bool isLightMode = Theme.of(context).brightness == Brightness.light;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -65,13 +67,15 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10), // changes position of shadow
-                    ),
+                    if (isLightMode)
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 20,
+                        offset:
+                            const Offset(0, 10), // changes position of shadow
+                      ),
                   ],
                 ),
                 child: Padding(
@@ -132,13 +136,15 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10), // changes position of shadow
-                    ),
+                    if (isLightMode)
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 20,
+                        offset:
+                            const Offset(0, 10), // changes position of shadow
+                      ),
                   ],
                 ),
                 child: Padding(
@@ -156,24 +162,22 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                             setState(() {});
                           }
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.camera_alt_outlined),
-                              const SizedBox(
+                              Icon(Icons.camera_alt_outlined),
+                              SizedBox(
                                 width: 21,
                               ),
-                              Text(
-                                'Update Profile Photo',
-                                style: GoogleFonts.mulish(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
+                              CustomTextWidget(
+                                text: 'Update Profile Photo',
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
                               ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_rounded),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios_rounded),
                             ],
                           ),
                         ),
@@ -183,24 +187,22 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         onTap: () {
                           // navigate to help page
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.help_center_rounded),
-                              const SizedBox(
+                              Icon(Icons.help_center_rounded),
+                              SizedBox(
                                 width: 21,
                               ),
-                              Text(
-                                'Learn More!',
-                                style: GoogleFonts.mulish(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
+                              CustomTextWidget(
+                                text: 'Learn More!',
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
                               ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_rounded),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios_rounded),
                             ],
                           ),
                         ),
@@ -216,24 +218,22 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                               contentText:
                                   'Do you really want to reset your password');
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.lock_clock_rounded),
-                              const SizedBox(
+                              Icon(Icons.lock_clock_rounded),
+                              SizedBox(
                                 width: 21,
                               ),
-                              Text(
-                                'Change Password?',
-                                style: GoogleFonts.mulish(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
+                              CustomTextWidget(
+                                text: 'Change Password!',
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
                               ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_rounded),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios_rounded),
                             ],
                           ),
                         ),
@@ -243,31 +243,29 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         onTap: () {
                           customLogoutDialog(
                             context: context,
-                            titleText: 'Log out of your account?',
+                            titleText: 'Log out?',
                             contentText:
-                                'You will logged out and navigated to login dashboard',
+                                'You will logged out from your account!',
                             actionText2: 'Log Out',
                             onTap: widget.logoutUser,
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.logout_rounded),
-                              const SizedBox(
+                              Icon(Icons.logout_rounded),
+                              SizedBox(
                                 width: 21,
                               ),
-                              Text(
-                                'Logout',
-                                style: GoogleFonts.mulish(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
+                              CustomTextWidget(
+                                text: 'Logout',
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
                               ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_rounded),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios_rounded),
                             ],
                           ),
                         ),

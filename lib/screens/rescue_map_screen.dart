@@ -11,6 +11,7 @@ import 'package:agencies_app/providers/location_provider.dart';
 import 'package:agencies_app/widgets/custom_buttons/custom_back_button.dart';
 import 'package:agencies_app/widgets/custom_buttons/custom_elevated_button.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -346,140 +347,146 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       latLng = ref.watch(deviceLocationProvider);
     }
     return Scaffold(
-      body: Stack(
-        children: [
-          FlutterMap(
-            options: MapOptions(
-              center: LatLng(latLng[0], latLng[1]),
-              zoom: 12,
-              interactiveFlags: InteractiveFlag.all,
-            ),
-            children: [
-              openStreetMapTileLayer,
-              MarkerLayer(
-                markers: [
-                  // Marker of this device
-                  Marker(
-                    point: LatLng(latLng[0], latLng[1]),
-                    width: 60,
-                    height: 60,
-                    rotateAlignment: Alignment.centerLeft,
-                    builder: (
-                      context,
-                    ) {
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: Image.asset(
-                                "assets/images/rescue_map/selfAgency.PNG"),
-                          ),
-                          const CustomTextWidget(
-                            text: "Me",
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-
-                  for (var liveAgency in liveAgencies)
+      body: FadeInUp(
+        duration: const Duration(milliseconds: 500),
+        child: Stack(
+          children: [
+            FlutterMap(
+              options: MapOptions(
+                center: LatLng(latLng[0], latLng[1]),
+                zoom: 12,
+                interactiveFlags: InteractiveFlag.all,
+              ),
+              children: [
+                openStreetMapTileLayer,
+                MarkerLayer(
+                  markers: [
+                    // Marker of this device
                     Marker(
-                      point: LatLng(liveAgency.lat!, liveAgency.lng!),
+                      point: LatLng(latLng[0], latLng[1]),
                       width: 60,
                       height: 60,
                       rotateAlignment: Alignment.centerLeft,
                       builder: (
                         context,
                       ) {
-                        return GestureDetector(
-                          onTap: () {
-                            openModalBottomSheet(liveAgency: liveAgency);
-                          },
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Image.asset(
-                                  liveAgency.rescueOpsName == null
-                                      ? "assets/images/rescue_map/agencySpying.PNG"
-                                      : "assets/images/rescue_map/agencyRescuing.PNG",
-                                ),
-                              ),
-                              Flexible(
-                                child: CustomTextWidget(
-                                  text: liveAgency.agencyName ?? "",
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset(
+                                  "assets/images/rescue_map/selfAgency.PNG"),
+                            ),
+                            const CustomTextWidget(
+                              text: "Me",
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
+                          ],
                         );
                       },
                     ),
 
-                  for (var liveUser in liveRescueUsers)
-                    // if (liveUser.isInDanger!)
-                    Marker(
-                      point: LatLng(liveUser.lat!, liveUser.lng!),
-                      width: 100,
-                      height: 100,
-                      rotateAlignment: Alignment.centerLeft,
-                      builder: (
-                        context,
-                      ) {
-                        return GestureDetector(
-                          onTap: () {
-                            openModalBottomSheet(liveRescueUsers: liveUser);
-                          },
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Image.asset(
-                                  "assets/images/rescue_map/userDanger.PNG",
+                    for (var liveAgency in liveAgencies)
+                      Marker(
+                        point: LatLng(liveAgency.lat!, liveAgency.lng!),
+                        width: 60,
+                        height: 60,
+                        rotateAlignment: Alignment.centerLeft,
+                        builder: (
+                          context,
+                        ) {
+                          return GestureDetector(
+                            onTap: () {
+                              openModalBottomSheet(liveAgency: liveAgency);
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Image.asset(
+                                    liveAgency.rescueOpsName == null
+                                        ? "assets/images/rescue_map/agencySpying.PNG"
+                                        : "assets/images/rescue_map/agencyRescuing.PNG",
+                                  ),
                                 ),
-                              ),
-                              Flexible(
-                                child: CustomTextWidget(
-                                  text: liveUser.userName ?? "",
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                Flexible(
+                                  child: CustomTextWidget(
+                                    text: liveAgency.agencyName ?? "",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ],
-          ),
-          if (isRescueOnGoing)
-            Positioned(
-              bottom: 10,
-              left: 0,
-              right: 0,
-              child: ManageElevatedButton(
-                buttonItem: Text(
-                  'Stop Operation'.toUpperCase(),
-                  style: GoogleFonts.mulish(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+
+                    for (var liveUser in liveRescueUsers)
+                      // if (liveUser.isInDanger!)
+                      Marker(
+                        point: LatLng(liveUser.lat!, liveUser.lng!),
+                        width: 100,
+                        height: 100,
+                        rotateAlignment: Alignment.centerLeft,
+                        builder: (
+                          context,
+                        ) {
+                          return GestureDetector(
+                            onTap: () {
+                              openModalBottomSheet(liveRescueUsers: liveUser);
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Image.asset(
+                                    "assets/images/rescue_map/userDanger.PNG",
+                                  ),
+                                ),
+                                Flexible(
+                                  child: CustomTextWidget(
+                                    text: liveUser.userName ?? "",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                  ],
                 ),
-                onButtonClick: () {
-                  stopRescueOperation(rescueOpsId: rescueId!);
-                },
-                enabled: true,
+              ],
+            ),
+            if (isRescueOnGoing)
+              Positioned(
+                bottom: 10,
+                left: 0,
+                right: 0,
+                child: ManageElevatedButton(
+                  buttonItem: Text(
+                    'Stop Operation'.toUpperCase(),
+                    style: GoogleFonts.mulish(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white),
+                  ),
+                  onButtonClick: () {
+                    stopRescueOperation(rescueOpsId: rescueId!);
+                  },
+                  enabled: true,
+                ),
+              ),
+            const Positioned(
+              top: 30,
+              left: 10,
+              child: CustomBackButton(
+                text: "back",
+                outlinedColor: Color.fromARGB(185, 30, 35, 44),
               ),
             ),
-          const Positioned(
-            top: 30,
-            left: 10,
-            child: CustomBackButton(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
