@@ -2,10 +2,12 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
-import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
-import 'package:agencies_app/small_widgets/listview_builder/events/registered_users_listview.dart';
+import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
+import 'package:agencies_app/widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,11 +37,7 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
   List<RegisteredUsers> registeredUsersList = [];
 
-  Widget activeWidget = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  Widget activeWidget = const ListviewShimmerEffect();
 
   @override
   void initState() {
@@ -67,10 +65,10 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
 
   Future<List<RegisteredUsers>> getEventRegisteredUsersList(
       {required String id}) async {
-    String eventRegisteredUsersList = dotenv.get("eventRegisteredUsersList");
+    String baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.get(
-      Uri.parse('$eventRegisteredUsersList$id'),
+      Uri.parse('$baseUrl/api/event/agency/registrations/$id'),
       headers: headers,
     );
 
@@ -90,74 +88,13 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    ThemeData themeData = Theme.of(context);
+    Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/logos/indiaflaglogo.png'),
-                  const SizedBox(
-                    width: 21,
-                  ),
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jai Hind!',
-                        style: GoogleFonts.inter().copyWith(fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.agencyName,
-                        // email,
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      foregroundColor:
-                          (themeData.brightness == Brightness.light)
-                              ? const Color.fromARGB(185, 30, 35, 44)
-                              : const Color(0xffe1dcd3),
-                      side: BorderSide(
-                        color: (themeData.brightness == Brightness.light)
-                            ? const Color.fromARGB(32, 30, 35, 44)
-                            : const Color(0xffE1DCD3),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios,
-                          size: 20,
-                        ),
-                        Text('back')
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            CustomEventsAppBar(agencyName: widget.agencyName),
             const SizedBox(
               height: 21,
             ),

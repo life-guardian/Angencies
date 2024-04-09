@@ -4,11 +4,12 @@ import 'dart:convert';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/register_succesful.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_form_field_login_register.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -163,10 +164,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "representativeName": representativeName.text.toString(),
     };
 
-    String registerurl = dotenv.get("registerurl");
+    String baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.post(
-      Uri.parse(registerurl),
+      Uri.parse('$baseUrl/api/agency/register'),
       headers: {"Content-Type": "application/json"},
       body: json.encode(regBody),
     );
@@ -209,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
+    Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     bool kIsMobile = (screenWidth <= mobileScreenWidth);
@@ -220,43 +221,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              foregroundColor: (themeData.brightness == Brightness.light)
-                  ? const Color.fromARGB(185, 30, 35, 44)
-                  : const Color(0xffe1dcd3),
-              side: BorderSide(
-                color: (themeData.brightness == Brightness.light)
-                    ? const Color.fromARGB(32, 30, 35, 44)
-                    : const Color(0xffE1DCD3),
-              ),
-            ),
-            onPressed: popScreen,
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
-          ),
-        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: !kIsMobile
-            ? SingleChildScrollView(
-                child: registerScreenWidget(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
-                    kIsMobile: kIsMobile),
-              )
-            : registerScreenWidget(
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
-                kIsMobile: kIsMobile,
-              ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: !kIsMobile
+              ? registerScreenWidget(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  kIsMobile: kIsMobile)
+              : registerScreenWidget(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  kIsMobile: kIsMobile,
+                ),
+        ),
       ),
     );
   }
@@ -269,19 +248,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Hello! Register agency to get started',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
+          FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: Text(
+              'Hello! Register agency to get started',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
             ),
           ),
           const SizedBox(
             height: 21,
           ),
           kIsMobile
-              ? Expanded(
+              ? FadeInUp(
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 500),
                   child: registerScreenFormWidget(
                     screenHeight: screenHeight,
                     screenWidth: screenWidth,
@@ -298,45 +282,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 91,
                 )
               : const SizedBox(
-                  height: 11,
+                  height: 51,
                 ),
-          SizedBox(
-            width: !kIsMobile
-                ? screenWidth / 4
-                : MediaQuery.of(context).size.width,
-            height: 55,
-            child: ElevatedButton(
-              onPressed: buttonEnabled ? submitForm : () {},
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Theme.of(context).colorScheme.tertiary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: activeButtonWidget,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Already have an account?',
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextButton(
-                  onPressed: goToLoginPage,
-                  child: const Text(
-                    'Login Now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                    ),
+          FadeInUp(
+            delay: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 500),
+            child: SizedBox(
+              width: !kIsMobile
+                  ? screenWidth / 4
+                  : MediaQuery.of(context).size.width,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: buttonEnabled ? submitForm : () {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
+                child: activeButtonWidget,
+              ),
+            ),
+          ),
+          FadeInUp(
+            delay: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Already have an account?',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  TextButton(
+                    onPressed: goToLoginPage,
+                    child: const Text(
+                      'Login Now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -357,7 +349,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: formKey,
             child: Column(
               children: [
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Agency Name',
                   controllerText: agencyName,
                   checkValidation: (value) => validateName(value, 'Name'),
@@ -365,7 +357,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Agency Email',
                   controllerText: agencyEmail,
                   checkValidation: (value) => validateEmail(value, 'Email'),
@@ -373,7 +365,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Agency Ph No',
                   controllerText: agencyPhone,
                   checkValidation: (value) =>
@@ -382,7 +374,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Agency Address',
                   controllerText: agencyAddress,
                   checkValidation: (value) =>
@@ -391,7 +383,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Representative Name',
                   controllerText: representativeName,
                   checkValidation: (value) =>
@@ -400,7 +392,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Password',
                   controllerText: agencyPassword,
                   checkValidation: (value) =>
@@ -410,7 +402,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 21,
                 ),
-                TextFieldWidget(
+                TextFormFieldLoginRegister(
                   labelText: 'Confirm Password',
                   controllerText: agencyConfirmPassword,
                   checkValidation: (value) =>

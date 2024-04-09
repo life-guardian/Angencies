@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, no_logic_in_create_state
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
-import 'package:agencies_app/providers/agencyname_provider.dart';
+import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/location_provider.dart';
@@ -10,10 +14,15 @@ import 'package:agencies_app/screens/home_screen.dart';
 import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/user_account_details.dart';
 import 'package:agencies_app/screens/welcome_screen.dart';
-import 'package:agencies_app/small_widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabsBottom extends ConsumerStatefulWidget {
@@ -26,18 +35,54 @@ class TabsBottom extends ConsumerStatefulWidget {
 
 class _TabsBottomState extends ConsumerState<TabsBottom> {
   bool dataLoaded = false;
-  Widget activePage = const Center(
-    child: CircularProgressIndicator(
-      color: Colors.grey,
-    ),
-  );
+  late SharedPreferences prefs;
+  Widget activePage = const HomeScreenShimmerEffect();
   int _currentIndx = 0;
   double _screenWidth = 0;
 
   @override
   void initState() {
     super.initState();
+    getImageFileFromAssets('assets/images/no-profile-photo.jpeg')
+        .then((value) => ref.read(profileImageProvider.notifier).state = value);
     getDeviceLocation();
+    addTokenProvider();
+  }
+
+  Future<XFile> getImageFileFromAssets(String path) async {
+    final ByteData byteData = await rootBundle.load(path);
+    final List<int> bytes = byteData.buffer.asUint8List();
+    final tempDir = await getTemporaryDirectory();
+    final fileName = path.split('/').last; // Extracting filename from the path
+    final tempFilePath = '${tempDir.path}/$fileName';
+    await File(tempFilePath).writeAsBytes(bytes);
+    return XFile(tempFilePath);
+  }
+
+  Future<void> getRescueOperationDetails() async {
+    var baseUrl = dotenv.get("BASE_URL");
+
+    var response = await http.get(
+      Uri.parse('$baseUrl/api/rescueops/agency/isongoing'),
+      headers: {"Authorization": "Bearer ${widget.myToken}"},
+    );
+
+    debugPrint("Status code: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      ref.read(isRescueOperationOnGoingProvider.notifier).state =
+          jsonResponse["isRescueOperationOnGoing"];
+      ref.read(rescueOperationIdProvider.notifier).state =
+          jsonResponse["rescueOpsId"];
+    }
+
+    return;
+  }
+
+  void addTokenProvider() {
+    Future.delayed(const Duration(seconds: 3), () {
+      ref.read(tokenProvider.notifier).state = widget.myToken;
+    });
   }
 
   void onSelectedTab(int index) {
@@ -51,23 +96,30 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   Future<void> getDeviceLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    try {
       if (permission == LocationPermission.denied) {
-        debugPrint("Location permission denied");
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          debugPrint("Location permission denied");
+        }
+      } else {
+        Position currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+
+        ref.read(deviceLocationProvider.notifier).state = [
+          currentPosition.latitude,
+          currentPosition.longitude
+        ];
+
+        debugPrint(
+            "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
       }
-    } else {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      ref.read(deviceLocationProvider.notifier).state = [
-        currentPosition.latitude,
-        currentPosition.longitude
-      ];
-
+    } catch (e) {
       debugPrint(
-          "Current Latitude: ${currentPosition.latitude.toString()} ,current Longitude: ${currentPosition.longitude.toString()}");
+          "Something went wrong while location permission: ${e.toString()}");
     }
+
+    await getRescueOperationDetails();
 
     setState(() {
       dataLoaded = true;
@@ -94,7 +146,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       ),
     );
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
 
     // reset all provider to intial state
@@ -115,26 +167,23 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
         builder: (ctx) => const LoginScreen(),
       ),
     );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        // content: Text(message),
-        content: Text("Logged out succesfully"),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isLoading = ref.watch(isLoadingHomeScreen);
     _screenWidth = MediaQuery.of(context).size.width;
 
-    if (dataLoaded == true) {
+    if (dataLoaded) {
       if (_currentIndx == 1) {
         activePage = UserAccountDetails(
           logoutUser: _logoutUser,
+          ref: ref,
         );
       } else if (_currentIndx == 0) {
-        activePage = HomeScreen(token: widget.myToken);
+        activePage = HomeScreen(
+          token: widget.myToken,
+        );
       }
     }
 
@@ -144,7 +193,8 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
           : SafeArea(
               child: activeScreen(),
             ),
-      bottomNavigationBar: _screenWidth > mobileScreenWidth || !dataLoaded
+      bottomNavigationBar: (_screenWidth > mobileScreenWidth || !dataLoaded) ||
+              isLoading
           ? null
           : Container(
               decoration: BoxDecoration(
@@ -169,9 +219,9 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle_outlined),
-                      activeIcon: Icon(Icons.account_circle_rounded),
-                      label: 'Account',
+                      icon: Icon(Icons.settings_outlined),
+                      activeIcon: Icon(Icons.settings_rounded),
+                      label: 'Settings',
                     ),
                   ],
                 ),
@@ -263,6 +313,8 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
+            // Color.fromARGB(255, 135, 208, 18),
+            // Colors.red,
             Theme.of(context).colorScheme.primary,
             Theme.of(context).colorScheme.background,
           ],

@@ -2,12 +2,13 @@
 
 import 'dart:convert';
 import 'package:agencies_app/constants/sizes.dart';
-import 'package:agencies_app/custom_functions/validate_textfield.dart';
+import 'package:agencies_app/functions/validate_textfield.dart';
 import 'package:agencies_app/screens/tabs.dart';
-import 'package:agencies_app/small_widgets/custom_dialogs/custom_show_dialog.dart';
+import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/screens/register_screen.dart';
-import 'package:agencies_app/transitions_animations/custom_page_transition.dart';
-import 'package:agencies_app/small_widgets/custom_textfields/textfield_widget.dart';
+import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
+import 'package:agencies_app/widgets/custom_textfields/text_form_field_login_register.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -92,11 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     String serverMessage;
 
-    var loginUrl = dotenv.get("loginUrl");
+    var baseUrl = dotenv.get("BASE_URL");
 
     try {
       var response = await http.post(
-        Uri.parse(loginUrl),
+        Uri.parse('$baseUrl/api/agency/login'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(reqBody),
       );
@@ -136,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     bool kIsMobile = (screenWidth <= mobileScreenWidth);
     return Scaffold(
@@ -145,30 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              foregroundColor: (themeData.brightness == Brightness.light)
-                  ? const Color.fromARGB(185, 30, 35, 44)
-                  : const Color(0xffe1dcd3),
-              side: BorderSide(
-                color: (themeData.brightness == Brightness.light)
-                    ? const Color.fromARGB(32, 30, 35, 44)
-                    : const Color(0xffE1DCD3),
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
-          ),
-        ),
       ),
       body: Center(
         child: Padding(
@@ -178,115 +154,141 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  Image.asset('assets/images/disasterImage2.jpg'),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Image.asset('assets/images/disasterImage2.jpg'),
+                  ),
                   const SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    'Life Guardian',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(0.0, 7.0),
-                          blurRadius: 15.0,
-                          color: Color.fromARGB(57, 0, 0, 0),
-                        ),
-                      ],
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Text(
+                      'Life Guardian',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(0.0, 7.0),
+                            blurRadius: 15.0,
+                            color: Color.fromARGB(57, 0, 0, 0),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Text(
-                    'For Agencies',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 26,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(0.0, 7.0),
-                          blurRadius: 15.0,
-                          color: Color.fromARGB(57, 0, 0, 0),
-                        ),
-                      ],
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Text(
+                      'For Agencies',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 26,
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(0.0, 7.0),
+                            blurRadius: 15.0,
+                            color: Color.fromARGB(57, 0, 0, 0),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 31,
                   ),
-                  Text(
-                    'Welcome back! Glad to see you, team!',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Text(
+                      'Welcome back! Glad to see you, team!',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 31,
                   ),
-                  SizedBox(
-                    width: !kIsMobile ? screenWidth / 2 : null,
-                    child: TextFieldWidget(
-                      labelText: 'Email / Phone',
-                      controllerText: agencyLoginEmail,
-                      checkValidation: (value) =>
-                          validateTextField(value, 'Email / Phone'),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 700),
+                    child: SizedBox(
+                      width: !kIsMobile ? screenWidth / 2 : null,
+                      child: TextFormFieldLoginRegister(
+                        labelText: 'Email / Phone',
+                        controllerText: agencyLoginEmail,
+                        checkValidation: (value) =>
+                            validateTextField(value, 'Email / Phone'),
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  SizedBox(
-                    width: !kIsMobile ? screenWidth / 2 : null,
-                    child: TextFieldWidget(
-                      labelText: 'Password',
-                      controllerText: agencyPassword,
-                      checkValidation: (value) =>
-                          validateTextField(value, 'Password'),
-                      obsecureIcon: true,
-                      hideText: true,
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 700),
+                    child: SizedBox(
+                      width: !kIsMobile ? screenWidth / 2 : null,
+                      child: TextFormFieldLoginRegister(
+                        labelText: 'Password',
+                        controllerText: agencyPassword,
+                        checkValidation: (value) =>
+                            validateTextField(value, 'Password'),
+                        obsecureIcon: true,
+                        hideText: true,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 42,
                   ),
-                  SizedBox(
-                    width: !kIsMobile ? screenWidth / 4 : double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: buttonEnabled ? _submitButton : () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: activeButtonWidget,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Don\'t have an account?',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        TextButton(
-                          onPressed: _goToRegisterPage,
-                          child: const Text(
-                            'Register Now',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 16,
-                            ),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 800),
+                    child: SizedBox(
+                      width: !kIsMobile ? screenWidth / 4 : double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        onPressed: buttonEnabled ? _submitButton : () {},
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      ],
+                        child: activeButtonWidget,
+                      ),
+                    ),
+                  ),
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 800),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          TextButton(
+                            onPressed: _goToRegisterPage,
+                            child: const Text(
+                              'Register Now',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -2,11 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effect.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/models/event_list.dart';
-import 'package:agencies_app/models/modal_bottom_sheet.dart';
+import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
-import 'package:agencies_app/small_widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
+import 'package:agencies_app/widgets/listview_builder/events/manage_event_listview.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,11 +57,7 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
             token: widget.token,
             agencyName: widget.agencyName,
           )
-        : const Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          );
+        : const ListviewShimmerEffect();
   }
 
   void initializeTokenHeader() {
@@ -69,12 +68,11 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
     };
   }
 
-      String manageEventHistoryUrl = dotenv.get("manageEventHistoryUrl");
-
+  String baseUrl = dotenv.get("BASE_URL");
 
   Future<void> getEventList() async {
     var response = await http.get(
-      Uri.parse(manageEventHistoryUrl),
+      Uri.parse('$baseUrl/api/event/agency/list'),
       headers: headers,
     );
 
@@ -141,74 +139,12 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/logos/indiaflaglogo.png'),
-                  const SizedBox(
-                    width: 21,
-                  ),
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jai Hind!',
-                        style: GoogleFonts.inter().copyWith(fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.agencyName,
-                        // email,
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      foregroundColor:
-                          (themeData.brightness == Brightness.light)
-                              ? const Color.fromARGB(185, 30, 35, 44)
-                              : const Color(0xffe1dcd3),
-                      side: BorderSide(
-                        color: (themeData.brightness == Brightness.light)
-                            ? const Color.fromARGB(32, 30, 35, 44)
-                            : const Color(0xffE1DCD3),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios,
-                          size: 20,
-                        ),
-                        Text('back')
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+             CustomEventsAppBar(agencyName: widget.agencyName),
             const SizedBox(
               height: 21,
             ),
@@ -225,48 +161,53 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: screenWidth > mobileScreenWidth
-                            ? EdgeInsets.only(left: screenWidth / 6.5)
-                            : null,
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, top: 5, bottom: 15),
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  filterValue,
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: screenWidth > mobileScreenWidth
+                              ? EdgeInsets.only(left: screenWidth / 6.5)
+                              : null,
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 5, bottom: 15),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    filterValue,
+                                    style:
+                                        GoogleFonts.plusJakartaSans().copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Tap on the event to see registered users",
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
+                                  Text(
+                                    "Tap on the event to see registered users",
+                                    style:
+                                        GoogleFonts.plusJakartaSans().copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          width: screenWidth > mobileScreenWidth
-                              ? screenWidth / 1.5
-                              : double.infinity,
-                          child: activeWidget,
+                        Expanded(
+                          child: SizedBox(
+                            width: screenWidth > mobileScreenWidth
+                                ? screenWidth / 1.5
+                                : double.infinity,
+                            child: activeWidget,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
