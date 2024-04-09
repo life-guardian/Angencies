@@ -6,7 +6,7 @@ import 'package:agencies_app/animations/shimmer_animations/listview_shimmer_effe
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
-import 'package:agencies_app/widgets/custom_buttons/custom_back_button.dart';
+import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
 import 'package:agencies_app/widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -94,43 +94,7 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/logos/indiaflaglogo.png'),
-                  const SizedBox(
-                    width: 21,
-                  ),
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jai Hind!',
-                        style: GoogleFonts.inter().copyWith(fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.agencyName,
-                        // email,
-                        style: GoogleFonts.plusJakartaSans().copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  const CustomBackButton(
-                    text: "back",
-                  ),
-                ],
-              ),
-            ),
+            CustomEventsAppBar(agencyName: widget.agencyName),
             const SizedBox(
               height: 21,
             ),

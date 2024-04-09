@@ -1,3 +1,4 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class CustomBackButton extends StatelessWidget {
@@ -5,17 +6,22 @@ class CustomBackButton extends StatelessWidget {
     super.key,
     this.text,
     this.outlinedColor,
+    this.backgroundColor,
   });
 
   final String? text;
   final Color? outlinedColor;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        backgroundColor: backgroundColor,
         foregroundColor: outlinedColor ??
             ((themeData.brightness == Brightness.light)
                 ? const Color.fromARGB(185, 30, 35, 44)
@@ -38,8 +44,8 @@ class CustomBackButton extends StatelessWidget {
             size: 20,
           ),
           if (text != null)
-            Text(
-              text!,
+            CustomTextWidget(
+              text: text!,
             )
         ],
       ),

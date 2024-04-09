@@ -313,6 +313,8 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
+            // Color.fromARGB(255, 135, 208, 18),
+            // Colors.red,
             Theme.of(context).colorScheme.primary,
             Theme.of(context).colorScheme.background,
           ],

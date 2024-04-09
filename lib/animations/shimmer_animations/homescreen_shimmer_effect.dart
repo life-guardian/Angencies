@@ -36,20 +36,21 @@ class HomeScreenShimmerEffect extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Shimmer.fromColors(
-          baseColor: currentBrightness == Brightness.light
-              ? Colors.grey.shade300
-              : Theme.of(context).colorScheme.background,
-          highlightColor: currentBrightness == Brightness.light
-              ? Colors.grey.shade100
-              : Theme.of(context).colorScheme.secondary,
+    return SafeArea(
+      child: Shimmer.fromColors(
+        baseColor: currentBrightness == Brightness.light
+            ? Colors.grey.shade300
+            : Theme.of(context).colorScheme.background,
+        highlightColor: currentBrightness == Brightness.light
+            ? Colors.grey.shade100
+            : Theme.of(context).colorScheme.secondary,
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, top: 10, bottom: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -317,9 +317,9 @@ class _SendAlertState extends State<SendAlert> {
                 height: 31,
               ),
               ManageElevatedButton(
-                buttonItem: activeButtonText,
-                onButtonClick: _submitForm,
-                enabled: buttonEnabled,
+                childWidget: activeButtonText,
+                onPressed: _submitForm,
+                isButtonEnabled: buttonEnabled,
               ),
               const SizedBox(
                 height: 31,

@@ -464,17 +464,17 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 left: 0,
                 right: 0,
                 child: ManageElevatedButton(
-                  buttonItem: Text(
+                  childWidget: Text(
                     'Stop Operation'.toUpperCase(),
                     style: GoogleFonts.mulish(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Colors.white),
                   ),
-                  onButtonClick: () {
+                  onPressed: () {
                     stopRescueOperation(rescueOpsId: rescueId!);
                   },
-                  enabled: true,
+                  isButtonEnabled: true,
                 ),
               ),
             const Positioned(

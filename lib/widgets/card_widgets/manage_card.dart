@@ -1,5 +1,5 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ManageCard extends StatelessWidget {
   const ManageCard({
@@ -26,73 +26,69 @@ class ManageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Expanded(
       child: InkWell(
         onTap: showModal,
-        child: Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Color.fromARGB(30, 0, 0, 0),
-                offset: Offset(0, 3),
-                blurRadius: 50,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
+        child: Card(
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: (themeData.brightness == Brightness.dark)
+                  ? Theme.of(context).colorScheme.secondary
+                  : null,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            text1,
-                            style: GoogleFonts.inter().copyWith(
-                              fontSize: 12,
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              text: text1,
                               color: const Color.fromARGB(255, 185, 182, 182),
+                              maxLines: 2,
+                              fontSize: 12,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 11,
-                          ),
-                          Text(
-                            text2,
-                            style: GoogleFonts.inter().copyWith(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )
-                        ],
+                            const SizedBox(
+                              height: 11,
+                            ),
+                            CustomTextWidget(
+                              text: text2,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
                       ),
                       const Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),
-                ),
-                // the color line if possible see in figma
-                Container(
-                  width: double.infinity,
-                  height: 10,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: const [0.5, 0.5],
-                        colors: [
-                          lineColor1,
-                          lineColor2,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(15)),
-                )
-              ],
+                  const Spacer(),
+                  Container(
+                    width: double.infinity,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: const [0.5, 0.5],
+                          colors: [
+                            lineColor1,
+                            lineColor2,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(15)),
+                  )
+                ],
+              ),
             ),
           ),
         ),

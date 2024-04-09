@@ -27,68 +27,71 @@ class EventCard extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: onTap,
-        child: Container(
-          height: 120,
-          width: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: (themeData.brightness == Brightness.dark)
-                ? Theme.of(context).colorScheme.secondary
-                : null,
-            gradient: (themeData.brightness == Brightness.light)
-                ? LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      color1,
-                      color2,
-                    ],
-                  )
-                : null,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: circleColor,
-                ),
-                child: Center(
-                  child: Text(
-                    text1,
-                    style: GoogleFonts.inter().copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+        child: Card(
+          elevation: 3,
+          child: Container(
+            height: 120,
+            width: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: (themeData.brightness == Brightness.dark)
+                  ? Theme.of(context).colorScheme.secondary
+                  : null,
+              gradient: (themeData.brightness == Brightness.light)
+                  ? LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        color1,
+                        color2,
+                      ],
+                    )
+                  : null,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: circleColor,
+                  ),
+                  child: Center(
+                    child: Text(
+                      text1,
+                      style: GoogleFonts.inter().copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Text(
-                    text2,
-                    style: GoogleFonts.inter().copyWith(
-                      fontSize: 12,
-                      color: const Color.fromARGB(206, 255, 255, 255),
+                Column(
+                  children: [
+                    Text(
+                      text2,
+                      style: GoogleFonts.inter().copyWith(
+                        fontSize: 12,
+                        color: const Color.fromARGB(206, 255, 255, 255),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    text3,
-                    style: GoogleFonts.inter().copyWith(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: const Color.fromARGB(206, 255, 255, 255),
+                    const SizedBox(
+                      height: 5,
                     ),
-                  ),
-                ],
-              )
-            ],
+                    Text(
+                      text3,
+                      style: GoogleFonts.inter().copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(206, 255, 255, 255),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

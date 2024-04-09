@@ -274,9 +274,9 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 height: 31,
               ),
               ManageElevatedButton(
-                buttonItem: activeButtonText,
-                onButtonClick: () => _submitForm(context: context),
-                enabled: buttonEnabled,
+                childWidget: activeButtonText,
+                onPressed: () => _submitForm(context: context),
+                isButtonEnabled: buttonEnabled,
               ),
               const SizedBox(
                 height: 31,

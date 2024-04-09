@@ -290,8 +290,8 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
                 height: 31,
               ),
               ManageElevatedButton(
-                buttonItem: activeButtonText,
-                onButtonClick: buttonEnabled ? _submitForm : () {},
+                childWidget: activeButtonText,
+                onPressed: buttonEnabled ? _submitForm : () {},
               ),
               const SizedBox(
                 height: 31,
