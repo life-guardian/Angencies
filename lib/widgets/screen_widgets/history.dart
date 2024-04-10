@@ -11,6 +11,7 @@ import 'package:agencies_app/providers/alert_history_provider.dart';
 import 'package:agencies_app/providers/event_history_provider.dart';
 import 'package:agencies_app/providers/rescue_history_provider.dart';
 import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/widgets/listview_builder/manage/alert_history_listview.dart';
 import 'package:agencies_app/widgets/listview_builder/manage/event_history_listview.dart';
 import 'package:agencies_app/widgets/listview_builder/manage/rescue_operation_history_listview.dart';
@@ -18,7 +19,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class History extends ConsumerStatefulWidget {
@@ -42,14 +42,9 @@ class _HistoryState extends ConsumerState<History> {
 
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
 
-  List<String> values = [
-    'Alert History',
-    'Event History',
-    'Rescue Operations History'
-  ];
-  String filterValue = 'Alert History';
+  String filterValue = 'Alert';
 
-  List<OperationHistory> operationHistoryData = [];
+  List<RescueOperationHistory> operationHistoryData = [];
   late Widget activeWidget;
   bool isAlertListEmpty = true;
 
@@ -71,6 +66,7 @@ class _HistoryState extends ConsumerState<History> {
     activeWidget = !isAlertListEmpty
         ? activeWidget = BuildAlertHistoryListView(
             ref: ref,
+            token: widget.token,
           )
         : const ListviewShimmerEffect();
   }
@@ -107,6 +103,7 @@ class _HistoryState extends ConsumerState<History> {
       isAlertListEmpty = false;
       activeWidget = BuildAlertHistoryListView(
         ref: ref,
+        token: widget.token,
       );
     });
   }
@@ -135,31 +132,40 @@ class _HistoryState extends ConsumerState<History> {
       headers: headers,
     );
 
-    List<OperationHistory> data = [];
+    List<RescueOperationHistory> data = [];
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
 
       for (var jsonData in jsonResponse) {
-        data.add(OperationHistory.fromJson(jsonData));
+        data.add(RescueOperationHistory.fromJson(jsonData));
       }
     }
 
-    ref.read(rescueHistoryProvider.notifier).addList(data);
+    ref.read(rescueOperationHistoryProvider.notifier).addList(data);
   }
 
   @override
   Widget build(BuildContext context) {
     if (!isAlertListEmpty) {
       if (_currentIndx == 0) {
-        filterValue = 'Alert History';
-        activeWidget = BuildAlertHistoryListView(ref: ref);
+        filterValue = 'Alert';
+        activeWidget = BuildAlertHistoryListView(
+          ref: ref,
+          token: widget.token,
+        );
       } else if (_currentIndx == 1) {
-        filterValue = 'Event History';
-        activeWidget = BuildEventHistoryListView(ref: ref);
+        filterValue = 'Event';
+        activeWidget = BuildEventHistoryListView(
+          ref: ref,
+          token: widget.token,
+        );
       } else {
-        filterValue = 'Rescue Operation History';
-        activeWidget = BuildRescueHistoryListView(ref: ref);
+        filterValue = 'Rescue Operation';
+        activeWidget = BuildRescueHistoryListView(
+          ref: ref,
+          token: widget.token,
+        );
       }
     }
 
@@ -191,12 +197,21 @@ class _HistoryState extends ConsumerState<History> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 12),
-                          child: Text(
-                            filterValue,
-                            style: GoogleFonts.plusJakartaSans().copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                text: "$filterValue History",
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              CustomTextWidget(
+                                text: "Slide left to delete $filterValue",
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey,
+                              ),
+                            ],
                           ),
                         ),
                         Expanded(

@@ -133,7 +133,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
     ref.read(alertHistoryProvider.notifier).reset();
     ref.read(eventHistoryProvider.notifier).reset();
     ref.read(manageEventsProvider.notifier).reset();
-    ref.read(rescueHistoryProvider.notifier).reset();
+    ref.read(rescueOperationHistoryProvider.notifier).reset();
   }
 
   void _logoutUser() async {

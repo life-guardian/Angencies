@@ -489,6 +489,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
               child: CustomBackButton(
                 text: "back",
                 outlinedColor: Color.fromARGB(185, 30, 35, 44),
+                textColor: Color.fromARGB(232, 30, 35, 44),
               ),
             ),
           ],

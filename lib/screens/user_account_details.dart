@@ -66,6 +66,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                 width: double.infinity,
                 child: Card(
                   elevation: 3,
+                  color: Theme.of(context).colorScheme.primary,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 30,
@@ -227,14 +228,39 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                           ),
                         ),
                       ),
-                      const HorizontalDivider(thickness: 0.5),
+                      const HorizontalDivider(),
+                      InkWell(
+                        onTap: () {
+                          // share app
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(Icons.share_outlined),
+                              SizedBox(
+                                width: 21,
+                              ),
+                              CustomTextWidget(
+                                text: 'Share App!',
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              Spacer(),
+                              Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const HorizontalDivider(),
                       InkWell(
                         onTap: () {
                           customLogoutDialog(
                             context: context,
                             titleText: 'Log out?',
                             contentText:
-                                'You will logged out from your account!',
+                                'You will be logged out from your account!',
                             actionText2: 'Log Out',
                             onTap: widget.logoutUser,
                           );

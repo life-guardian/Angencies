@@ -1,20 +1,30 @@
 import 'package:agencies_app/models/operation_history.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RescueHistoryNotifier extends StateNotifier<List<OperationHistory>> {
-  RescueHistoryNotifier({required this.ref}) : super([]);
+class RescueOperationHistoryNotifier
+    extends StateNotifier<List<RescueOperationHistory>> {
+  RescueOperationHistoryNotifier({required this.ref}) : super([]);
 
   final Ref ref;
 
-  void addList(List<OperationHistory> list) {
+  void addList(List<RescueOperationHistory> list) {
     state = list;
   }
 
-  void reset(){
-    state=[];
+  void removeAt({required int index}) {
+    state.removeAt(index);
+  }
+
+  void insertAt(
+      {required int index, required RescueOperationHistory rescueOperation}) {
+    state.insert(index, rescueOperation);
+  }
+
+  void reset() {
+    state = [];
   }
 }
 
-final rescueHistoryProvider =
-    StateNotifierProvider<RescueHistoryNotifier, List<OperationHistory>>(
-        (reff) => RescueHistoryNotifier(ref: reff));
+final rescueOperationHistoryProvider = StateNotifierProvider<
+        RescueOperationHistoryNotifier, List<RescueOperationHistory>>(
+    (reff) => RescueOperationHistoryNotifier(ref: reff));

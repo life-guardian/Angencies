@@ -10,15 +10,18 @@ class ManageEventsNotifier extends StateNotifier<List<EventList>> {
     state = list;
   }
 
-  void removeAt({required String id}) {
-    state = state
-        .where(
-          (element) => element.eventId != id,
-        )
-        .toList();
+ 
+
+  void removeAt({required int index}) {
+    state.removeAt(index);
   }
-  void reset(){
-    state=[];
+
+  void insertAt({required int index, required EventList event}) {
+    state.insert(index, event);
+  }
+
+  void reset() {
+    state = [];
   }
 }
 

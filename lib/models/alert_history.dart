@@ -1,6 +1,6 @@
 class AlertHistory {
   AlertLocation? alertLocation;
-  String? sId;
+  String? alertId;
   String? alertName;
   String? alertSeverity;
   String? alertForDate;
@@ -11,7 +11,7 @@ class AlertHistory {
 
   AlertHistory(
       {this.alertLocation,
-      this.sId,
+      this.alertId,
       this.alertName,
       this.alertSeverity,
       this.alertForDate,
@@ -24,7 +24,7 @@ class AlertHistory {
     alertLocation = json['alertLocation'] != null
         ? AlertLocation.fromJson(json['alertLocation'])
         : null;
-    sId = json['_id'];
+    alertId = json['_id'];
     alertName = json['alertName'];
     alertSeverity = json['alertSeverity'];
     alertForDate = json['alertForDate'];

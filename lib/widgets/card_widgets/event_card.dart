@@ -1,3 +1,4 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -70,23 +71,20 @@ class EventCard extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text(
-                      text2,
-                      style: GoogleFonts.inter().copyWith(
-                        fontSize: 12,
-                        color: const Color.fromARGB(206, 255, 255, 255),
-                      ),
+                    CustomTextWidget(
+                      text: text2,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                      color: const Color.fromARGB(206, 255, 255, 255),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      text3,
-                      style: GoogleFonts.inter().copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(206, 255, 255, 255),
-                      ),
+                    CustomTextWidget(
+                      text: text3,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromARGB(206, 255, 255, 255),
                     ),
                   ],
                 )

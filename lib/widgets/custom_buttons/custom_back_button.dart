@@ -7,9 +7,11 @@ class CustomBackButton extends StatelessWidget {
     this.text,
     this.outlinedColor,
     this.backgroundColor,
+    this.textColor,
   });
 
   final String? text;
+  final Color? textColor;
   final Color? outlinedColor;
   final Color? backgroundColor;
 
@@ -46,6 +48,8 @@ class CustomBackButton extends StatelessWidget {
           if (text != null)
             CustomTextWidget(
               text: text!,
+              fontWeight: FontWeight.normal,
+              color: textColor ?? Theme.of(context).colorScheme.onBackground,
             )
         ],
       ),

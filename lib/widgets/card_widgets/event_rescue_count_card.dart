@@ -1,5 +1,5 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class EventRescueCountCard extends StatelessWidget {
   const EventRescueCountCard({
@@ -39,21 +39,21 @@ class EventRescueCountCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Events',
-                    style: GoogleFonts.inter().copyWith(
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                        fontSize: 12),
+                  const CustomTextWidget(
+                    text: "Events",
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 220, 217, 217),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(eventCount,
-                      style: GoogleFonts.inter().copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      )),
+                  CustomTextWidget(
+                    text: eventCount,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 220, 217, 217),
+                  ),
                 ],
               ),
             ],
@@ -77,22 +77,20 @@ class EventRescueCountCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Rescue Ops',
-                    style: GoogleFonts.inter().copyWith(
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                        fontSize: 12),
+                  const CustomTextWidget(
+                    text: 'Rescue Ops',
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 220, 217, 217),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    rescueCount,
-                    style: GoogleFonts.inter().copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                  CustomTextWidget(
+                    text: rescueCount,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 220, 217, 217),
                   ),
                 ],
               )

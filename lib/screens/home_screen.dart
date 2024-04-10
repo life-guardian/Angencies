@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/widgets/card_widgets/event_rescue_count_card.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/widgets/modal_widgets/organize_event.dart';
 import 'package:agencies_app/widgets/modal_widgets/rescue_operation.dart';
 import 'package:agencies_app/widgets/modal_widgets/send_alert.dart';
@@ -156,21 +157,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                grettingMessage,
-                                style:
-                                    GoogleFonts.inter().copyWith(fontSize: 12),
+                              CustomTextWidget(
+                                text: grettingMessage,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                // color: const Color.fromARGB(255, 220, 217, 217),
                               ),
                               const SizedBox(
                                 height: 3,
                               ),
-                              Text(
-                                agencyname ?? 'Loading...',
-                                // email,
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              CustomTextWidget(
+                                text: agencyname ?? 'Loading...',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                // color: const Color.fromARGB(255, 220, 217, 217),
                               ),
                             ],
                           ),
@@ -282,7 +282,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           ManageCard(
                             text1: 'See all history',
-                            text2: 'History',
+                            text2: 'Manage History',
                             showModal: () {
                               Navigator.of(context).push(
                                 CustomSlideTransition(
@@ -329,7 +329,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           EventCard(
                             text1: 'E',
-                            text2: 'Manage',
+                            text2: 'Registration',
                             text3: 'Events',
                             color1: const Color.fromARGB(232, 213, 128, 115),
                             color2: const Color.fromARGB(232, 214, 70, 47),

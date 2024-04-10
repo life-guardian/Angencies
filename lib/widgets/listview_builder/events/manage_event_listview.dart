@@ -1,21 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
-
-import 'dart:convert';
-
-import 'package:agencies_app/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
-import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
-import 'package:agencies_app/widgets/custom_dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class BuildManageEventListView extends StatefulWidget {
   const BuildManageEventListView({
@@ -38,50 +29,6 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void deleteEvent({required String id, required int index}) async {
-    Navigator.of(context).pop();
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    String baseUrl = dotenv.get("BASE_URL");
-
-    var response = await http.delete(
-      Uri.parse('$baseUrl/api/event/agency/cancel/$id'),
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer ${widget.token}'
-      },
-    );
-
-    var jsonResponse = jsonDecode(response.body);
-
-    String message = jsonResponse['message'];
-
-    if (response.statusCode == 200) {
-      setState(() {
-        Navigator.of(context).pop();
-        widget.ref.read(manageEventsProvider.notifier).removeAt(id: id);
-        // widget.eventList.removeAt(index);
-      });
-
-      showAwesomeSnackBarAnimation(
-        context: context,
-        title: "Rescue Operation!!",
-        message: message,
-        contentType: ContentType.success,
-      );
-    } else {
-      customShowDialog(
-          context: context,
-          titleText: 'Something went wrong',
-          contentText: message);
-    }
   }
 
   void navigateToRegisteredUsers({required String id}) {
@@ -183,23 +130,11 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
                               ],
                             ),
                           ),
-                          child: IconButton(
-                            onPressed: () {
-                              customLogoutDialog(
-                                  context: context,
-                                  titleText: 'Confirm Delete !',
-                                  onTap: () {
-                                    // delete from server
-                                    deleteEvent(
-                                        id: eventData.eventId.toString(),
-                                        index: index);
-                                  },
-                                  actionText2: 'Yes',
-                                  contentText:
-                                      'Deleting an event cancels all registrations. This action cannot be undone.');
-                            },
-                            icon: const Icon(
-                              Icons.delete_rounded,
+                          child: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(
+                              Icons.event_note_rounded,
+                              size: 30,
                               color: Colors.white,
                             ),
                           ),

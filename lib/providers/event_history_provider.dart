@@ -9,8 +9,17 @@ class EventHistoryNotifier extends StateNotifier<List<EventHistory>> {
   void addList(List<EventHistory> list) {
     state = list;
   }
-  void reset(){
-    state=[];
+
+  void removeAt({required int index}) {
+    state.removeAt(index);
+  }
+
+  void insertAt({required int index, required EventHistory event}) {
+    state.insert(index, event);
+  }
+
+  void reset() {
+    state = [];
   }
 }
 

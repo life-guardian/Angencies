@@ -10,8 +10,16 @@ class AlertHistoryNotifier extends StateNotifier<List<AlertHistory>> {
     state = list;
   }
 
-  void reset(){
-    state=[];
+  void removeAt({required int index}) {
+    state.removeAt(index);
+  }
+
+  void insertAt({required int index, required AlertHistory alert}) {
+    state.insert(index, alert);
+  }
+
+  void reset() {
+    state = [];
   }
 }
 

@@ -1,4 +1,4 @@
-class OperationHistory {
+class RescueOperationHistory {
   AgencyLocation? agencyLocation;
   String? sId;
   String? name;
@@ -9,7 +9,7 @@ class OperationHistory {
   String? updatedAt;
   int? iV;
 
-  OperationHistory(
+  RescueOperationHistory(
       {this.agencyLocation,
       this.sId,
       this.name,
@@ -20,7 +20,7 @@ class OperationHistory {
       this.updatedAt,
       this.iV});
 
-  OperationHistory.fromJson(Map<String, dynamic> json) {
+  RescueOperationHistory.fromJson(Map<String, dynamic> json) {
     agencyLocation = json['agencyLocation'] != null
         ? AgencyLocation.fromJson(json['agencyLocation'])
         : null;

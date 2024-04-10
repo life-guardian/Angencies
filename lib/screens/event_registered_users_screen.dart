@@ -7,10 +7,10 @@ import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/widgets/listview_builder/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class EventRegisteredUsersScreen extends StatefulWidget {
@@ -113,8 +113,8 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
+                      const Padding(
+                        padding: EdgeInsets.only(
                             left: 16, right: 16, top: 5, bottom: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,12 +122,10 @@ class _EventRegisteredListState extends State<EventRegisteredUsersScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Registered Users',
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                                CustomTextWidget(
+                                  text: 'Registered Users',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ],
                             ),

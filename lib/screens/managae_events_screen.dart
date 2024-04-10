@@ -8,13 +8,13 @@ import 'package:agencies_app/models/event_list.dart';
 import 'package:agencies_app/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/widgets/app_bars/custom_events_appbar.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:agencies_app/widgets/listview_builder/events/manage_event_listview.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class ManageEventsScreen extends ConsumerStatefulWidget {
@@ -38,7 +38,6 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
   List<String> eventsLocality = [];
 
   ModalBottomSheet modalBottomSheet = ModalBottomSheet();
-  String filterValue = 'Events';
 
   late Widget activeWidget;
 
@@ -144,7 +143,7 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-             CustomEventsAppBar(agencyName: widget.agencyName),
+            CustomEventsAppBar(agencyName: widget.agencyName),
             const SizedBox(
               height: 21,
             ),
@@ -171,27 +170,22 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                               : null,
                           padding: const EdgeInsets.only(
                               left: 16, right: 16, top: 5, bottom: 15),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    filterValue,
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  CustomTextWidget(
+                                    text: "Events",
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
-                                    "Tap on the event to see registered users",
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
-                                    ),
+                                  CustomTextWidget(
+                                    text:
+                                        "Tap on the event to see registered users",
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.grey,
                                   ),
                                 ],
                               ),

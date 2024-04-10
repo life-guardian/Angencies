@@ -61,9 +61,8 @@ class ManageCard extends StatelessWidget {
                             ),
                             CustomTextWidget(
                               text: text2,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
                               maxLines: 2,
+                              fontSize: 15,
                             ),
                           ],
                         ),
