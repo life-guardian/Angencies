@@ -81,7 +81,7 @@ class _BuildRescueHistoryListViewState
     ThemeData themeData = Theme.of(context);
     return rescueList.isEmpty
         ? const CustomErrorImage(
-            headingText: "No Alerts Found!",
+            headingText: "No Rescues Found!",
             imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : SlidableAutoCloseBehavior(

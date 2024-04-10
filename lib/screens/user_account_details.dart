@@ -218,7 +218,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                                 width: 21,
                               ),
                               CustomTextWidget(
-                                text: 'Change Password!',
+                                text: 'Change Password',
                                 fontSize: 18,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -243,7 +243,7 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                                 width: 21,
                               ),
                               CustomTextWidget(
-                                text: 'Share App!',
+                                text: 'Share App',
                                 fontSize: 18,
                                 fontWeight: FontWeight.normal,
                               ),

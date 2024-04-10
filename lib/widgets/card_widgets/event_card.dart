@@ -31,8 +31,8 @@ class EventCard extends StatelessWidget {
         child: Card(
           elevation: 3,
           child: Container(
-            height: 120,
-            width: 120,
+            // height: 120,
+            // width: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: (themeData.brightness == Brightness.dark)

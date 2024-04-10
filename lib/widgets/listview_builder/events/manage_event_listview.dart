@@ -50,7 +50,7 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
     final eventList = widget.ref.watch(manageEventsProvider);
     return eventList.isEmpty
         ? const CustomErrorImage(
-            headingText: "No Alerts Found!",
+            headingText: "No Events Found!",
             imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : ListView.builder(

@@ -80,7 +80,7 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
 
     return eventList.isEmpty
         ? const CustomErrorImage(
-            headingText: "No Alerts Found!",
+            headingText: "No Events Found!",
             imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : SlidableAutoCloseBehavior(

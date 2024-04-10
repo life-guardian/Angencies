@@ -16,7 +16,7 @@ class BuildRegisteredUsersListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return registeredUsersList.isEmpty
         ? const CustomErrorImage(
-            headingText: "No Alerts Found!",
+            headingText: "No Registered Users Yet!",
             imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : ListView.builder(
