@@ -39,7 +39,6 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
   Widget build(BuildContext context) {
     String? userName = widget.ref.watch(agencyNameProvider);
     _pickedImage = widget.ref.watch(profileImageProvider);
-    bool isLightMode = Theme.of(context).brightness == Brightness.light;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -123,169 +122,163 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
               const SizedBox(
                 height: 31,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Theme.of(context).colorScheme.primary,
-                  boxShadow: [
-                    if (isLightMode)
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 20,
-                        offset:
-                            const Offset(0, 10), // changes position of shadow
-                      ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          _pickedImage = await pickImageFromGallery();
-                          if (_pickedImage != null) {
-                            widget.ref
-                                .read(profileImageProvider.notifier)
-                                .state = _pickedImage;
+              Card(
+                elevation: 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            _pickedImage = await pickImageFromGallery();
+                            if (_pickedImage != null) {
+                              widget.ref
+                                  .read(profileImageProvider.notifier)
+                                  .state = _pickedImage;
 
-                            setState(() {});
-                          }
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.camera_alt_outlined),
-                              SizedBox(
-                                width: 21,
-                              ),
-                              CustomTextWidget(
-                                text: 'Update Profile Photo',
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
+                              setState(() {});
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.camera_alt_outlined),
+                                SizedBox(
+                                  width: 21,
+                                ),
+                                CustomTextWidget(
+                                  text: 'Update Profile Photo',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios_rounded),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const HorizontalDivider(),
-                      InkWell(
-                        onTap: () {
-                          // navigate to help page
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.help_center_rounded),
-                              SizedBox(
-                                width: 21,
-                              ),
-                              CustomTextWidget(
-                                text: 'Learn More!',
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
+                        const HorizontalDivider(),
+                        InkWell(
+                          onTap: () {
+                            // navigate to help page
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.help_center_rounded),
+                                SizedBox(
+                                  width: 21,
+                                ),
+                                CustomTextWidget(
+                                  text: 'Learn More!',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios_rounded),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const HorizontalDivider(),
-                      InkWell(
-                        onTap: () {
-                          customLogoutDialog(
+                        const HorizontalDivider(),
+                        InkWell(
+                          onTap: () {
+                            customLogoutDialog(
+                                context: context,
+                                titleText: 'Change Password?',
+                                onTap: () {},
+                                actionText2: 'Yes',
+                                contentText:
+                                    'Do you really want to reset your password');
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.lock_clock_rounded),
+                                SizedBox(
+                                  width: 21,
+                                ),
+                                CustomTextWidget(
+                                  text: 'Change Password',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios_rounded),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const HorizontalDivider(),
+                        InkWell(
+                          onTap: () {
+                            // share app
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.share_outlined),
+                                SizedBox(
+                                  width: 21,
+                                ),
+                                CustomTextWidget(
+                                  text: 'Share App',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios_rounded),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const HorizontalDivider(),
+                        InkWell(
+                          onTap: () {
+                            customLogoutDialog(
                               context: context,
-                              titleText: 'Change Password?',
-                              onTap: () {},
-                              actionText2: 'Yes',
+                              titleText: 'Log out?',
                               contentText:
-                                  'Do you really want to reset your password');
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.lock_clock_rounded),
-                              SizedBox(
-                                width: 21,
-                              ),
-                              CustomTextWidget(
-                                text: 'Change Password',
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
+                                  'You will be logged out from your account!',
+                              actionText2: 'Log Out',
+                              onTap: widget.logoutUser,
+                            );
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.logout_rounded),
+                                SizedBox(
+                                  width: 21,
+                                ),
+                                CustomTextWidget(
+                                  text: 'Logout',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios_rounded),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const HorizontalDivider(),
-                      InkWell(
-                        onTap: () {
-                          // share app
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.share_outlined),
-                              SizedBox(
-                                width: 21,
-                              ),
-                              CustomTextWidget(
-                                text: 'Share App',
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const HorizontalDivider(),
-                      InkWell(
-                        onTap: () {
-                          customLogoutDialog(
-                            context: context,
-                            titleText: 'Log out?',
-                            contentText:
-                                'You will be logged out from your account!',
-                            actionText2: 'Log Out',
-                            onTap: widget.logoutUser,
-                          );
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.logout_rounded),
-                              SizedBox(
-                                width: 21,
-                              ),
-                              CustomTextWidget(
-                                text: 'Logout',
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              Spacer(),
-                              Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
