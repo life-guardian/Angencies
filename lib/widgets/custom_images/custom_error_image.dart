@@ -1,9 +1,14 @@
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 
-class NoDataFoundImage extends StatelessWidget {
-  const NoDataFoundImage({super.key, this.headingText});
+class CustomErrorImage extends StatelessWidget {
+  const CustomErrorImage({
+    super.key,
+    this.headingText,
+    required this.imagePath,
+  });
   final String? headingText;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +19,13 @@ class NoDataFoundImage extends StatelessWidget {
           SizedBox(
             width: 250,
             child: Image.asset(
-              "assets/images/animated_images/nothingfound.png",
+              imagePath,
+              // "assets/images/animated_images/nothingfound.png",
             ),
           ),
           CustomTextWidget(
             text: headingText ?? "",
+            textAlign: TextAlign.center,
             fontSize: 14,
             fontWeight: FontWeight.normal,
           )

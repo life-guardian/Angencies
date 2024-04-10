@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 import 'package:agencies_app/models/registered_users.dart';
-import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
+import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,8 +15,9 @@ class BuildRegisteredUsersListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return registeredUsersList.isEmpty
-        ? const NoDataFoundImage(
-            headingText: "No Registered Users Found!",
+        ? const CustomErrorImage(
+            headingText: "No Alerts Found!",
+            imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : ListView.builder(
             itemCount: registeredUsersList.length,

@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, no_logic_in_create_state
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
+import 'package:agencies_app/classes/check_internet_connection.dart';
 import 'package:agencies_app/constants/sizes.dart';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
@@ -15,6 +17,7 @@ import 'package:agencies_app/screens/login_screen.dart';
 import 'package:agencies_app/screens/user_account_details.dart';
 import 'package:agencies_app/screens/welcome_screen.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -40,13 +43,22 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
   int _currentIndx = 0;
   double _screenWidth = 0;
 
+  late ConnectivityResult result;
+  late StreamSubscription subscription;
+
   @override
   void initState() {
     super.initState();
+    checkInternetConnection();
     getImageFileFromAssets('assets/images/no-profile-photo.jpeg')
         .then((value) => ref.read(profileImageProvider.notifier).state = value);
     getDeviceLocation();
     addTokenProvider();
+  }
+
+  checkInternetConnection() async {
+    CheckInternetConnection checkInternetConnection = CheckInternetConnection();
+    checkInternetConnection.startStreamSubscription(ref: ref);
   }
 
   Future<XFile> getImageFileFromAssets(String path) async {

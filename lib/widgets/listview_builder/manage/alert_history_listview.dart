@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:agencies_app/apis/custom_delete_eventsapi.dart';
 import 'package:agencies_app/models/alert_history.dart';
 import 'package:agencies_app/providers/alert_history_provider.dart';
-import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
+import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -85,8 +84,9 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
     final alertList = widget.ref.watch(alertHistoryProvider);
 
     return alertList.isEmpty
-        ? const NoDataFoundImage(
+        ? const CustomErrorImage(
             headingText: "No Alerts Found!",
+            imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : SlidableAutoCloseBehavior(
             closeWhenOpened: true,

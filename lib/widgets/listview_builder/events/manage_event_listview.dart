@@ -2,7 +2,7 @@
 import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
-import 'package:agencies_app/widgets/custom_images/no_data_found.dart';
+import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -49,8 +49,9 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
     ThemeData themeData = Theme.of(context);
     final eventList = widget.ref.watch(manageEventsProvider);
     return eventList.isEmpty
-        ? const NoDataFoundImage(
-            headingText: "No Events Found!",
+        ? const CustomErrorImage(
+            headingText: "No Alerts Found!",
+            imagePath: "assets/images/animated_images/nothingfound.png",
           )
         : ListView.builder(
             itemCount: eventList.length,

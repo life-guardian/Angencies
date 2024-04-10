@@ -15,6 +15,8 @@ final isLoadingHomeScreen = StateProvider<bool>((ref) => true);
 
 final greetingProvider = StateProvider<String>((ref) => getGreetingMessage());
 
+final isInternetConnectionOnProvider = StateProvider<bool>((ref) => false);
+
 final rescueOperationIdProvider = StateProvider<String?>((ref) {
   return null;
 });
