@@ -118,43 +118,55 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
         ];
         debugPrint(
             "Initial lat ${currentPosition.latitude} and lng: ${currentPosition.longitude}");
-        initialEmitLocationUpdate(
-            currentPosition.latitude, currentPosition.longitude);
-        onIntialConnectReceiveNearbyAgenciesUsers();
+        emitLocationUpdate(currentPosition.latitude, currentPosition.longitude);
+        getInitialConnectAgenciesUsersLocation();
       }
     }
     return;
   }
 
-  void initialEmitLocationUpdate(double latitude, double longitude) {
-    socket.emit('initialConnect', {'lat': latitude, 'lng': longitude});
+  void emitLocationUpdate(double latitude, double longitude) {
+    socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
   }
 
-  void onIntialConnectReceiveNearbyAgenciesUsers() {
-    debugPrint("initial connect onIntialConnectReceiveNearbyAgenciesUsers");
-    socket.on("initialConnectReceiveNearbyUsers", (initialConnectUsers) {
-      if (mounted) {
-        debugPrint("Got initial connect Users");
-        debugPrint(initialConnectUsers.toString());
-        for (var liveAgency in initialConnectUsers) {
-          liveRescueUsers.add(LiveRescueUsers.fromJson(liveAgency));
-        }
-        setState(() {});
-      }
-    });
+  Future<void> getInitialConnectAgenciesUsersLocation() async {
+    var baseUrl = dotenv.get("BASE_URL");
 
-    socket.on("initialConnectReceiveNearbyAgencies", (initialConnectAgencies) {
-      if (mounted) {
-        debugPrint("Got initial connect agency");
-        debugPrint(initialConnectAgencies.toString());
-        for (var liveAgency in initialConnectAgencies) {
+    try {
+      var response = await http.get(
+        Uri.parse(
+          "$baseUrl/api/rescueops/initialconnect/${latLng[0]}/${latLng[1]}",
+        ),
+        headers: {"Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+
+        final initialAgencies = jsonResponse["agencies"];
+        final initialUsers = jsonResponse["users"];
+        debugPrint(
+            "Got initial connect agency & users: \n ${jsonResponse.toString()}");
+
+        for (var liveAgency in initialAgencies) {
           liveAgencies.add(LiveAgencies.fromJson(liveAgency));
         }
-        setState(() {});
-      }
-    });
 
-    listenSocketOn();
+        for (var liveUsers in initialUsers) {
+          liveRescueUsers.add(LiveRescueUsers.fromJson(liveUsers));
+        }
+
+        listenSocketOn();
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    } catch (error) {
+      debugPrint(
+          "Error while fetching intial connect agencies and user ${error.toString()}");
+    }
+
+    return;
   }
 
   void listenSocketOn() {
@@ -254,11 +266,38 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     }
   }
 
-  void emitLocationUpdate(double latitude, double longitude) {
-    socket.emit('agencyLocationUpdate', {'lat': latitude, 'lng': longitude});
-  }
-
   // <------------------------ </Socket Implementation> ------------------------>
+
+  // void initialEmitLocationUpdate(double latitude, double longitude) {
+  //   socket.emit('initialConnect', {'lat': latitude, 'lng': longitude});
+  // }
+
+  // void onIntialConnectReceiveNearbyAgenciesUsers() {
+  //   debugPrint("initial connect onIntialConnectReceiveNearbyAgenciesUsers");
+  //   socket.on("initialConnectReceiveNearbyUsers", (initialConnectUsers) {
+  //     if (mounted) {
+  //       debugPrint("Got initial connect Users");
+  //       debugPrint(initialConnectUsers.toString());
+  //       for (var liveAgency in initialConnectUsers) {
+  //         liveRescueUsers.add(LiveRescueUsers.fromJson(liveAgency));
+  //       }
+  //       setState(() {});
+  //     }
+  //   });
+
+  //   socket.on("initialConnectReceiveNearbyAgencies", (initialConnectAgencies) {
+  //     if (mounted) {
+  //       debugPrint("Got initial connect agency");
+  //       debugPrint(initialConnectAgencies.toString());
+  //       for (var liveAgency in initialConnectAgencies) {
+  //         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
+  //       }
+  //       setState(() {});
+  //     }
+  //   });
+
+  //   listenSocketOn();
+  // }
 
   void openModalBottomSheet(
       {LiveAgencies? liveAgency, LiveRescueUsers? liveRescueUsers}) {
@@ -269,39 +308,6 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           : markerPointUsersDetails(liveRescueUsers: liveRescueUsers!),
     );
   }
-
-  // Future<void> getInitialConnectAgenciesUsersLocation() async {
-  //   var baseUrl = dotenv.get("BASE_URL");
-
-  //   try {
-  //     var response = await http.get(
-  //       Uri.parse(
-  //         "$baseUrl/api/rescueops/initialconnect/${latLng[0]}/${latLng[1]}",
-  //       ),
-  //       headers: {"Authorization": "Bearer $token"},
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       var jsonResponse = jsonDecode(response.body);
-
-  //       final initialAgencies = jsonResponse["agencies"];
-  //       debugPrint("Got initial connect agency");
-  //       debugPrint(initialAgencies.toString());
-
-  //       for (var liveAgency in initialAgencies) {
-  //         liveAgencies.add(LiveAgencies.fromJson(liveAgency));
-  //       }
-  //       if (mounted) {
-  //         setState(() {});
-  //       }
-  //     }
-  //   } catch (error) {
-  //     debugPrint(
-  //         "Error while fetching intial connect agencies and user ${error.toString()}");
-  //   }
-
-  //   return;
-  // }
 
   Future<void> launchPhoneDial({required int phoneNo}) async {
     final Uri url = Uri(
