@@ -1,3 +1,4 @@
+import 'package:agencies_app/theme/custom_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,7 +40,7 @@ class TextFormFieldModal extends StatelessWidget {
           ),
         ),
         hintText: hintText,
-        hintStyle: GoogleFonts.mulish(
+        hintStyle: customTextStyle().copyWith(
           fontSize: 16,
           color: Colors.grey.shade700,
         ),

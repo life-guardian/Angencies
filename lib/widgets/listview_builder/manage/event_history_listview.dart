@@ -150,31 +150,24 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    event.eventName.toString(),
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
+                                  CustomTextWidget(
+                                    text: event.eventName.toString(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    event.description.toString(),
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      color: (themeData.brightness ==
-                                              Brightness.light)
-                                          ? const Color.fromARGB(
-                                              255, 0, 58, 112)
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                      fontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                  CustomTextWidget(
+                                    text: event.description.toString(),
+                                    color: (themeData.brightness ==
+                                            Brightness.light)
+                                        ? const Color.fromARGB(255, 0, 58, 112)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                    fontSize: 12,
+                                    textOverflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
                                 ],
@@ -183,19 +176,14 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              DateFormat('dd/MM/yy').format(
+                            CustomTextWidget(
+                              text: DateFormat('dd/MM/yy').format(
                                   DateTime.parse(event.eventDate.toString())),
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    (themeData.brightness == Brightness.light)
-                                        ? const Color.fromARGB(255, 0, 58, 112)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onBackground,
-                                fontSize: 14,
-                              ),
+                              fontWeight: FontWeight.bold,
+                              color: (themeData.brightness == Brightness.light)
+                                  ? const Color.fromARGB(255, 0, 58, 112)
+                                  : Theme.of(context).colorScheme.onBackground,
+                              fontSize: 14,
                             ),
                           ],
                         ),

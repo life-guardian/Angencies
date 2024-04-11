@@ -3,6 +3,7 @@ import 'package:agencies_app/providers/manage_events_provider.dart';
 import 'package:agencies_app/screens/event_registered_users_screen.dart';
 import 'package:agencies_app/animations/transitions_animations/custom_page_transition.dart';
 import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,42 +80,36 @@ class _BuildManageEventListViewState extends State<BuildManageEventListView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                eventData.eventName.toString(),
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                              CustomTextWidget(
+                                text: eventData.eventName.toString(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                // code here to show exact location
-                                eventData.locality.toString(),
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              CustomTextWidget(
+                                text: eventData.locality.toString(),
+                                color: Colors.grey,
+                                fontSize: 12,
+                                textOverflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                DateFormat('dd/MM/yy').format(DateTime.parse(
-                                    eventData.eventDate.toString())),
-                                style: GoogleFonts.plusJakartaSans().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: (themeData.brightness ==
-                                          Brightness.light)
-                                      ? const Color.fromARGB(255, 224, 28, 14)
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                  fontSize: 14,
-                                ),
+                              CustomTextWidget(
+                                text: DateFormat('dd/MM/yy').format(
+                                    DateTime.parse(
+                                        eventData.eventDate.toString())),
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    (themeData.brightness == Brightness.light)
+                                        ? const Color.fromARGB(255, 224, 28, 14)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                fontSize: 14,
                               ),
                             ],
                           ),

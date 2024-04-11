@@ -154,39 +154,30 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  alert.alertName.toString(),
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
+                                CustomTextWidget(
+                                  text: alert.alertName.toString(),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
-                                  alert.alertSeverity.toString(),
-                                  style: GoogleFonts.plusJakartaSans().copyWith(
-                                    color:
-                                        const Color.fromARGB(255, 158, 18, 8),
-                                    fontSize: 12,
-                                  ),
+                                CustomTextWidget(
+                                  text: alert.alertSeverity.toString(),
+                                  color: const Color.fromARGB(255, 158, 18, 8),
+                                  fontSize: 12,
                                 ),
                               ],
                             ),
-                            Text(
-                              DateFormat('dd/MM/yy').format(DateTime.parse(
-                                  alert.alertForDate.toString())),
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    (themeData.brightness == Brightness.light)
-                                        ? const Color.fromARGB(255, 158, 18, 8)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onBackground,
-                                fontSize: 14,
-                              ),
+                            CustomTextWidget(
+                              text: DateFormat('dd/MM/yy').format(
+                                  DateTime.parse(
+                                      alert.alertForDate.toString())),
+                              fontWeight: FontWeight.bold,
+                              color: (themeData.brightness == Brightness.light)
+                                  ? const Color.fromARGB(255, 158, 18, 8)
+                                  : Theme.of(context).colorScheme.onBackground,
+                              fontSize: 14,
                             ),
                           ],
                         ),

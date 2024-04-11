@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:agencies_app/providers/agencydetails_providers.dart';
 import 'package:agencies_app/widgets/custom_dialogs/custom_logout_dialog.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/inherited_widgets/custom_lifeguardian_tag.dart';
 import 'package:agencies_app/widgets/dividers/horizontal_divider.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserAccountDetails extends StatefulWidget {
@@ -222,8 +224,11 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
                         ),
                         const HorizontalDivider(),
                         InkWell(
-                          onTap: () {
-                            // share app
+                          onTap: () async {
+                            String url =
+                                "https://lifeguardian-agencies.netlify.app/";
+                            await Share.share(
+                                "Lifeguardian Agencies app for agencies \n\n$url");
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
@@ -285,36 +290,10 @@ class _UserAccountDetailsState extends State<UserAccountDetails> {
               const SizedBox(
                 height: 31,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      const Text(
-                        'Life ',
-                        style: TextStyle(
-                            color: Colors.orange,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      ),
-                      const Text(
-                        'Guardian',
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 18),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      SizedBox(
-                        width: 25,
-                        child: Image.asset(
-                          'assets/images/disasterImage2.jpg',
-                        ),
-                      )
-                    ],
-                  ),
+                  CustomLifeGuardianTag(),
                 ],
               ),
             ],

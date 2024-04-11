@@ -150,31 +150,26 @@ class _BuildRescueHistoryListViewState
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    rescueOperation.name.toString(),
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
+                                  CustomTextWidget(
+                                    text: rescueOperation.name.toString(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    rescueOperation.description.toString(),
-                                    style:
-                                        GoogleFonts.plusJakartaSans().copyWith(
-                                      color: (themeData.brightness ==
-                                              Brightness.light)
-                                          ? const Color.fromARGB(255, 8, 72, 20)
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                      fontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    maxLines: 1,
+                                  CustomTextWidget(
+                                    text:
+                                        rescueOperation.description.toString(),
+                                    color: (themeData.brightness ==
+                                            Brightness.light)
+                                        ? const Color.fromARGB(255, 8, 72, 20)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                    fontSize: 12,
+                                    textOverflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                   ),
                                 ],
                               ),
@@ -182,19 +177,15 @@ class _BuildRescueHistoryListViewState
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              DateFormat('dd/MM/yy').format(DateTime.parse(
-                                  rescueOperation.createdAt.toString())),
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    (themeData.brightness == Brightness.light)
-                                        ? const Color.fromARGB(255, 8, 72, 20)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onBackground,
-                                fontSize: 14,
-                              ),
+                            CustomTextWidget(
+                              text: DateFormat('dd/MM/yy').format(
+                                  DateTime.parse(
+                                      rescueOperation.createdAt.toString())),
+                              fontWeight: FontWeight.bold,
+                              color: (themeData.brightness == Brightness.light)
+                                  ? const Color.fromARGB(255, 8, 72, 20)
+                                  : Theme.of(context).colorScheme.onBackground,
+                              fontSize: 14,
                             ),
                           ],
                         ),

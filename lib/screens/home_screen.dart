@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:agencies_app/animations/shimmer_animations/homescreen_shimmer_effect.dart';
 import 'package:agencies_app/classes/check_internet_connection.dart';
+import 'package:agencies_app/data/manage_event.dart';
 import 'package:agencies_app/widgets/card_widgets/event_rescue_count_card.dart';
 import 'package:agencies_app/widgets/custom_buttons/custom_outlined_button.dart';
 import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
@@ -117,6 +118,65 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     eventsCount = ref.watch(eventsCountProvider.notifier).state[0];
     rescueCount = ref.watch(eventsCountProvider.notifier).state[1];
 
+    List<ManageEventData> listManageEventData = [
+      ManageEventData(
+        title: "Rescue Operation",
+        desc: "Start",
+        onPressed: isRescueOnGoing
+            ? () {
+                navigateToRescueMaps();
+              }
+            : () async {
+                await modalBottomSheet.openModal(
+                  context: context,
+                  widget: RescueOperation(token: widget.token),
+                );
+                getAgencyDataFromServer();
+              },
+        lineColor1: Colors.yellow.shade400,
+        lineColor2: Colors.yellow.shade50,
+      ),
+      ManageEventData(
+        title: "Awareness",
+        desc: "Event",
+        onPressed: () async {
+          await modalBottomSheet.openModal(
+            context: context,
+            widget: OrganizeEvent(token: widget.token),
+          );
+          getAgencyDataFromServer();
+        },
+        lineColor1: Colors.green.shade400,
+        lineColor2: Colors.green.shade50,
+      ),
+      ManageEventData(
+        title: "Alert for disaster",
+        desc: "Send Alert",
+        onPressed: () {
+          modalBottomSheet.openModal(
+            context: context,
+            widget: SendAlert(token: widget.token),
+          );
+        },
+        lineColor1: Colors.red.shade400,
+        lineColor2: Colors.red.shade50,
+      ),
+      ManageEventData(
+        title: "See all history",
+        desc: "Manage History",
+        onPressed: () {
+          Navigator.of(context).push(
+            CustomSlideTransition(
+              direction: AxisDirection.left,
+              child: History(token: widget.token, agencyName: agencyname!),
+            ),
+          );
+        },
+        lineColor1: Colors.blue.shade400,
+        lineColor2: Colors.blue.shade50,
+      ),
+    ];
+
     return isLoading
         ? const HomeScreenShimmerEffect()
         : !isInternetConnectionOn
@@ -212,101 +272,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      FadeInUp(
-                        delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                          height: 140,
-                          child: Row(
-                            mainAxisAlignment: kIsWeb
-                                ? MainAxisAlignment.spaceAround
-                                : MainAxisAlignment.center,
-                            children: [
-                              ManageCard(
-                                text1: 'Rescue Operation',
-                                text2: 'Start',
-                                showModal: isRescueOnGoing
-                                    ? () {
-                                        navigateToRescueMaps();
-                                      }
-                                    : () async {
-                                        await modalBottomSheet.openModal(
-                                          context: context,
-                                          widget: RescueOperation(
-                                              token: widget.token),
-                                        );
-                                        getAgencyDataFromServer();
-                                      },
-                                lineColor1: Colors.yellow.shade400,
-                                lineColor2: Colors.yellow.shade50,
-                              ),
-                              const SizedBox(
-                                width: 11,
-                              ),
-                              ManageCard(
-                                text1: 'Awareness Event',
-                                text2: 'Organize Event',
-                                showModal: () async {
-                                  await modalBottomSheet.openModal(
-                                    context: context,
-                                    widget: OrganizeEvent(token: widget.token),
-                                  );
-                                  getAgencyDataFromServer();
-                                },
-                                lineColor1: Colors.green.shade400,
-                                lineColor2: Colors.green.shade50,
-                              ),
-                            ],
-                          ),
+                      GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          mainAxisExtent: 140,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      FadeInUp(
-                        delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                          height: 140,
-                          child: Row(
-                            mainAxisAlignment: kIsWeb
-                                ? MainAxisAlignment.spaceAround
-                                : MainAxisAlignment.center,
-                            children: [
-                              ManageCard(
-                                text1: 'Alert for disaster',
-                                text2: 'Send Alert',
-                                showModal: () {
-                                  modalBottomSheet.openModal(
-                                    context: context,
-                                    widget: SendAlert(token: widget.token),
-                                  );
-                                },
-                                lineColor1: Colors.red.shade400,
-                                lineColor2: Colors.red.shade50,
-                              ),
-                              const SizedBox(
-                                width: 11,
-                              ),
-                              ManageCard(
-                                text1: 'See all history',
-                                text2: 'Manage History',
-                                showModal: () {
-                                  Navigator.of(context).push(
-                                    CustomSlideTransition(
-                                      direction: AxisDirection.left,
-                                      child: History(
-                                          token: widget.token,
-                                          agencyName: agencyname!),
-                                    ),
-                                  );
-                                },
-                                lineColor1: Colors.blue.shade400,
-                                lineColor2: Colors.blue.shade50,
-                              ),
-                            ],
-                          ),
-                        ),
+                        shrinkWrap: true,
+                        itemCount: listManageEventData.length,
+                        itemBuilder: (context, index) {
+                          final manageEvent = listManageEventData[index];
+                          return FadeInUp(
+                            delay: const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 500),
+                            child: ManageCard(
+                              text1: manageEvent.desc,
+                              // height: 30,
+                              text2: manageEvent.title,
+                              onPressed: manageEvent.onPressed!,
+                              lineColor1: manageEvent.lineColor1,
+                              lineColor2: manageEvent.lineColor2,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 31,

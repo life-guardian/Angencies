@@ -6,7 +6,7 @@ class ManageCard extends StatelessWidget {
     super.key,
     required this.text1,
     required this.text2,
-    required this.showModal,
+    required this.onPressed,
     required this.lineColor1,
     required this.lineColor2,
     this.stop1 = 0.5,
@@ -14,7 +14,7 @@ class ManageCard extends StatelessWidget {
     this.height,
   });
 
-  final void Function() showModal;
+  final void Function() onPressed;
 
   final String text1;
   final String text2;
@@ -27,67 +27,66 @@ class ManageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    return Expanded(
-      child: InkWell(
-        onTap: showModal,
-        child: Card(
-          elevation: 3,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: (themeData.brightness == Brightness.dark)
-                  ? Theme.of(context).colorScheme.secondary
-                  : null,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              text: text1,
-                              color: const Color.fromARGB(255, 185, 182, 182),
-                              maxLines: 2,
-                              fontSize: 12,
-                            ),
-                            const SizedBox(
-                              height: 11,
-                            ),
-                            CustomTextWidget(
-                              text: text2,
-                              maxLines: 2,
-                              fontSize: 15,
-                            ),
-                          ],
-                        ),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Card(
+        elevation: 3,
+        child: Container(
+          height: 20,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: (themeData.brightness == Brightness.dark)
+                ? Theme.of(context).colorScheme.secondary
+                : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            text: text1,
+                            color: const Color.fromARGB(255, 185, 182, 182),
+                            maxLines: 2,
+                            fontSize: 12,
+                          ),
+                          const SizedBox(
+                            height: 11,
+                          ),
+                          CustomTextWidget(
+                            text: text2,
+                            maxLines: 2,
+                            fontSize: 15,
+                          ),
+                        ],
                       ),
-                      const Icon(Icons.arrow_forward_ios_rounded)
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    width: double.infinity,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          stops: const [0.5, 0.5],
-                          colors: [
-                            lineColor1,
-                            lineColor2,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(15)),
-                  )
-                ],
-              ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios_rounded)
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  width: double.infinity,
+                  height: 10,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: const [0.5, 0.5],
+                        colors: [
+                          lineColor1,
+                          lineColor2,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(15)),
+                )
+              ],
             ),
           ),
         ),

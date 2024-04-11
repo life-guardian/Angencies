@@ -1,3 +1,4 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,15 +19,13 @@ class TextInTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      selectedText ?? initialText,
-      style: GoogleFonts.mulish(
-        color: (selectedText == null)
-            ? Colors.grey.shade700
-            : Theme.of(context).colorScheme.onBackground,
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-      ),
+    return CustomTextWidget(
+      text: selectedText ?? initialText,
+      color: (selectedText == null)
+          ? Colors.grey.shade700
+          : Theme.of(context).colorScheme.onBackground,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
     );
   }
 }

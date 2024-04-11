@@ -1,3 +1,4 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -40,14 +41,13 @@ class SelectMapLocationField extends StatelessWidget {
                 width: 11,
               ),
               Flexible(
-                child: Text(
-                  address ?? initialText,
-                  style: GoogleFonts.mulish(
-                    fontSize: 16,
-                    color: (address == null)
-                        ? Colors.grey.shade700
-                        : Theme.of(context).colorScheme.onBackground,
-                  ),
+                child: CustomTextWidget(
+                  text: address ?? initialText,
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: (address == null)
+                      ? Colors.grey.shade700
+                      : Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ],

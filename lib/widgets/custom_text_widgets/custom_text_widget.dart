@@ -1,3 +1,4 @@
+import 'package:agencies_app/theme/custom_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,7 +29,7 @@ class CustomTextWidget extends StatelessWidget {
       overflow: textOverflow,
       maxLines: maxLines,
       textAlign: textAlign,
-      style: GoogleFonts.mulish(
+      style: customTextStyle().copyWith(
         fontWeight: fontWeight ?? FontWeight.bold,
         fontSize: fontSize ?? 12,
         color: color == Colors.transparent

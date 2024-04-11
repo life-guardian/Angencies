@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -41,23 +42,20 @@ class BuildRegisteredUsersListView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              registeredUser.userName.toString(),
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                            CustomTextWidget(
+                              text: registeredUser.userName.toString(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
                             const SizedBox(
                               height: 11,
                             ),
-                            Text(
-                              'Phone: ${registeredUser.phoneNumber.toString()}',
-                              style: GoogleFonts.plusJakartaSans().copyWith(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                            CustomTextWidget(
+                              text:
+                                  'Phone: ${registeredUser.phoneNumber.toString()}',
+                              color: Colors.grey,
+                              fontSize: 12,
+                              textOverflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                           ],

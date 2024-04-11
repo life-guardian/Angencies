@@ -1,3 +1,4 @@
+import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,22 +19,16 @@ Future customShowDialog(
             borderRadius: BorderRadius.circular(12),
           ),
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
-            titleText,
-            style: GoogleFonts.lato(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
+          title: CustomTextWidget(
+            text: titleText,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
-          content: RichText(
-            text: TextSpan(
-              text: contentText,
-              style: GoogleFonts.lato(
-                fontSize: 20.0,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-            ),
+          content: CustomTextWidget(
+            text: contentText,
+            fontSize: 20.0,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
           actions: [
             Center(
