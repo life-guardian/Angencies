@@ -3,7 +3,6 @@ import 'package:agencies_app/models/registered_users.dart';
 import 'package:agencies_app/widgets/custom_images/custom_error_image.dart';
 import 'package:agencies_app/widgets/custom_text_widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BuildRegisteredUsersListView extends StatelessWidget {
   const BuildRegisteredUsersListView({
