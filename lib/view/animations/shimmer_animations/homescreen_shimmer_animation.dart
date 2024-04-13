@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomeScreenShimmerAnimation extends StatelessWidget {
@@ -44,90 +45,91 @@ class HomeScreenShimmerAnimation extends StatelessWidget {
         highlightColor: currentBrightness == Brightness.light
             ? Colors.grey.shade100
             : Theme.of(context).colorScheme.secondary,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 10, bottom: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: themeColorSecondary,
-                        ),
-                        const SizedBox(
-                          width: 18,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            shimmerContainer(width: 80),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            shimmerContainer(
-                              width: 120,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    shimmerContainer(
-                      width: double.infinity,
-                      height: 80,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Center(
-                      child: shimmerContainer(
-                        width: 120,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, top: 10, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: themeColorSecondary,
+                          ),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              shimmerContainer(width: 80),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              shimmerContainer(
+                                width: 120,
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    cardRow(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    cardRow(),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Center(
-                      child: shimmerContainer(
-                        width: 120,
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    cardRow(),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(21),
-                    topRight: Radius.circular(21),
+                      shimmerContainer(
+                        width: double.infinity,
+                        height: 80,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Center(
+                        child: shimmerContainer(
+                          width: 120,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      cardRow(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      cardRow(),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Center(
+                        child: shimmerContainer(
+                          width: 120,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      cardRow(),
+                    ],
                   ),
-                  color: themeColorSecondary,
                 ),
               ),
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(21),
+                  topRight: Radius.circular(21),
+                ),
+                color: themeColorSecondary,
+              ),
+            ),
+          ],
         ),
       ),
     );

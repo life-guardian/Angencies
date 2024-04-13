@@ -12,9 +12,9 @@ import 'package:agencies_app/view_model/providers/event_history_provider.dart';
 import 'package:agencies_app/view_model/providers/location_provider.dart';
 import 'package:agencies_app/view_model/providers/manage_events_provider.dart';
 import 'package:agencies_app/view_model/providers/rescue_history_provider.dart';
-import 'package:agencies_app/widget/screen/home.dart';
+import 'package:agencies_app/widget/screen/home_widget.dart';
 import 'package:agencies_app/view/screens/login_screen.dart';
-import 'package:agencies_app/widget/screen/settings.dart';
+import 'package:agencies_app/widget/screen/settings_widget.dart';
 import 'package:agencies_app/view/screens/welcome_screen.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -188,12 +188,12 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
 
     if (dataLoaded) {
       if (_currentIndx == 1) {
-        activePage = Settings(
+        activePage = SettingsWidget(
           logoutUser: _logoutUser,
           ref: ref,
         );
       } else if (_currentIndx == 0) {
-        activePage = Home(
+        activePage = HomeWidget(
           token: widget.myToken,
         );
       }
@@ -308,7 +308,7 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
                     ),
                   ),
                   const CustomTextWidget(
-                    text: "Account",
+                    text: "Settings",
                     color: Colors.grey,
                   )
                 ],

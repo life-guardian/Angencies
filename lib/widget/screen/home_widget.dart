@@ -30,18 +30,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({
+class HomeWidget extends ConsumerStatefulWidget {
+  const HomeWidget({
     super.key,
     required this.token,
   });
   final token;
 
   @override
-  ConsumerState<Home> createState() => _HomeScreenState();
+  ConsumerState<HomeWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<Home> {
+class _HomeScreenState extends ConsumerState<HomeWidget> {
   late String userId;
   String? eventsCount;
   String? rescueCount;
@@ -201,6 +201,7 @@ class _HomeScreenState extends ConsumerState<Home> {
                                           duration:
                                               const Duration(milliseconds: 500),
                                           child: AlertDialog(
+                                            backgroundColor: Colors.transparent,
                                             content: Image(
                                               image: FileImage(
                                                 File(_pickedImage!.path),

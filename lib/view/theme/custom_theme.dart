@@ -54,31 +54,3 @@ ThemeData darkTheme = ThemeData(
     ),
   ),
 );
-
-// ThemeData darkTheme = ThemeData(
-//   textButtonTheme: const TextButtonThemeData(
-//     style: ButtonStyle(
-//       foregroundColor: MaterialStatePropertyAll(Colors.white),
-//     ),
-//   ),
-//   brightness: Brightness.dark,
-//   textSelectionTheme: const TextSelectionThemeData(
-//     cursorColor: Colors.white,
-//     selectionColor: Color.fromARGB(116, 255, 255, 255),
-//   ),
-//   colorScheme: const ColorScheme.dark(
-//     background: Color(0xff0F172A),
-//     primary: Color(0xff0D2136),
-//     secondary: Color(0xff162C46),
-//     tertiary: Color(0xff162C46),
-//   ),
-//   datePickerTheme: DatePickerThemeData(
-//     backgroundColor: Colors.grey.shade700,
-//     headerBackgroundColor: Colors.grey.shade800,
-//     dayOverlayColor:
-//         const MaterialStatePropertyAll(Color.fromARGB(255, 200, 194, 194)),
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(30),
-//     ),
-//   ),
-// );

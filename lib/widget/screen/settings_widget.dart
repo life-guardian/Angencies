@@ -12,8 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({
+class SettingsWidget extends StatefulWidget {
+  const SettingsWidget({
     super.key,
     required this.logoutUser,
     required this.ref,
@@ -22,10 +22,10 @@ class Settings extends StatefulWidget {
   final WidgetRef ref;
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsWidget> createState() => _SettingsWidgetState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsWidgetState extends State<SettingsWidget> {
   final ImagePicker _picker = ImagePicker();
   XFile? _pickedImage;
   late SharedPreferences prefs;
