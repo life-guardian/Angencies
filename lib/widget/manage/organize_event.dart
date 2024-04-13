@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
 import 'package:agencies_app/view/animations/snackbar_animations/awesome_snackbar_animation.dart';
 import 'package:agencies_app/view_model/functions/validate_textfield.dart';
 import 'package:agencies_app/helper/classes/exact_location.dart';
+import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/textfields/select_map_location_field.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -99,13 +99,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
   void _publishEvent({required BuildContext context}) async {
     setState(() {
       buttonEnabled = false;
-      activeButtonText = const Center(
-        child: SizedBox(
-          height: 25,
-          width: 25,
-          child: CircularProgressIndicator(),
-        ),
-      );
+      activeButtonText = const CustomCircularProgressIndicator();
     });
 
     final jwtToken = widget.token;
@@ -160,6 +154,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
       debugPrint("Exception occured: ${e.toString()}");
     }
+
     buttonEnabled = true;
   }
 

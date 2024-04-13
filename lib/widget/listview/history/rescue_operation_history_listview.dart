@@ -3,6 +3,7 @@ import 'package:agencies_app/model/operation_history.dart';
 import 'package:agencies_app/view_model/providers/rescue_history_provider.dart';
 import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,120 +80,130 @@ class _BuildRescueHistoryListViewState
 
     ThemeData themeData = Theme.of(context);
     return rescueList.isEmpty
-        ? const SearchErrorImage(
-            headingText: "No Rescues Found!",
-            imagePath: "assets/images/animated_images/nothingfound.png",
+        ? FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: const SearchErrorImage(
+              headingText: "No Rescues Found!",
+              imagePath: "assets/images/animated_images/nothingfound.png",
+            ),
           )
-        : SlidableAutoCloseBehavior(
-            closeWhenOpened: true,
-            child: ListView.builder(
-              itemCount: rescueList.length,
-              itemBuilder: (context, index) {
-                final rescueOperation = rescueList.elementAt(index);
-                return Slidable(
-                  key: Key(rescueOperation.sId!),
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    dismissible: DismissiblePane(
-                        onDismissed: () => deleteRescueOperation(
+        : FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: SlidableAutoCloseBehavior(
+              closeWhenOpened: true,
+              child: ListView.builder(
+                itemCount: rescueList.length,
+                itemBuilder: (context, index) {
+                  final rescueOperation = rescueList.elementAt(index);
+                  return Slidable(
+                    key: Key(rescueOperation.sId!),
+                    endActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      dismissible: DismissiblePane(
+                          onDismissed: () => deleteRescueOperation(
+                                ref: widget.ref,
+                                indx: index,
+                                rescueId: rescueOperation.sId!,
+                                rescueOperation: rescueOperation,
+                              )),
+                      children: [
+                        SlidableAction(
+                          label: "Delete",
+                          icon: Icons.delete,
+                          onPressed: (context) {
+                            deleteRescueOperation(
                               ref: widget.ref,
                               indx: index,
                               rescueId: rescueOperation.sId!,
                               rescueOperation: rescueOperation,
-                            )),
-                    children: [
-                      SlidableAction(
-                        label: "Delete",
-                        icon: Icons.delete,
-                        onPressed: (context) {
-                          deleteRescueOperation(
-                            ref: widget.ref,
-                            indx: index,
-                            rescueId: rescueOperation.sId!,
-                            rescueOperation: rescueOperation,
-                          );
-                        },
-                        backgroundColor: const Color.fromARGB(216, 195, 29, 17),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ],
-                  ),
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                            );
+                          },
+                          backgroundColor:
+                              const Color.fromARGB(216, 195, 29, 17),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ],
                     ),
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Container(
-                      decoration: BoxDecoration(
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(69, 57, 111, 59),
-                            Color.fromARGB(169, 20, 191, 26),
-                          ],
-                          stops: [
-                            0.1,
-                            0.9,
-                          ],
-                        ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 20,
+                      color: Theme.of(context).colorScheme.secondary,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(69, 57, 111, 59),
+                              Color.fromARGB(169, 20, 191, 26),
+                            ],
+                            stops: [
+                              0.1,
+                              0.9,
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    text: rescueOperation.name.toString(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  CustomTextWidget(
-                                    text:
-                                        rescueOperation.description.toString(),
-                                    color: (themeData.brightness ==
-                                            Brightness.light)
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 20,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextWidget(
+                                      text: rescueOperation.name.toString(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    CustomTextWidget(
+                                      text: rescueOperation.description
+                                          .toString(),
+                                      color: (themeData.brightness ==
+                                              Brightness.light)
+                                          ? const Color.fromARGB(255, 8, 72, 20)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                      fontSize: 12,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              CustomTextWidget(
+                                text: DateFormat('dd/MM/yy').format(
+                                    DateTime.parse(
+                                        rescueOperation.createdAt.toString())),
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    (themeData.brightness == Brightness.light)
                                         ? const Color.fromARGB(255, 8, 72, 20)
                                         : Theme.of(context)
                                             .colorScheme
                                             .onBackground,
-                                    fontSize: 12,
-                                    textOverflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                  ),
-                                ],
+                                fontSize: 14,
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            CustomTextWidget(
-                              text: DateFormat('dd/MM/yy').format(
-                                  DateTime.parse(
-                                      rescueOperation.createdAt.toString())),
-                              fontWeight: FontWeight.bold,
-                              color: (themeData.brightness == Brightness.light)
-                                  ? const Color.fromARGB(255, 8, 72, 20)
-                                  : Theme.of(context).colorScheme.onBackground,
-                              fontSize: 14,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
   }

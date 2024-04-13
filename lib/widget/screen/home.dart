@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:agencies_app/view/animations/shimmer_animations/homescreen_shimmer_animation.dart';
 import 'package:agencies_app/model/manage_event.dart';
-import 'package:agencies_app/widget/card_widgets/event_rescue_count_card.dart';
+import 'package:agencies_app/widget/card/event_rescue_count_card.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:agencies_app/widget/errors/no_internet.dart';
 import 'package:agencies_app/widget/manage/organize_event.dart';
@@ -16,8 +16,8 @@ import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 
 import 'package:agencies_app/view/screens/managae_events_screen.dart';
 import 'package:agencies_app/view/screens/rescue_map_screen.dart';
-import 'package:agencies_app/widget/card_widgets/event_card.dart';
-import 'package:agencies_app/widget/card_widgets/manage_card.dart';
+import 'package:agencies_app/widget/card/event_card.dart';
+import 'package:agencies_app/widget/card/manage_card.dart';
 
 import 'package:agencies_app/widget/manage/history.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';

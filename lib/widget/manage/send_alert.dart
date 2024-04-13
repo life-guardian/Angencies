@@ -7,6 +7,7 @@ import 'package:agencies_app/view_model/functions/validate_textfield.dart';
 import 'package:agencies_app/helper/classes/exact_location.dart';
 import 'package:agencies_app/widget/buttons/custom_elevated_button.dart';
 import 'package:agencies_app/view_model/functions/datepicker_function.dart';
+import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/textfields/select_map_location_field.dart';
 import 'package:agencies_app/widget/textfields/manage_events_textformfield.dart';
 import 'package:agencies_app/widget/dialogs/osm_map_dialog.dart';
@@ -101,13 +102,7 @@ class _SendAlertState extends State<SendAlert> {
   Future<void> _sendAlert() async {
     setState(() {
       buttonEnabled = false;
-      activeButtonText = const Center(
-        child: SizedBox(
-          height: 25,
-          width: 25,
-          child: CircularProgressIndicator(),
-        ),
-      );
+      activeButtonText = const CustomCircularProgressIndicator();
     });
 
     final jwtToken = widget.token;

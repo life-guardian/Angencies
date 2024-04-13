@@ -10,7 +10,6 @@ import 'package:agencies_app/view_model/providers/manage_events_provider.dart';
 import 'package:agencies_app/widget/app_bar/custom_events_appbar.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:agencies_app/widget/listview/events/manage_event_listview.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -160,48 +159,45 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: FadeInUp(
-                    duration: const Duration(milliseconds: 500),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: screenWidth > mobileScreenWidth
-                              ? EdgeInsets.only(left: screenWidth / 6.5)
-                              : null,
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, top: 5, bottom: 15),
-                          child: const Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    text: "Events",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  CustomTextWidget(
-                                    text:
-                                        "Tap on the event to see registered users",
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: screenWidth > mobileScreenWidth
+                            ? EdgeInsets.only(left: screenWidth / 6.5)
+                            : null,
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 5, bottom: 15),
+                        child: const Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextWidget(
+                                  text: "Events",
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                CustomTextWidget(
+                                  text:
+                                      "Tap on the event to see registered users",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: SizedBox(
-                            width: screenWidth > mobileScreenWidth
-                                ? screenWidth / 1.5
-                                : double.infinity,
-                            child: activeWidget,
-                          ),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          width: screenWidth > mobileScreenWidth
+                              ? screenWidth / 1.5
+                              : double.infinity,
+                          child: activeWidget,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
