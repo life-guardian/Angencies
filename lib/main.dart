@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
-import 'package:agencies_app/screens/tabs.dart';
-import 'package:agencies_app/screens/welcome_screen.dart';
-import 'package:agencies_app/theme/custom_theme.dart';
+import 'package:agencies_app/view/screens/splash_screen.dart';
+import 'package:agencies_app/view/screens/tabs.dart';
+import 'package:agencies_app/view/screens/welcome_screen.dart';
+import 'package:agencies_app/view/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final myToken = prefs.getString('token');
   await dotenv.load(fileName: ".env");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? myToken = prefs.getString('token');
 
   runApp(
     ProviderScope(
@@ -22,22 +23,46 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-  final token;
+Future initialization(BuildContext? context) async {
+  await Future.delayed(
+    const Duration(seconds: 3),
+  );
+}
 
-  const MyApp({super.key, required this.token});
+class MyApp extends StatefulWidget {
+  final String? token;
 
-  Widget activeScreen() {
-    Widget activeWidget = const WelcomeScreen();
-    // activeWidget = HomeScreenShimmerEffect();
+  const MyApp({super.key, this.token});
 
-    if (token != null) {
-      activeWidget = (token == ''
-          ? const WelcomeScreen()
-          : TabsBottom(
-              myToken: token,
-            ));
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Widget activeWidget;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.token != null) {
+      activeWidget = const SplashScreen();
+      assignAppScreen();
+    } else {
+      activeWidget = const WelcomeScreen();
     }
+  }
+
+  Widget assignAppScreen() {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        activeWidget = TabsBottom(
+          myToken: widget.token,
+        );
+        setState(() {});
+      },
+    );
+
     return activeWidget;
   }
 
@@ -48,7 +73,7 @@ class MyApp extends StatelessWidget {
       title: 'Angencies',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: activeScreen(),
+      home: activeWidget,
     );
   }
 }
