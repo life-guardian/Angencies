@@ -1,6 +1,6 @@
 import 'package:agencies_app/helper/classes/check_internet_connection.dart';
 import 'package:agencies_app/widget/buttons/custom_outlined_button.dart';
-import 'package:agencies_app/widget/images/search_error_image.dart';
+import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

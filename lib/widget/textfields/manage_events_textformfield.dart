@@ -1,4 +1,4 @@
-import 'package:agencies_app/view/theme/custom_textstyle.dart';
+import 'package:agencies_app/view/theme/textstyle_theme.dart';
 import 'package:flutter/material.dart';
 
 class ManageEventsTextFormField extends StatelessWidget {
@@ -39,7 +39,7 @@ class ManageEventsTextFormField extends StatelessWidget {
           ),
         ),
         hintText: hintText,
-        hintStyle: customTextStyle().copyWith(
+        hintStyle: textStyleFont().copyWith(
           fontSize: 16,
           color: Colors.grey.shade700,
         ),

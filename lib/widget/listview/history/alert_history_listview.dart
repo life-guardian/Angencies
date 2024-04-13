@@ -3,7 +3,7 @@
 import 'package:agencies_app/helper/services/custom_delete_eventsapi.dart';
 import 'package:agencies_app/model/alert_history.dart';
 import 'package:agencies_app/view_model/providers/alert_history_provider.dart';
-import 'package:agencies_app/widget/images/search_error_image.dart';
+import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

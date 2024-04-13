@@ -2,7 +2,7 @@
 import 'package:agencies_app/view_model/providers/manage_events_provider.dart';
 import 'package:agencies_app/view/screens/registered_users_events_screen.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';
-import 'package:agencies_app/widget/images/search_error_image.dart';
+import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

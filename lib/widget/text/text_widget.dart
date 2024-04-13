@@ -1,4 +1,4 @@
-import 'package:agencies_app/view/theme/custom_textstyle.dart';
+import 'package:agencies_app/view/theme/textstyle_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextWidget extends StatelessWidget {
@@ -28,7 +28,7 @@ class CustomTextWidget extends StatelessWidget {
       overflow: textOverflow,
       maxLines: maxLines,
       textAlign: textAlign,
-      style: customTextStyle().copyWith(
+      style: textStyleFont().copyWith(
         fontWeight: fontWeight ?? FontWeight.bold,
         fontSize: fontSize ?? 12,
         color: color == Colors.transparent
