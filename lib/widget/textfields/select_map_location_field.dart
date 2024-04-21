@@ -45,7 +45,7 @@ class SelectMapLocationField extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
                   color: (address == null)
-                      ? Colors.grey.shade700
+                      ? Colors.grey.shade500
                       : Theme.of(context).colorScheme.onBackground,
                 ),
               ),

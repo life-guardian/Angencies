@@ -100,7 +100,6 @@ class _EventRegisteredListState extends State<RegisteredUsersEventScreen> {
             ),
             Expanded(
               child: Container(
-                // width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   borderRadius: const BorderRadius.only(

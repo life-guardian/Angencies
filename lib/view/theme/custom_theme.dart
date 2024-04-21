@@ -39,10 +39,10 @@ ThemeData darkTheme = ThemeData(
     selectionColor: Color.fromARGB(116, 255, 255, 255),
   ),
   colorScheme: const ColorScheme.dark(
-    background: Color(0xff0F172A),
-    primary: Color(0xff0D2136),
-    secondary: Color(0xff162C46),
-    tertiary: Color(0xff162C46),
+    background: Color(0xff02040A),
+    primary: Color(0xff0E1117),
+    secondary: Color.fromARGB(255, 22, 27, 33),
+    tertiary: Color.fromARGB(255, 22, 27, 33),
   ),
   datePickerTheme: DatePickerThemeData(
     backgroundColor: Colors.grey.shade700,

@@ -3,10 +3,11 @@
 import 'dart:convert';
 
 import 'package:agencies_app/view/animations/snackbar_animations/awesome_snackbar_animation.dart';
-import 'package:agencies_app/view_model/functions/validate_textfield.dart';
+import 'package:agencies_app/helper/functions/validate_textfield.dart';
 import 'package:agencies_app/helper/classes/exact_location.dart';
 import 'package:agencies_app/widget/buttons/custom_elevated_button.dart';
-import 'package:agencies_app/view_model/functions/datepicker_function.dart';
+import 'package:agencies_app/helper/functions/datepicker_function.dart';
+import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/textfields/select_map_location_field.dart';
 import 'package:agencies_app/widget/textfields/manage_events_textformfield.dart';
 import 'package:agencies_app/widget/dialogs/osm_map_dialog.dart';
@@ -34,6 +35,7 @@ class _SendAlertState extends State<SendAlert> {
   DateTime? _selectedDate;
   final formatter = DateFormat.yMd();
   TextEditingController alertNameController = TextEditingController();
+  TextEditingController alertDescriptionController = TextEditingController();
   double? lat;
   double? lng;
   String? address;
@@ -51,6 +53,7 @@ class _SendAlertState extends State<SendAlert> {
   void dispose() {
     super.dispose();
     alertNameController.dispose();
+    alertDescriptionController.dispose();
   }
 
   void _presentDatePicker(BuildContext context) async {
@@ -101,13 +104,7 @@ class _SendAlertState extends State<SendAlert> {
   Future<void> _sendAlert() async {
     setState(() {
       buttonEnabled = false;
-      activeButtonText = const Center(
-        child: SizedBox(
-          height: 25,
-          width: 25,
-          child: CircularProgressIndicator(),
-        ),
-      );
+      activeButtonText = const CustomCircularProgressIndicator();
     });
 
     final jwtToken = widget.token;
@@ -115,9 +112,10 @@ class _SendAlertState extends State<SendAlert> {
 
     var reqBody = {
       "locationCoordinates": [lng, lat],
-      "alertName": alertNameController.text.toString(),
+      "alertName": alertNameController.text.trim(),
       "alertSeverity": dropDownValue.toString().toLowerCase(),
       "alertForDate": _selectedDate.toString(),
+      "alertDescription": alertDescriptionController.text.trim(),
     };
 
     try {
@@ -199,7 +197,7 @@ class _SendAlertState extends State<SendAlert> {
                 onTap: openMaps,
                 address: address,
                 initialText:
-                    'Area will be in radius of 2 km from the location point.',
+                    'area will be in radius of 2 km from the location point.',
               ),
               const SizedBox(
                 height: 21,
@@ -211,10 +209,25 @@ class _SendAlertState extends State<SendAlert> {
                 height: 5,
               ),
               ManageEventsTextFormField(
-                hintText: 'Fire and Safety Drill',
+                hintText: 'Eg: flood alert',
                 controller: alertNameController,
                 checkValidation: (value) =>
-                    validateTextField(value, 'Alert Name'),
+                    validateTextField(value, 'alert name'),
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              const CustomTextWidget(
+                text: 'DESCRIPTION',
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              ManageEventsTextFormField(
+                hintText: 'alert description',
+                controller: alertDescriptionController,
+                checkValidation: (value) =>
+                    validateTextField(value, 'alert description'),
               ),
               const SizedBox(
                 height: 21,
@@ -241,12 +254,12 @@ class _SendAlertState extends State<SendAlert> {
                     children: [
                       CustomTextWidget(
                         text: dropDownValue == null
-                            ? 'Select Severty'
+                            ? 'select severty'
                             : dropDownValue!,
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
                         color: dropDownValue == null
-                            ? Colors.grey.shade700
+                            ? Colors.grey.shade500
                             : Theme.of(context).colorScheme.onBackground,
                       ),
                       DropdownButtonHideUnderline(
@@ -305,12 +318,12 @@ class _SendAlertState extends State<SendAlert> {
                       children: [
                         CustomTextWidget(
                           text: _selectedDate == null
-                              ? 'Pick Date'
+                              ? 'pick date'
                               : formatter.format(_selectedDate!),
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
                           color: _selectedDate == null
-                              ? Colors.grey.shade700
+                              ? Colors.grey.shade500
                               : Theme.of(context).colorScheme.onBackground,
                         ),
                         const SizedBox(

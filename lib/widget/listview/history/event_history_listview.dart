@@ -3,6 +3,7 @@ import 'package:agencies_app/model/event_history.dart';
 import 'package:agencies_app/view_model/providers/event_history_provider.dart';
 import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,119 +79,145 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
     final eventList = widget.ref.watch(eventHistoryProvider);
 
     return eventList.isEmpty
-        ? const SearchErrorImage(
-            headingText: "No Events Found!",
-            imagePath: "assets/images/animated_images/nothingfound.png",
+        ? FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: const SearchErrorImage(
+              headingText: "No Events Found!",
+              imagePath: "assets/images/animated_images/nothingfound.png",
+            ),
           )
-        : SlidableAutoCloseBehavior(
-            closeWhenOpened: true,
-            child: ListView.builder(
-              itemCount: eventList.length,
-              itemBuilder: (context, index) {
-                final event = eventList.elementAt(index);
-                return Slidable(
-                  key: Key(event.sId!),
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    dismissible: DismissiblePane(
-                      onDismissed: () => deleteEvent(
-                        ref: widget.ref,
-                        indx: index,
-                        eventId: event.sId!,
-                        event: event,
-                      ),
-                    ),
-                    children: [
-                      SlidableAction(
-                        label: "Delete",
-                        icon: Icons.delete,
-                        onPressed: (context) {
-                          deleteEvent(
-                            ref: widget.ref,
-                            indx: index,
-                            eventId: event.sId!,
-                            event: event,
-                          );
-                        },
-                        backgroundColor: const Color.fromARGB(216, 195, 29, 17),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ],
-                  ),
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(88, 67, 92, 112),
-                            Color.fromARGB(178, 33, 149, 243),
-                          ],
-                          stops: [
-                            0.1,
-                            0.9,
-                          ],
+        : FadeInUp(
+            duration: const Duration(milliseconds: 500),
+            child: SlidableAutoCloseBehavior(
+              closeWhenOpened: true,
+              child: ListView.builder(
+                itemCount: eventList.length,
+                itemBuilder: (context, index) {
+                  final event = eventList.elementAt(index);
+                  return Slidable(
+                    key: Key(event.sId!),
+                    endActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      dismissible: DismissiblePane(
+                        onDismissed: () => deleteEvent(
+                          ref: widget.ref,
+                          indx: index,
+                          eventId: event.sId!,
+                          event: event,
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 20,
+                      children: [
+                        SlidableAction(
+                          label: "Delete",
+                          icon: Icons.delete,
+                          onPressed: (context) {
+                            deleteEvent(
+                              ref: widget.ref,
+                              indx: index,
+                              eventId: event.sId!,
+                              event: event,
+                            );
+                          },
+                          backgroundColor:
+                              const Color.fromARGB(216, 195, 29, 17),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    text: event.eventName.toString(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  CustomTextWidget(
-                                    text: event.description.toString(),
-                                    color: (themeData.brightness ==
-                                            Brightness.light)
+                      ],
+                    ),
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      color: Theme.of(context).colorScheme.secondary,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(88, 67, 92, 112),
+                              Color.fromARGB(178, 33, 149, 243),
+                            ],
+                            stops: [
+                              0.1,
+                              0.9,
+                            ],
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 20,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextWidget(
+                                      text: event.eventName.toString(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    CustomTextWidget(
+                                      text: event.locality.toString(),
+                                      color: (themeData.brightness ==
+                                              Brightness.light)
+                                          ? const Color.fromARGB(176, 1, 34, 65)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                      fontSize: 12,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    CustomTextWidget(
+                                      text: event.description.toString(),
+                                      color: (themeData.brightness ==
+                                              Brightness.light)
+                                          ? const Color.fromARGB(
+                                              255, 0, 58, 112)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                      fontSize: 12,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              CustomTextWidget(
+                                text: DateFormat('dd/MM/yy').format(
+                                    DateTime.parse(event.eventDate.toString())),
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    (themeData.brightness == Brightness.light)
                                         ? const Color.fromARGB(255, 0, 58, 112)
                                         : Theme.of(context)
                                             .colorScheme
                                             .onBackground,
-                                    fontSize: 12,
-                                    textOverflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
+                                fontSize: 14,
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            CustomTextWidget(
-                              text: DateFormat('dd/MM/yy').format(
-                                  DateTime.parse(event.eventDate.toString())),
-                              fontWeight: FontWeight.bold,
-                              color: (themeData.brightness == Brightness.light)
-                                  ? const Color.fromARGB(255, 0, 58, 112)
-                                  : Theme.of(context).colorScheme.onBackground,
-                              fontSize: 14,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
   }

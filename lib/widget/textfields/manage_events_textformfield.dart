@@ -41,7 +41,7 @@ class ManageEventsTextFormField extends StatelessWidget {
         hintText: hintText,
         hintStyle: textStyleFont().copyWith(
           fontSize: 16,
-          color: Colors.grey.shade700,
+          color: Colors.grey.shade500,
         ),
       ),
     );

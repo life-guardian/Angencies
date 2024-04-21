@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:agencies_app/view/animations/shimmer_animations/homescreen_shimmer_animation.dart';
 import 'package:agencies_app/model/manage_event.dart';
-import 'package:agencies_app/widget/card_widgets/event_rescue_count_card.dart';
+import 'package:agencies_app/widget/card/event_rescue_count_card.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:agencies_app/widget/errors/no_internet.dart';
 import 'package:agencies_app/widget/manage/organize_event.dart';
@@ -14,10 +14,10 @@ import 'package:agencies_app/widget/manage/send_alert.dart';
 import 'package:agencies_app/helper/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 
-import 'package:agencies_app/view/screens/managae_events_screen.dart';
+import 'package:agencies_app/view/screens/registration_events_screen.dart';
 import 'package:agencies_app/view/screens/rescue_map_screen.dart';
-import 'package:agencies_app/widget/card_widgets/event_card.dart';
-import 'package:agencies_app/widget/card_widgets/manage_card.dart';
+import 'package:agencies_app/widget/card/event_card.dart';
+import 'package:agencies_app/widget/card/manage_card.dart';
 
 import 'package:agencies_app/widget/manage/history.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';
@@ -30,18 +30,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({
+class HomeWidget extends ConsumerStatefulWidget {
+  const HomeWidget({
     super.key,
     required this.token,
   });
   final token;
 
   @override
-  ConsumerState<Home> createState() => _HomeScreenState();
+  ConsumerState<HomeWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<Home> {
+class _HomeScreenState extends ConsumerState<HomeWidget> {
   late String userId;
   String? eventsCount;
   String? rescueCount;
@@ -201,6 +201,7 @@ class _HomeScreenState extends ConsumerState<Home> {
                                           duration:
                                               const Duration(milliseconds: 500),
                                           child: AlertDialog(
+                                            backgroundColor: Colors.transparent,
                                             content: Image(
                                               image: FileImage(
                                                 File(_pickedImage!.path),
@@ -282,25 +283,30 @@ class _HomeScreenState extends ConsumerState<Home> {
                         itemCount: listManageEventData.length,
                         itemBuilder: (context, index) {
                           final manageEvent = listManageEventData[index];
-                          return FadeInUp(
-                            delay: const Duration(milliseconds: 200),
-                            duration: const Duration(milliseconds: 500),
-                            child: ManageCard(
-                              text1: manageEvent.desc,
-                              // height: 30,
-                              text2: manageEvent.title,
-                              onPressed: manageEvent.onPressed!,
-                              lineColor1: manageEvent.lineColor1,
-                              lineColor2: manageEvent.lineColor2,
-                            ),
-                          );
+                          // int delay;
+                          // int duration;
+                          // if (index == 0) {
+                          //   delay = 300;
+                          //   duration = 500;
+                          // } else if (index == 1) {
+                          //   delay = 500;
+                          //   duration = 500;
+                          // } else if (index == 2) {
+                          //   delay = 700;
+                          //   duration = 500;
+                          // } else {
+                          //   delay = 900;
+                          //   duration = 500;
+                          // }
+                          return manageEventCardWidget(
+                              index: index, manageEvent: manageEvent);
                         },
                       ),
                       const SizedBox(
                         height: 31,
                       ),
-                      FadeInUp(
-                        delay: const Duration(milliseconds: 300),
+                      ZoomIn(
+                        delay: const Duration(milliseconds: 1800),
                         duration: const Duration(milliseconds: 500),
                         child: Text(
                           'View',
@@ -313,8 +319,8 @@ class _HomeScreenState extends ConsumerState<Home> {
                       const SizedBox(
                         height: 21,
                       ),
-                      FadeInUp(
-                        delay: const Duration(milliseconds: 300),
+                      BounceInDown(
+                        delay: const Duration(milliseconds: 1300),
                         duration: const Duration(milliseconds: 500),
                         child: SizedBox(
                           height: 140,
@@ -337,7 +343,7 @@ class _HomeScreenState extends ConsumerState<Home> {
                                 onTap: () => Navigator.of(context).push(
                                   SlideTransitionAnimation(
                                     direction: AxisDirection.left,
-                                    child: ManageEventsScreen(
+                                    child: RegistrationEventsScreen(
                                         agencyName: agencyname!,
                                         token: widget.token),
                                   ),
@@ -376,5 +382,61 @@ class _HomeScreenState extends ConsumerState<Home> {
                   ),
                 ),
               );
+  }
+
+  Widget manageEventCardWidget({
+    required int index,
+    required ManageEventData manageEvent,
+  }) {
+    switch (index) {
+      case 0:
+        return FadeInLeft(
+          delay: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 100),
+          child: ManageCard(
+            text1: manageEvent.desc,
+            text2: manageEvent.title,
+            onPressed: manageEvent.onPressed!,
+            lineColor1: manageEvent.lineColor1,
+            lineColor2: manageEvent.lineColor2,
+          ),
+        );
+      case 1:
+        return FadeInDown(
+          delay: const Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 100),
+          child: ManageCard(
+            text1: manageEvent.desc,
+            text2: manageEvent.title,
+            onPressed: manageEvent.onPressed!,
+            lineColor1: manageEvent.lineColor1,
+            lineColor2: manageEvent.lineColor2,
+          ),
+        );
+      case 2:
+        return FadeInUp(
+          delay: const Duration(milliseconds: 900),
+          duration: const Duration(milliseconds: 100),
+          child: ManageCard(
+            text1: manageEvent.desc,
+            text2: manageEvent.title,
+            onPressed: manageEvent.onPressed!,
+            lineColor1: manageEvent.lineColor1,
+            lineColor2: manageEvent.lineColor2,
+          ),
+        );
+      default:
+        return FadeInRight(
+          delay: const Duration(milliseconds: 1200),
+          duration: const Duration(milliseconds: 100),
+          child: ManageCard(
+            text1: manageEvent.desc,
+            text2: manageEvent.title,
+            onPressed: manageEvent.onPressed!,
+            lineColor1: manageEvent.lineColor1,
+            lineColor2: manageEvent.lineColor2,
+          ),
+        );
+    }
   }
 }

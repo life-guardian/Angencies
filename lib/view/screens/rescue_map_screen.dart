@@ -10,6 +10,7 @@ import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 import 'package:agencies_app/view_model/providers/location_provider.dart';
 import 'package:agencies_app/widget/buttons/back_navigation_button.dart';
 import 'package:agencies_app/widget/buttons/custom_elevated_button.dart';
+import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -39,6 +40,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
 
   late IO.Socket socket;
   late String token;
+  late Widget activeButtonWidget;
 
   StreamSubscription<Position>? positionStreamSubscription;
   late bool isRescueOnGoing;
@@ -59,6 +61,13 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     if (mounted) {
       isRescueOnGoing = ref.read(isRescueOperationOnGoingProvider);
       rescueId = ref.read(rescueOperationIdProvider);
+
+      activeButtonWidget = CustomTextWidget(
+        text: 'Stop Operation'.toUpperCase(),
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        color: Colors.white,
+      );
     }
   }
 
@@ -322,6 +331,10 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   }
 
   void stopRescueOperation({required String rescueOpsId}) async {
+    setState(() {
+      activeButtonWidget = const CustomCircularProgressIndicator();
+    });
+
     var baseUrl = dotenv.get("BASE_URL");
 
     var response = await http.put(
@@ -470,11 +483,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 left: 0,
                 right: 0,
                 child: ManageElevatedButton(
-                  childWidget: CustomTextWidget(
-                      text: 'Stop Operation'.toUpperCase(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white),
+                  childWidget: activeButtonWidget,
                   onPressed: () {
                     stopRescueOperation(rescueOpsId: rescueId!);
                   },

@@ -3,11 +3,12 @@
 import 'dart:convert';
 
 import 'package:agencies_app/view/animations/snackbar_animations/awesome_snackbar_animation.dart';
-import 'package:agencies_app/view_model/functions/validate_textfield.dart';
+import 'package:agencies_app/helper/functions/validate_textfield.dart';
 import 'package:agencies_app/helper/classes/exact_location.dart';
 import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 import 'package:agencies_app/view_model/providers/location_provider.dart';
 import 'package:agencies_app/view/screens/rescue_map_screen.dart';
+import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/dialogs/osm_map_dialog.dart';
 import 'package:agencies_app/widget/dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/widget/buttons/custom_elevated_button.dart';
@@ -113,13 +114,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     // code to send data to server setState(() {
     setState(() {
       buttonEnabled = false;
-      activeButtonText = const Center(
-        child: SizedBox(
-          height: 25,
-          width: 25,
-          child: CircularProgressIndicator(),
-        ),
-      );
+      activeButtonText = const CustomCircularProgressIndicator();
     });
 
     await getDeviceLocation();
