@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/helper/constants/api_keys.dart';
+import 'package:agencies_app/helper/functions/get_locality.dart';
 import 'package:agencies_app/model/alert_history.dart';
 import 'package:agencies_app/model/event_history.dart';
 import 'package:agencies_app/model/operation_history.dart';
@@ -23,9 +24,15 @@ class HistoryApi {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-
       for (var jsonData in jsonResponse) {
         data.add(AlertHistory.fromJson(jsonData));
+      }
+      for (int i = 0; i < data.length; i++) {
+        String alertLocality = await getLocality(
+            lat: data[i].alertLocation!.coordinates![1],
+            lng: data[i].alertLocation!.coordinates![0]);
+
+        data[i].locality = alertLocality;
       }
     }
 
@@ -50,6 +57,13 @@ class HistoryApi {
       for (var jsonData in jsonResponse) {
         data.add(RescueOperationHistory.fromJson(jsonData));
       }
+      for (int i = 0; i < data.length; i++) {
+        String alertLocality = await getLocality(
+            lat: data[i].agencyLocation!.coordinates![1],
+            lng: data[i].agencyLocation!.coordinates![0]);
+
+        data[i].locality = alertLocality;
+      }
     }
 
     return data;
@@ -72,6 +86,14 @@ class HistoryApi {
 
       for (var jsonData in jsonResponse) {
         data.add(EventHistory.fromJson(jsonData));
+      }
+
+      for (int i = 0; i < data.length; i++) {
+        String alertLocality = await getLocality(
+            lat: data[i].location!.coordinates![1],
+            lng: data[i].location!.coordinates![0]);
+
+        data[i].locality = alertLocality;
       }
     }
     return data;

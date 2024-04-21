@@ -6,8 +6,8 @@ import 'package:agencies_app/view/animations/transitions_animations/fade_transit
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterSuccessfullScreen extends StatefulWidget {
-  const RegisterSuccessfullScreen({
+class RegisterationSuccessfullScreen extends StatefulWidget {
+  const RegisterationSuccessfullScreen({
     super.key,
     required this.token,
   });
@@ -15,11 +15,12 @@ class RegisterSuccessfullScreen extends StatefulWidget {
   final token;
 
   @override
-  State<RegisterSuccessfullScreen> createState() =>
-      _RegisterSuccessfullScreenState();
+  State<RegisterationSuccessfullScreen> createState() =>
+      _RegisterationSuccessfullScreenState();
 }
 
-class _RegisterSuccessfullScreenState extends State<RegisterSuccessfullScreen> {
+class _RegisterationSuccessfullScreenState
+    extends State<RegisterationSuccessfullScreen> {
   Timer? _timer;
 
   @override

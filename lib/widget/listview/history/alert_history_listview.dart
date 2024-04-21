@@ -169,10 +169,23 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                                     height: 5,
                                   ),
                                   CustomTextWidget(
+                                    text: alert.locality.toString(),
+                                    color: (themeData.brightness ==
+                                            Brightness.light)
+                                        ? const Color.fromARGB(123, 94, 11, 5)
+                                        : const Color.fromARGB(
+                                            164, 175, 135, 132),
+                                    fontSize: 12,
+                                    // fontWeight: FontWeight.normal,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  CustomTextWidget(
                                     text: alert.alertSeverity.toString(),
                                     color:
                                         const Color.fromARGB(255, 158, 18, 8),
-                                    fontSize: 12,
+                                    fontSize: 16,
                                   ),
                                 ],
                               ),

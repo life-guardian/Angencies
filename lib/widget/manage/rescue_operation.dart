@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:agencies_app/view/animations/snackbar_animations/awesome_snackbar_animation.dart';
-import 'package:agencies_app/view_model/functions/validate_textfield.dart';
+import 'package:agencies_app/helper/functions/validate_textfield.dart';
 import 'package:agencies_app/helper/classes/exact_location.dart';
 import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 import 'package:agencies_app/view_model/providers/location_provider.dart';

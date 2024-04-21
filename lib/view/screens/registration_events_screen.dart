@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:agencies_app/helper/functions/get_locality.dart';
 import 'package:agencies_app/view/animations/shimmer_animations/listview_shimmer_animation.dart';
 import 'package:agencies_app/helper/constants/sizes.dart';
 import 'package:agencies_app/model/event_list.dart';
@@ -13,11 +14,10 @@ import 'package:agencies_app/widget/listview/events/manage_event_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 
-class ManageEventsScreen extends ConsumerStatefulWidget {
-  const ManageEventsScreen({
+class RegistrationEventsScreen extends ConsumerStatefulWidget {
+  const RegistrationEventsScreen({
     super.key,
     required this.agencyName,
     required this.token,
@@ -27,10 +27,11 @@ class ManageEventsScreen extends ConsumerStatefulWidget {
   final token;
 
   @override
-  ConsumerState<ManageEventsScreen> createState() => _ManageEventsScreenState();
+  ConsumerState<RegistrationEventsScreen> createState() =>
+      _ManageEventsScreenState();
 }
 
-class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
+class _ManageEventsScreenState extends ConsumerState<RegistrationEventsScreen> {
   late final jwtToken;
   late Map<String, String> headers;
   List<EventList> eventList = [];
@@ -107,29 +108,20 @@ class _ManageEventsScreenState extends ConsumerState<ManageEventsScreen> {
       coordinates.add(event.eventPlace!);
     }
 
-    // print(coordinates.toList());
-
     List<String> localities = [];
 
     for (List<double> coordinate in coordinates) {
-      try {
-        List<Placemark> placemarks =
-            await placemarkFromCoordinates(coordinate[1], coordinate[0]);
-        Placemark placemark = placemarks[0];
-        String? locality = placemark.locality;
-        localities.add(locality!);
-      } catch (error) {
-        localities.add("Unknown"); // Add a placeholder for unknown localities
-      }
-    }
+      String locality = await getLocality(
+        lat: coordinate[1],
+        lng: coordinate[0],
+      );
 
-    // eventList.ad
+      localities.add(locality);
+    }
 
     for (int i = 0; i < data.length; i++) {
       data[i].locality = localities[i];
     }
-
-    // print(data);
 
     return data;
   }

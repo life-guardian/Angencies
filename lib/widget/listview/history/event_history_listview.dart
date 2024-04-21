@@ -165,6 +165,21 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                                       height: 5,
                                     ),
                                     CustomTextWidget(
+                                      text: event.locality.toString(),
+                                      color: (themeData.brightness ==
+                                              Brightness.light)
+                                          ? const Color.fromARGB(176, 1, 34, 65)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                      fontSize: 12,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    CustomTextWidget(
                                       text: event.description.toString(),
                                       color: (themeData.brightness ==
                                               Brightness.light)

@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:agencies_app/helper/constants/sizes.dart';
 import 'package:agencies_app/view/screens/login_screen.dart';
-import 'package:agencies_app/view/screens/register_succesful.dart';
+import 'package:agencies_app/view/screens/registeration_succesful.dart';
 import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';
@@ -176,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.of(context).pushReplacement(
         SlideTransitionAnimation(
           direction: AxisDirection.left,
-          child: RegisterSuccessfullScreen(token: myToken),
+          child: RegisterationSuccessfullScreen(token: myToken),
         ),
       );
     } else {

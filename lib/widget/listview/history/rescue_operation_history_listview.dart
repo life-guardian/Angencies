@@ -165,6 +165,21 @@ class _BuildRescueHistoryListViewState
                                       height: 5,
                                     ),
                                     CustomTextWidget(
+                                      text: rescueOperation.locality.toString(),
+                                      color: (themeData.brightness ==
+                                              Brightness.light)
+                                          ? const Color.fromARGB(178, 4, 59, 14)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                      fontSize: 12,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    CustomTextWidget(
                                       text: rescueOperation.description
                                           .toString(),
                                       color: (themeData.brightness ==

@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'package:agencies_app/helper/constants/sizes.dart';
-import 'package:agencies_app/view_model/functions/validate_textfield.dart';
+import 'package:agencies_app/helper/functions/validate_textfield.dart';
 import 'package:agencies_app/view/screens/tabs.dart';
 import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_progress_indicator.dart';
 import 'package:agencies_app/widget/dialogs/custom_show_dialog.dart';

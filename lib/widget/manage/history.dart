@@ -58,6 +58,7 @@ class _HistoryState extends ConsumerState<History> {
     HistoryApi historyApi = HistoryApi();
     // alert History api call
     historyApi.getAlertHistoryData(token: widget.token).then((alertHistories) {
+     
       ref.read(alertHistoryProvider.notifier).addList(alertHistories);
       setState(() {
         isAlertListEmpty = false;
