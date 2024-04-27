@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:agencies_app/view/animations/shimmer_animations/homescreen_shimmer_animation.dart';
 import 'package:agencies_app/helper/classes/check_internet_connection.dart';
 import 'package:agencies_app/helper/constants/sizes.dart';
+import 'package:agencies_app/view/screens/welcome_screen.dart';
 import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 import 'package:agencies_app/view_model/providers/alert_history_provider.dart';
 import 'package:agencies_app/view_model/providers/event_history_provider.dart';
@@ -167,6 +168,11 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
       Navigator.of(context).pop();
     }
 
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (ctx) => const WelcomeScreen(),
+      ),
+    );
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => const LoginScreen(),
