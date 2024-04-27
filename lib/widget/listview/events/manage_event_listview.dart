@@ -7,6 +7,7 @@ import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class ManageEventListView extends StatefulWidget {
@@ -73,9 +74,9 @@ class _ManageEventListViewState extends State<ManageEventListView> {
                     ),
                     color: Theme.of(context).colorScheme.secondary,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 20,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 20.h,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,20 +88,20 @@ class _ManageEventListViewState extends State<ManageEventListView> {
                                 CustomTextWidget(
                                   text: eventData.eventName.toString(),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                 ),
-                                const SizedBox(
-                                  height: 5,
+                                SizedBox(
+                                  height: 5.h,
                                 ),
                                 CustomTextWidget(
                                   text: eventData.locality.toString(),
                                   color: Colors.grey,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                   textOverflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
-                                const SizedBox(
-                                  height: 5,
+                                SizedBox(
+                                  height: 5.h,
                                 ),
                                 CustomTextWidget(
                                   text: DateFormat('dd/MM/yy').format(
@@ -113,29 +114,30 @@ class _ManageEventListViewState extends State<ManageEventListView> {
                                       : Theme.of(context)
                                           .colorScheme
                                           .onBackground,
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                 ),
                               ],
                             ),
                           ),
                           Container(
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30)),
-                              gradient: LinearGradient(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.r),
+                              ),
+                              gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Color.fromARGB(224, 210, 85, 74),
+                                  Color.fromARGB(223, 123, 60, 54),
                                   Color.fromARGB(210, 228, 53, 37)
                                 ],
                               ),
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(12.0),
+                            child: Padding(
+                              padding: EdgeInsets.all(12.0.h),
                               child: Icon(
                                 Icons.event_note_rounded,
-                                size: 30,
+                                size: 30.h,
                                 color: Colors.white,
                               ),
                             ),

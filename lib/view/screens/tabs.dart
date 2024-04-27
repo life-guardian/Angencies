@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -204,27 +205,39 @@ class _TabsBottomState extends ConsumerState<TabsBottom> {
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.background),
               child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25.r),
+                  topRight: Radius.circular(25.r),
                 ),
                 child: BottomNavigationBar(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   unselectedItemColor: const Color.fromARGB(175, 158, 158, 158),
                   currentIndex: _currentIndx,
-                  iconSize: 25,
+                  iconSize: 25.h,
                   onTap: onSelectedTab,
                   elevation: 5,
                   selectedItemColor: Colors.grey,
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home_outlined),
-                      activeIcon: Icon(Icons.home_rounded),
+                      icon: Icon(
+                        Icons.home_outlined,
+                        size: 25.h,
+                      ),
+                      activeIcon: Icon(
+                        Icons.home_rounded,
+                        size: 30.h,
+                      ),
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.settings_outlined),
-                      activeIcon: Icon(Icons.settings_rounded),
+                      icon: Icon(
+                        Icons.settings_outlined,
+                        size: 25.h,
+                      ),
+                      activeIcon: Icon(
+                        Icons.settings_rounded,
+                        size: 30.h,
+                      ),
                       label: 'Settings',
                     ),
                   ],

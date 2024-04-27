@@ -1,5 +1,6 @@
 import 'package:agencies_app/view/theme/textstyle_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ManageEventsTextFormField extends StatelessWidget {
   const ManageEventsTextFormField({
@@ -7,41 +8,47 @@ class ManageEventsTextFormField extends StatelessWidget {
     required this.hintText,
     this.controller,
     this.keyboardType = TextInputType.name,
-    required this.checkValidation,
+     this.checkValidation,
+    this.maxLines,
   });
 
   final String hintText;
   final TextInputType keyboardType;
+  final int? maxLines;
   final TextEditingController? controller;
-  final String? Function(String?) checkValidation;
+  final String? Function(String?)? checkValidation;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      validator: checkValidation,
-      cursorColor: Theme.of(context).colorScheme.onBackground,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(156, 158, 158, 158)),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+    return SizedBox(
+      child: TextFormField(
+        controller: controller,
+        validator: checkValidation,
+        cursorColor: Theme.of(context).colorScheme.onBackground,
+        keyboardType: keyboardType,
+        enableSuggestions: true,
+        maxLines: maxLines ?? 1,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.r),
           ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.r),
+            ),
           ),
-        ),
-        hintText: hintText,
-        hintStyle: textStyleFont().copyWith(
-          fontSize: 16,
-          color: Colors.grey.shade500,
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.r),
+            ),
+          ),
+          hintText: hintText,
+          hintStyle: textStyleFont().copyWith(
+            fontSize: 12.sp,
+            color: Colors.grey.shade500,
+          ),
         ),
       ),
     );

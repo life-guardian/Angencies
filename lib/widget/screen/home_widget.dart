@@ -14,7 +14,7 @@ import 'package:agencies_app/widget/manage/send_alert.dart';
 import 'package:agencies_app/helper/classes/modal_bottom_sheet.dart';
 import 'package:agencies_app/view_model/providers/agencydetails_providers.dart';
 
-import 'package:agencies_app/view/screens/registration_events_screen.dart';
+import 'package:agencies_app/view/screens/events_registration_screen.dart';
 import 'package:agencies_app/view/screens/rescue_map_screen.dart';
 import 'package:agencies_app/widget/card/event_card.dart';
 import 'package:agencies_app/widget/card/manage_card.dart';
@@ -26,6 +26,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -181,205 +182,184 @@ class _HomeScreenState extends ConsumerState<HomeWidget> {
             ? const NoInternet()
             : Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 500),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (_pickedImage != null)
-                                GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return FadeInUp(
-                                          duration:
-                                              const Duration(milliseconds: 500),
-                                          child: AlertDialog(
-                                            backgroundColor: Colors.transparent,
-                                            content: Image(
-                                              image: FileImage(
-                                                File(_pickedImage!.path),
-                                              ),
-                                              fit: BoxFit.cover,
+                child: Column(
+                  children: [
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 500),
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0.h),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (_pickedImage != null)
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return FadeInUp(
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        child: AlertDialog(
+                                          backgroundColor: Colors.transparent,
+                                          content: Image(
+                                            image: FileImage(
+                                              File(_pickedImage!.path),
                                             ),
+                                            fit: BoxFit.cover,
                                           ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        FileImage(File(_pickedImage!.path)),
-                                  ),
-                                ),
-                              const SizedBox(
-                                width: 21,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    text: grettingMessage,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    // color: const Color.fromARGB(255, 220, 217, 217),
-                                  ),
-                                  const SizedBox(
-                                    height: 3,
-                                  ),
-                                  CustomTextWidget(
-                                    text: agencyname ?? 'Loading...',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    // color: const Color.fromARGB(255, 220, 217, 217),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 500),
-                        child: EventRescueCountCard(
-                            eventCount: eventsCount ?? '0',
-                            rescueCount: rescueCount ?? '0'),
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      FadeInUp(
-                        delay: const Duration(milliseconds: 100),
-                        duration: const Duration(milliseconds: 500),
-                        child: Text(
-                          'Manage',
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          mainAxisExtent: 140,
-                        ),
-                        shrinkWrap: true,
-                        itemCount: listManageEventData.length,
-                        itemBuilder: (context, index) {
-                          final manageEvent = listManageEventData[index];
-                          // int delay;
-                          // int duration;
-                          // if (index == 0) {
-                          //   delay = 300;
-                          //   duration = 500;
-                          // } else if (index == 1) {
-                          //   delay = 500;
-                          //   duration = 500;
-                          // } else if (index == 2) {
-                          //   delay = 700;
-                          //   duration = 500;
-                          // } else {
-                          //   delay = 900;
-                          //   duration = 500;
-                          // }
-                          return manageEventCardWidget(
-                              index: index, manageEvent: manageEvent);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 31,
-                      ),
-                      ZoomIn(
-                        delay: const Duration(milliseconds: 1800),
-                        duration: const Duration(milliseconds: 500),
-                        child: Text(
-                          'View',
-                          style: GoogleFonts.plusJakartaSans().copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 21,
-                      ),
-                      BounceInDown(
-                        delay: const Duration(milliseconds: 1300),
-                        duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                          height: 140,
-                          child: Row(
-                            mainAxisAlignment: kIsWeb
-                                ? MainAxisAlignment.spaceAround
-                                : MainAxisAlignment.center,
-                            children: [
-                              EventCard(
-                                text1: 'E',
-                                text2: 'Registration',
-                                text3: 'Events',
-                                color1:
-                                    const Color.fromARGB(232, 213, 128, 115),
-                                color2: const Color.fromARGB(232, 214, 70, 47),
-                                circleColor: themeData.brightness ==
-                                        Brightness.dark
-                                    ? Theme.of(context).colorScheme.primary
-                                    : const Color.fromARGB(206, 255, 255, 255),
-                                onTap: () => Navigator.of(context).push(
-                                  SlideTransitionAnimation(
-                                    direction: AxisDirection.left,
-                                    child: RegistrationEventsScreen(
-                                        agencyName: agencyname!,
-                                        token: widget.token),
-                                  ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 25.r,
+                                  backgroundImage:
+                                      FileImage(File(_pickedImage!.path)),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 25,
-                              ),
-                              EventCard(
-                                text1: 'M',
-                                text2: 'Rescue',
-                                text3: 'Map',
-                                color1:
-                                    const Color.fromARGB(223, 226, 168, 180),
-                                color2:
-                                    const Color.fromARGB(226, 215, 123, 140),
-                                circleColor: themeData.brightness ==
-                                        Brightness.dark
-                                    ? Theme.of(context).colorScheme.primary
-                                    : const Color.fromARGB(206, 255, 255, 255),
-                                onTap: () => Navigator.of(context).push(
-                                  SlideTransitionAnimation(
-                                    direction: AxisDirection.left,
-                                    child: const RescueMapScreen(),
-                                  ),
+                            SizedBox(
+                              width: 21.h,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextWidget(
+                                  text: grettingMessage,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.normal,
+                                  // color: const Color.fromARGB(255, 220, 217, 217),
                                 ),
-                              ),
-                            ],
-                          ),
+                                SizedBox(
+                                  height: 3.h,
+                                ),
+                                CustomTextWidget(
+                                  text: agencyname ?? 'Loading...',
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  // color: const Color.fromARGB(255, 220, 217, 217),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 21,
+                    ),
+                    SizedBox(
+                      height: 21.h,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 500),
+                      child: EventRescueCountCard(
+                          eventCount: eventsCount ?? '0',
+                          rescueCount: rescueCount ?? '0'),
+                    ),
+                    SizedBox(
+                      height: 21.h,
+                    ),
+                    FadeInUp(
+                      delay: const Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 500),
+                      child: Text(
+                        'Manage',
+                        style: GoogleFonts.plusJakartaSans().copyWith(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 11.h,
+                    ),
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10.h,
+                        crossAxisSpacing: 10.w,
+                        mainAxisExtent: 125.h,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: listManageEventData.length,
+                      itemBuilder: (context, index) {
+                        final manageEvent = listManageEventData[index];
+
+                        return manageEventCardWidget(
+                            index: index, manageEvent: manageEvent);
+                      },
+                    ),
+                    const Spacer(),
+                    ZoomIn(
+                      delay: const Duration(milliseconds: 900),
+                      duration: const Duration(milliseconds: 500),
+                      child: Text(
+                        'View',
+                        style: GoogleFonts.plusJakartaSans().copyWith(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 11.h,
+                    ),
+                    BounceInDown(
+                      delay: const Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
+                      child: SizedBox(
+                        height: 125.h,
+                        child: Row(
+                          mainAxisAlignment: kIsWeb
+                              ? MainAxisAlignment.spaceAround
+                              : MainAxisAlignment.center,
+                          children: [
+                            EventCard(
+                              text1: 'E',
+                              text2: 'Registration',
+                              text3: 'Events',
+                              color1: const Color.fromARGB(232, 213, 128, 115),
+                              color2: const Color.fromARGB(232, 214, 70, 47),
+                              circleColor: themeData.brightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.primary
+                                  : const Color.fromARGB(206, 255, 255, 255),
+                              onTap: () => Navigator.of(context).push(
+                                SlideTransitionAnimation(
+                                  direction: AxisDirection.left,
+                                  child: EventsRegistrationScreen(
+                                      agencyName: agencyname!,
+                                      token: widget.token),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            EventCard(
+                              text1: 'M',
+                              text2: 'Rescue',
+                              text3: 'Map',
+                              color1: const Color.fromARGB(223, 226, 168, 180),
+                              color2: const Color.fromARGB(226, 215, 123, 140),
+                              circleColor: themeData.brightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.primary
+                                  : const Color.fromARGB(206, 255, 255, 255),
+                              onTap: () => Navigator.of(context).push(
+                                SlideTransitionAnimation(
+                                  direction: AxisDirection.left,
+                                  child: const RescueMapScreen(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 11.h,
+                    ),
+                  ],
                 ),
               );
   }
@@ -392,7 +372,7 @@ class _HomeScreenState extends ConsumerState<HomeWidget> {
       case 0:
         return FadeInLeft(
           delay: const Duration(milliseconds: 300),
-          duration: const Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 200),
           child: ManageCard(
             text1: manageEvent.desc,
             text2: manageEvent.title,
@@ -403,8 +383,8 @@ class _HomeScreenState extends ConsumerState<HomeWidget> {
         );
       case 1:
         return FadeInDown(
-          delay: const Duration(milliseconds: 600),
-          duration: const Duration(milliseconds: 100),
+          delay: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
           child: ManageCard(
             text1: manageEvent.desc,
             text2: manageEvent.title,
@@ -415,8 +395,8 @@ class _HomeScreenState extends ConsumerState<HomeWidget> {
         );
       case 2:
         return FadeInUp(
-          delay: const Duration(milliseconds: 900),
-          duration: const Duration(milliseconds: 100),
+          delay: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
           child: ManageCard(
             text1: manageEvent.desc,
             text2: manageEvent.title,
@@ -427,8 +407,8 @@ class _HomeScreenState extends ConsumerState<HomeWidget> {
         );
       default:
         return FadeInRight(
-          delay: const Duration(milliseconds: 1200),
-          duration: const Duration(milliseconds: 100),
+          delay: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
           child: ManageCard(
             text1: manageEvent.desc,
             text2: manageEvent.title,

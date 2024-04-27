@@ -9,6 +9,7 @@ import 'package:agencies_app/widget/dialogs/custom_show_dialog.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/widget/textfields/login_register_textformfield.dart';
 import 'package:flutter/material.dart';
@@ -141,8 +142,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void registerUser() async {
-    //check validation of texts
-
     setState(() {
       buttonEnabled = false;
       activeButtonWidget = const CustomCircularProgressIndicator();
@@ -217,20 +216,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: !kIsMobile
-              ? registerScreenWidget(
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                  kIsMobile: kIsMobile)
-              : registerScreenWidget(
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                  kIsMobile: kIsMobile,
-                ),
-        ),
+      body: registerScreenWidget(
+        screenHeight: screenHeight,
+        screenWidth: screenWidth,
+        kIsMobile: kIsMobile,
       ),
     );
   }
@@ -239,87 +228,98 @@ class _RegisterScreenState extends State<RegisterScreen> {
       {required double screenHeight,
       required double screenWidth,
       required bool kIsMobile}) {
-    return SizedBox(
+    return SingleChildScrollView(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FadeInUp(
-            duration: const Duration(milliseconds: 500),
-            child: Text(
-              'Hello! Register agency to get started',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          kIsMobile
-              ? FadeInUp(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.h),
+            child: Column(
+              children: [
+                FadeInUp(
+                  duration: const Duration(milliseconds: 500),
+                  child: Text(
+                    'Hello! Register agency to get started',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 21.h,
+                ),
+                FadeInUp(
                   delay: const Duration(milliseconds: 300),
                   duration: const Duration(milliseconds: 500),
                   child: registerScreenFormWidget(
-                    screenHeight: screenHeight,
                     screenWidth: screenWidth,
                     kIsMobile: kIsMobile,
                   ),
-                )
-              : registerScreenFormWidget(
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                  kIsMobile: kIsMobile,
                 ),
-          !kIsMobile
-              ? const SizedBox(
-                  height: 91,
-                )
-              : const SizedBox(
-                  height: 51,
-                ),
-          FadeInUp(
-            delay: const Duration(milliseconds: 300),
-            duration: const Duration(milliseconds: 500),
-            child: SizedBox(
-              width: !kIsMobile
-                  ? screenWidth / 4
-                  : MediaQuery.of(context).size.width,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: buttonEnabled ? submitForm : () {},
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: activeButtonWidget,
-              ),
+              ],
             ),
           ),
-          FadeInUp(
-            delay: const Duration(milliseconds: 500),
-            duration: const Duration(milliseconds: 500),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0xff35C2C1), // Set shadow color
+                  blurRadius: 20.0, // Adjust blur for softness
+                  spreadRadius: 2.0, // Adjust based on container size
+                  offset: Offset(0.0, 0.5), // Slight offset for depth
+                )
+              ],
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              padding: EdgeInsets.only(left: 10.w, right: 10.h, top: 10.h),
+              child: Wrap(
                 children: [
-                  const Text(
-                    'Already have an account?',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  TextButton(
-                    onPressed: goToLoginPage,
-                    child: const Text(
-                      'Login Now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 500),
+                    child: SizedBox(
+                      width: !kIsMobile
+                          ? screenWidth / 4
+                          : MediaQuery.of(context).size.width,
+                      height: 55.h,
+                      child: ElevatedButton(
+                        onPressed: buttonEnabled ? submitForm : () {},
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: activeButtonWidget,
                       ),
+                    ),
+                  ),
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account?',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        TextButton(
+                          onPressed: goToLoginPage,
+                          child: Text(
+                            'Login Now',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -332,80 +332,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget registerScreenFormWidget(
-      {required double screenHeight,
-      required double screenWidth,
-      required bool kIsMobile}) {
+      {required double screenWidth, required bool kIsMobile}) {
     return SizedBox(
-      height: screenHeight / 2,
-      child: SingleChildScrollView(
-        child: SizedBox(
-          width: !kIsMobile ? screenWidth / 2 : null,
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                LoginRegisterTextFormField(
-                  labelText: 'Agency Name',
-                  controllerText: agencyName,
-                  checkValidation: (value) => validateName(value, 'Name'),
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Agency Email',
-                  controllerText: agencyEmail,
-                  checkValidation: (value) => validateEmail(value, 'Email'),
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Agency Ph No',
-                  controllerText: agencyPhone,
-                  checkValidation: (value) =>
-                      validatePhoneNo(value, 'Phone Number'),
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Agency Address',
-                  controllerText: agencyAddress,
-                  checkValidation: (value) =>
-                      validateTextField(value, 'Address'),
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Representative Name',
-                  controllerText: representativeName,
-                  checkValidation: (value) =>
-                      validateName(value, 'Representative name'),
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Password',
-                  controllerText: agencyPassword,
-                  checkValidation: (value) =>
-                      validatePassword(value, 'Password'),
-                  hideText: true,
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                LoginRegisterTextFormField(
-                  labelText: 'Confirm Password',
-                  controllerText: agencyConfirmPassword,
-                  checkValidation: (value) =>
-                      validateConfirmPassword(value, 'Confirm Password'),
-                  hideText: true,
-                ),
-              ],
-            ),
+      width: !kIsMobile ? (screenWidth / 2).w : null,
+      height: 510.h,
+      child: Form(
+        key: formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Agency Name',
+                controllerText: agencyName,
+                checkValidation: (value) => validateName(value, 'Name'),
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Agency Email',
+                controllerText: agencyEmail,
+                checkValidation: (value) => validateEmail(value, 'Email'),
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Agency Ph No',
+                controllerText: agencyPhone,
+                checkValidation: (value) =>
+                    validatePhoneNo(value, 'Phone Number'),
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Agency Address',
+                controllerText: agencyAddress,
+                checkValidation: (value) => validateTextField(value, 'Address'),
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Representative Name',
+                controllerText: representativeName,
+                checkValidation: (value) =>
+                    validateName(value, 'Representative name'),
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Password',
+                controllerText: agencyPassword,
+                checkValidation: (value) => validatePassword(value, 'Password'),
+                hideText: true,
+              ),
+              SizedBox(
+                height: size_3.h,
+              ),
+              LoginRegisterTextFormField(
+                height: 70.h,
+                labelText: 'Confirm Password',
+                controllerText: agencyConfirmPassword,
+                checkValidation: (value) =>
+                    validateConfirmPassword(value, 'Confirm Password'),
+                hideText: true,
+              ),
+            ],
           ),
         ),
       ),

@@ -16,6 +16,7 @@ import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -43,11 +44,13 @@ class _SendAlertState extends State<SendAlert> {
   bool dateSelected = false;
   ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Widget activeButtonText = Text(
-    'SEND ALERT',
-    style: GoogleFonts.mulish(
-        fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-  );
+  late Widget activeButtonText;
+
+  @override
+  void initState() {
+    super.initState();
+    setButtonText();
+  }
 
   @override
   void dispose() {
@@ -68,7 +71,7 @@ class _SendAlertState extends State<SendAlert> {
     activeButtonText = Text(
       'SEND ALERT',
       style: GoogleFonts.mulish(
-          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+          fontWeight: FontWeight.bold, fontSize: 12.sp, color: Colors.white),
     );
   }
 
@@ -115,7 +118,9 @@ class _SendAlertState extends State<SendAlert> {
       "alertName": alertNameController.text.trim(),
       "alertSeverity": dropDownValue.toString().toLowerCase(),
       "alertForDate": _selectedDate.toString(),
-      "alertDescription": alertDescriptionController.text.trim(),
+      "alertDescription": alertDescriptionController.text.trim().isEmpty
+          ? null
+          : alertDescriptionController.text.trim(),
     };
 
     try {
@@ -168,30 +173,29 @@ class _SendAlertState extends State<SendAlert> {
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
-        top: 12,
-        left: 12,
-        right: 12,
+        top: 12.h,
+        left: 12.w,
+        right: 12.w,
       ),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomTextWidget(
+              CustomTextWidget(
                 text: 'Send Emergency Alert',
-                fontSize: 20,
+                fontSize: 18.sp,
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               const CustomTextWidget(
                 text: 'ALERTING AREA',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               SelectMapLocationField(
                 onTap: openMaps,
@@ -199,14 +203,14 @@ class _SendAlertState extends State<SendAlert> {
                 initialText:
                     'area will be in radius of 2 km from the location point.',
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'ALERT NAME',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'Eg: flood alert',
@@ -214,38 +218,39 @@ class _SendAlertState extends State<SendAlert> {
                 checkValidation: (value) =>
                     validateTextField(value, 'alert name'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'DESCRIPTION',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'alert description',
+                maxLines: 4,
                 controller: alertDescriptionController,
-                checkValidation: (value) =>
-                    validateTextField(value, 'alert description'),
+                // checkValidation: (value) =>
+                //     validateTextField(value, 'alert description'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'ALERT SEVERITY',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               Container(
+                height: 70.h,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    // width: 2,
                     color: Colors.grey,
                     style: BorderStyle.solid,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -256,7 +261,7 @@ class _SendAlertState extends State<SendAlert> {
                         text: dropDownValue == null
                             ? 'select severty'
                             : dropDownValue!,
-                        fontSize: 16,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.normal,
                         color: dropDownValue == null
                             ? Colors.grey.shade500
@@ -265,7 +270,7 @@ class _SendAlertState extends State<SendAlert> {
                       DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           underline: null,
-                          iconSize: 35,
+                          iconSize: 40.h,
                           items: values
                               .map(
                                 (value) => DropdownMenuItem<String>(
@@ -274,6 +279,10 @@ class _SendAlertState extends State<SendAlert> {
                                 ),
                               )
                               .toList(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
                           onChanged: (String? newValue) {
                             setState(() {
                               isPickeddropDownValue = true;
@@ -289,30 +298,30 @@ class _SendAlertState extends State<SendAlert> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'DATE',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               GestureDetector(
                 onTap: () {
                   _presentDatePicker(context);
                 },
                 child: Container(
+                  height: 70.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      // width: 2,
                       color: Colors.grey,
                       style: BorderStyle.solid,
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -320,31 +329,34 @@ class _SendAlertState extends State<SendAlert> {
                           text: _selectedDate == null
                               ? 'pick date'
                               : formatter.format(_selectedDate!),
-                          fontSize: 16,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.normal,
                           color: _selectedDate == null
                               ? Colors.grey.shade500
                               : Theme.of(context).colorScheme.onBackground,
                         ),
-                        const SizedBox(
-                          width: 11,
+                        SizedBox(
+                          width: 11.w,
                         ),
-                        const Icon(Icons.calendar_month_outlined),
+                        Icon(
+                          Icons.calendar_month_outlined,
+                          size: 20.h,
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               ManageElevatedButton(
                 childWidget: activeButtonText,
                 onPressed: _submitForm,
                 isButtonEnabled: buttonEnabled,
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
             ],
           ),

@@ -5,6 +5,7 @@ import 'package:agencies_app/view/screens/register_screen.dart';
 import 'package:agencies_app/view/animations/transitions_animations/page_transition_animation.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter/foundation.dart' show Platform;
 
 class WelcomeScreen extends StatelessWidget {
@@ -43,131 +44,124 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    flex: 15,
-                    child: FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 40),
-                        width: double.infinity,
-                        child: Image.asset('assets/images/disasterImage1.png'),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Container(
+                      margin: EdgeInsets.only(top: 40.h),
+                      width: double.infinity,
+                      child: Image(
+                        image: const AssetImage(
+                            'assets/images/disasterImage1.png'),
+                        height: 300.h,
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      child: Image.asset('assets/images/disasterImage2.jpg'),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 500),
+                    child: Image(
+                      image:
+                          const AssetImage('assets/images/disasterImage2.jpg'),
+                      height: 100.h,
                     ),
                   ),
-                  const SizedBox(
-                    height: 12,
+                  SizedBox(
+                    height: 12.h,
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      children: [
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 300),
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
-                            'Life Guardian',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              shadows: const [
-                                Shadow(
-                                  offset: Offset(0.0, 7.0),
-                                  blurRadius: 15.0,
-                                  color: Color.fromARGB(57, 0, 0, 0),
-                                ),
-                              ],
-                            ),
+                  Column(
+                    children: [
+                      FadeInUp(
+                        delay: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 500),
+                        child: Text(
+                          'Life Guardian',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                            shadows: const [
+                              Shadow(
+                                offset: Offset(0.0, 7.0),
+                                blurRadius: 15.0,
+                                color: Color.fromARGB(57, 0, 0, 0),
+                              ),
+                            ],
                           ),
                         ),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 300),
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
-                            'For Agencies',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26,
-                              shadows: const [
-                                Shadow(
-                                  offset: Offset(0.0, 7.0),
-                                  blurRadius: 15.0,
-                                  color: Color.fromARGB(57, 0, 0, 0),
-                                ),
-                              ],
-                            ),
+                      ),
+                      FadeInUp(
+                        delay: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 500),
+                        child: Text(
+                          'For Agencies',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.sp,
+                            shadows: const [
+                              Shadow(
+                                offset: Offset(0.0, 7.0),
+                                blurRadius: 15.0,
+                                color: Color.fromARGB(57, 0, 0, 0),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 31,
+                  SizedBox(
+                    height: 31.h,
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: FadeInUp(
-                      delay: const Duration(milliseconds: 800),
-                      duration: const Duration(milliseconds: 500),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 55,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _login(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.tertiary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 800),
+                    duration: const Duration(milliseconds: 500),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _login(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
-                          child: const Text('Login'),
                         ),
+                        child: const Text('Login'),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 18,
+                  SizedBox(
+                    height: 18.h,
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: FadeInUp(
-                      delay: const Duration(milliseconds: 800),
-                      duration: const Duration(milliseconds: 500),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 55,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            _register(context);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            foregroundColor:
-                                (themeData.brightness == Brightness.light)
-                                    ? const Color(0xff1E232C)
-                                    : Colors.white,
-                            side: BorderSide(
-                              color: (themeData.brightness == Brightness.light)
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 800),
+                    duration: const Duration(milliseconds: 500),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50.h,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          _register(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          foregroundColor:
+                              (themeData.brightness == Brightness.light)
                                   ? const Color(0xff1E232C)
                                   : Colors.white,
-                            ),
+                          side: BorderSide(
+                            color: (themeData.brightness == Brightness.light)
+                                ? const Color(0xff1E232C)
+                                : Colors.white,
                           ),
-                          child: const Text("Register"),
                         ),
+                        child: const Text("Register"),
                       ),
                     ),
                   ),
@@ -176,10 +170,11 @@ class WelcomeScreen extends StatelessWidget {
                     delay: const Duration(milliseconds: 1000),
                     duration: const Duration(milliseconds: 500),
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: const Text(
+                      margin: EdgeInsets.only(bottom: 10.w),
+                      child: Text(
                         'Jai Hind !',
                         style: TextStyle(
+                          fontSize: 14.sp,
                           color: Colors.blue,
                           fontWeight: FontWeight.w500,
                         ),
@@ -198,17 +193,17 @@ class WelcomeScreen extends StatelessWidget {
       {required BuildContext context,
       required ThemeData themeData,
       required double screenWidth}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 12,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SingleChildScrollView(
-            child: Column(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -264,59 +259,60 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            width: screenWidth / 7,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: screenWidth / 3,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _login(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+            SizedBox(
+              width: screenWidth / 7,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: screenWidth / 3,
+                  height: 55,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _login(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
+                    child: const Text('Login'),
                   ),
-                  child: const Text('Login'),
                 ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: screenWidth / 3,
-                height: 55,
-                child: OutlinedButton(
-                  onPressed: () {
-                    _register(context);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(
+                  height: 18,
+                ),
+                SizedBox(
+                  width: screenWidth / 3,
+                  height: 55,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      _register(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      foregroundColor:
+                          (themeData.brightness == Brightness.light)
+                              ? const Color(0xff1E232C)
+                              : Colors.white,
+                      side: BorderSide(
+                        color: (themeData.brightness == Brightness.light)
+                            ? const Color(0xff1E232C)
+                            : Colors.white,
+                      ),
                     ),
-                    foregroundColor: (themeData.brightness == Brightness.light)
-                        ? const Color(0xff1E232C)
-                        : Colors.white,
-                    side: BorderSide(
-                      color: (themeData.brightness == Brightness.light)
-                          ? const Color(0xff1E232C)
-                          : Colors.white,
-                    ),
+                    child: const Text("Register"),
                   ),
-                  child: const Text("Register"),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

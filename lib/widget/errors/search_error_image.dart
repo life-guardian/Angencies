@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchErrorImage extends StatelessWidget {
   const SearchErrorImage({
@@ -17,7 +18,7 @@ class SearchErrorImage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 250,
+            height: 200.h,
             child: Image.asset(
               imagePath,
             ),
@@ -25,7 +26,7 @@ class SearchErrorImage extends StatelessWidget {
           CustomTextWidget(
             text: headingText ?? "",
             textAlign: TextAlign.center,
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.normal,
           )
         ],

@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ManageCard extends StatelessWidget {
   const ManageCard({
@@ -32,15 +33,15 @@ class ManageCard extends StatelessWidget {
       child: Card(
         elevation: 3,
         child: Container(
-          height: 20,
+          height: 20.h,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
             color: (themeData.brightness == Brightness.dark)
                 ? Theme.of(context).colorScheme.secondary
                 : null,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: EdgeInsets.all(12.0.h),
             child: Column(
               children: [
                 Row(
@@ -54,37 +55,41 @@ class ManageCard extends StatelessWidget {
                             text: text1,
                             color: const Color.fromARGB(255, 185, 182, 182),
                             maxLines: 2,
-                            fontSize: 12,
+                            fontSize: 10.sp,
                           ),
-                          const SizedBox(
-                            height: 11,
+                          SizedBox(
+                            height: 11.h,
                           ),
                           CustomTextWidget(
                             text: text2,
                             maxLines: 2,
-                            fontSize: 15,
+                            fontSize: 12.sp,
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.arrow_forward_ios_rounded)
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 30.h,
+                    )
                   ],
                 ),
                 const Spacer(),
                 Container(
                   width: double.infinity,
-                  height: 10,
+                  height: 10.h,
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: const [0.5, 0.5],
-                        colors: [
-                          lineColor1,
-                          lineColor2,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(15)),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: const [0.5, 0.5],
+                      colors: [
+                        lineColor1,
+                        lineColor2,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
                 )
               ],
             ),

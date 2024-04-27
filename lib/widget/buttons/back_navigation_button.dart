@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BackNavigationButton extends StatelessWidget {
   const BackNavigationButton({
@@ -21,7 +22,7 @@ class BackNavigationButton extends StatelessWidget {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         backgroundColor: backgroundColor,
         foregroundColor: outlinedColor ??
@@ -41,14 +42,15 @@ class BackNavigationButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Icon(
+          Icon(
             Icons.arrow_back_ios,
-            size: 20,
+            size: 20.h,
           ),
           if (text != null)
             CustomTextWidget(
               text: text!,
               fontWeight: FontWeight.normal,
+              fontSize: 12,
               color: textColor ?? Theme.of(context).colorScheme.onBackground,
             )
         ],

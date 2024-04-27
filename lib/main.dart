@@ -4,8 +4,10 @@ import 'package:agencies_app/view/screens/tabs.dart';
 import 'package:agencies_app/view/screens/welcome_screen.dart';
 import 'package:agencies_app/view/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -14,13 +16,16 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? myToken = prefs.getString('token');
 
-  runApp(
-    ProviderScope(
-      child: MyApp(
-        token: myToken,
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(
+      ProviderScope(
+        child: MyApp(
+          token: myToken,
+        ),
       ),
-    ),
-  );
+    );
+  });
 }
 
 Future initialization(BuildContext? context) async {
@@ -68,12 +73,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Angencies',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      home: activeWidget,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      builder: (_, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Angencies',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        home: activeWidget,
+      ),
     );
   }
 }

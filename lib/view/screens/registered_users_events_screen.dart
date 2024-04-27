@@ -11,6 +11,7 @@ import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:agencies_app/widget/listview/events/registered_users_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 
 class RegisteredUsersEventScreen extends StatefulWidget {
@@ -112,9 +113,9 @@ class _EventRegisteredListState extends State<RegisteredUsersEventScreen> {
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(
-                            left: 16, right: 16, top: 5, bottom: 15),
+                            left: 16.w, right: 16.w, top: 5.h, bottom: 15.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -123,7 +124,7 @@ class _EventRegisteredListState extends State<RegisteredUsersEventScreen> {
                               children: [
                                 CustomTextWidget(
                                   text: 'Registered Users',
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ],

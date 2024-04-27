@@ -13,6 +13,7 @@ import 'package:agencies_app/widget/listview/history/event_history_listview.dart
 import 'package:agencies_app/widget/listview/history/rescue_operation_history_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class History extends ConsumerStatefulWidget {
   const History({
@@ -58,7 +59,6 @@ class _HistoryState extends ConsumerState<History> {
     HistoryApi historyApi = HistoryApi();
     // alert History api call
     historyApi.getAlertHistoryData(token: widget.token).then((alertHistories) {
-     
       ref.read(alertHistoryProvider.notifier).addList(alertHistories);
       setState(() {
         isAlertListEmpty = false;
@@ -107,38 +107,38 @@ class _HistoryState extends ConsumerState<History> {
         child: Column(
           children: [
             CustomEventsAppBar(agencyName: widget.agencyName),
-            const SizedBox(
-              height: 21,
+            SizedBox(
+              height: 21.h,
             ),
             Expanded(
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.r),
+                    topRight: Radius.circular(40.r),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 18, left: 18, right: 18),
+                  padding: EdgeInsets.only(top: 18.h, left: 18.w, right: 18.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 12),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.h, horizontal: 12.w),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
                               text: "$filterValue History",
-                              fontSize: 18,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                             CustomTextWidget(
                               text: "Slide left to delete $filterValue",
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.normal,
                               color: Colors.grey,
                             ),
@@ -178,20 +178,38 @@ class _HistoryState extends ConsumerState<History> {
             },
             elevation: 5,
             selectedItemColor: activeIconColor(),
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_alert_rounded),
-                activeIcon: Icon(Icons.add_alert_rounded),
+                icon: Icon(
+                  Icons.add_alert_rounded,
+                  size: 25.h,
+                ),
+                activeIcon: Icon(
+                  Icons.add_alert_rounded,
+                  size: 30.h,
+                ),
                 label: 'Alerts',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.event_rounded),
-                activeIcon: Icon(Icons.event_rounded),
+                icon: Icon(
+                  Icons.event_rounded,
+                  size: 25.h,
+                ),
+                activeIcon: Icon(
+                  Icons.event_rounded,
+                  size: 30.h,
+                ),
                 label: 'Events',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.star_border_rounded),
-                activeIcon: Icon(Icons.star_border_rounded),
+                icon: Icon(
+                  Icons.star_border_rounded,
+                  size: 25.h,
+                ),
+                activeIcon: Icon(
+                  Icons.star_border_rounded,
+                  size: 30.h,
+                ),
                 label: 'Rescues',
               ),
             ],

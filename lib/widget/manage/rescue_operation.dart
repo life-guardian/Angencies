@@ -19,6 +19,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
@@ -45,11 +46,13 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
   bool buttonEnabled = true;
   ExactLocation exactLocation = ExactLocation();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Widget activeButtonText = Text(
-    'START',
-    style: GoogleFonts.mulish(
-        fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-  );
+  late Widget activeButtonText;
+
+  @override
+  void initState() {
+    super.initState();
+    setButtonText();
+  }
 
   @override
   void dispose() {
@@ -63,7 +66,7 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     activeButtonText = Text(
       'START',
       style: GoogleFonts.mulish(
-          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+          fontWeight: FontWeight.bold, fontSize: 12.sp, color: Colors.white),
     );
   }
 
@@ -124,8 +127,8 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     bool hasAccessLiveLocation = ref.read(accessLiveLocationProvider);
 
     var reqBody = {
-      "name": operationNameController.text,
-      "description": descController.text,
+      "name": operationNameController.text.trim(),
+      "description": descController.text.trim(),
       "latitude": lat,
       "longitude": lng,
       "rescueTeamSize": teamSizeController.text.toString()
@@ -216,30 +219,29 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
-        top: 12,
-        left: 12,
-        right: 12,
+        top: 12.h,
+        left: 12.w,
+        right: 12.w,
       ),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomTextWidget(
+              CustomTextWidget(
                 text: 'Start Rescue Operation',
-                fontSize: 20,
+                fontSize: 18.sp,
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               const CustomTextWidget(
                 text: 'RESCUE OPERATION NAME',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'Enter Rescue operation name',
@@ -247,14 +249,14 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
                 checkValidation: (value) =>
                     validateTextField(value, 'Operation Name'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'RESCUE TEAM SIZE',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 keyboardType: TextInputType.number,
@@ -263,14 +265,14 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
                 checkValidation: (value) =>
                     validateTextField(value, 'Team Size'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'DESCRIPTION',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'Enter description',
@@ -278,18 +280,15 @@ class _RescueOperationState extends ConsumerState<RescueOperation> {
                 checkValidation: (value) =>
                     validateTextField(value, 'Description'),
               ),
-              const SizedBox(
-                height: 21,
-              ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               ManageElevatedButton(
                 childWidget: activeButtonText,
                 onPressed: buttonEnabled ? _submitForm : () {},
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 // ignore_for_file: no_logic_in_create_state
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginRegisterTextFormField extends StatefulWidget {
   const LoginRegisterTextFormField({
@@ -48,7 +49,6 @@ class _LoginRegisterTextFormFieldState
         controller: widget.controllerText,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         cursorColor: Theme.of(context).colorScheme.onBackground,
-        // cursorErrorColor: Colors.red,
         validator: (value) => widget.checkValidation(value),
         selectionControls: DesktopTextSelectionControls(),
         decoration: InputDecoration(
@@ -71,23 +71,25 @@ class _LoginRegisterTextFormFieldState
               ? const Color.fromARGB(162, 232, 236, 244)
               : Theme.of(context).colorScheme.primary,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(156, 158, 158, 158)),
+          enabledBorder: OutlineInputBorder(
+            borderSide:
+                const BorderSide(color: Color.fromARGB(156, 158, 158, 158)),
             borderRadius: BorderRadius.all(
-              Radius.circular(10),
+              Radius.circular(10.r),
             ),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.all(
-              Radius.circular(10),
+              Radius.circular(10.r),
             ),
           ),
           labelText: widget.labelText,
-          labelStyle:
-              TextStyle(color: Theme.of(context).colorScheme.onBackground),
+          labelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontSize: 14.sp),
           hintText: widget.textHint,
         ),
       ),

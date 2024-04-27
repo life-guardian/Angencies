@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EventCard extends StatelessWidget {
@@ -32,7 +33,7 @@ class EventCard extends StatelessWidget {
           elevation: 3,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
               color: (themeData.brightness == Brightness.dark)
                   ? Theme.of(context).colorScheme.secondary
                   : null,
@@ -50,19 +51,16 @@ class EventCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: circleColor,
-                  ),
+                CircleAvatar(
+                  radius: 15.r,
+                  backgroundColor: circleColor,
                   child: Center(
                     child: Text(
                       text1,
                       style: GoogleFonts.inter().copyWith(
-                        fontSize: 16,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
                     ),
                   ),
@@ -71,16 +69,16 @@ class EventCard extends StatelessWidget {
                   children: [
                     CustomTextWidget(
                       text: text2,
-                      fontSize: 13,
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.normal,
                       color: const Color.fromARGB(206, 255, 255, 255),
                     ),
-                    const SizedBox(
-                      height: 5,
+                    SizedBox(
+                      height: 5.h,
                     ),
                     CustomTextWidget(
                       text: text3,
-                      fontSize: 16,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: const Color.fromARGB(206, 255, 255, 255),
                     ),

@@ -1,6 +1,7 @@
 import 'package:agencies_app/widget/buttons/back_navigation_button.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomEventsAppBar extends StatelessWidget {
   const CustomEventsAppBar({
@@ -18,25 +19,28 @@ class CustomEventsAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset('assets/logos/indiaflaglogo.png'),
-          const SizedBox(
-            width: 21,
+          Image(
+            image: const AssetImage('assets/logos/indiaflaglogo.png'),
+            height: 25.h,
+          ),
+          SizedBox(
+            width: 18.w,
           ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomTextWidget(
+                CustomTextWidget(
                   text: 'Jai Hind!',
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                 ),
-                const SizedBox(
-                  height: 5,
+                SizedBox(
+                  height: 5.h,
                 ),
                 CustomTextWidget(
                   text: agencyName,
-                  fontSize: 18,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   // maxLines: 3,
                   // textOverflow: TextOverflow.ellipsis,

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ManageElevatedButton extends StatelessWidget {
   const ManageElevatedButton({
@@ -17,15 +18,21 @@ class ManageElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Center(
-      child: ElevatedButton(
-        onPressed: isButtonEnabled ? onPressed : () {},
-        style: ElevatedButton.styleFrom(
-            fixedSize: const Size(200, 40),
+      child: SizedBox(
+        width: width / 2,
+        child: ElevatedButton(
+          onPressed: isButtonEnabled ? onPressed : () {},
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 40.w),
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50))),
-        child: childWidget,
+              borderRadius: BorderRadius.circular(50.r),
+            ),
+          ),
+          child: childWidget,
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future logoutDialog(
         {required BuildContext context,
@@ -25,11 +26,11 @@ Future logoutDialog(
           title: CustomTextWidget(
             text: titleText,
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: 18.sp,
           ),
           content: CustomTextWidget(
             text: contentText,
-            fontSize: 20.0,
+            fontSize: 16.sp,
             fontWeight: FontWeight.normal,
             color: Theme.of(context).colorScheme.onBackground,
           ),

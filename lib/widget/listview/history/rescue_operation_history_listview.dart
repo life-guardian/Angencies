@@ -7,6 +7,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -145,9 +146,9 @@ class _BuildRescueHistoryListViewState
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 20,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 18.h,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,10 +160,10 @@ class _BuildRescueHistoryListViewState
                                     CustomTextWidget(
                                       text: rescueOperation.name.toString(),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 14.sp,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    SizedBox(
+                                      height: 5.h,
                                     ),
                                     CustomTextWidget(
                                       text: rescueOperation.locality.toString(),
@@ -172,12 +173,12 @@ class _BuildRescueHistoryListViewState
                                           : Theme.of(context)
                                               .colorScheme
                                               .onBackground,
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       textOverflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    SizedBox(
+                                      height: 5.h,
                                     ),
                                     CustomTextWidget(
                                       text: rescueOperation.description
@@ -188,15 +189,12 @@ class _BuildRescueHistoryListViewState
                                           : Theme.of(context)
                                               .colorScheme
                                               .onBackground,
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       textOverflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
                               ),
                               CustomTextWidget(
                                 text: DateFormat('dd/MM/yy').format(
@@ -209,7 +207,7 @@ class _BuildRescueHistoryListViewState
                                         : Theme.of(context)
                                             .colorScheme
                                             .onBackground,
-                                fontSize: 14,
+                                fontSize: 13.sp,
                               ),
                             ],
                           ),

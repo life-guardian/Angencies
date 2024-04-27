@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -65,7 +66,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
       activeButtonWidget = CustomTextWidget(
         text: 'Stop Operation'.toUpperCase(),
         fontWeight: FontWeight.bold,
-        fontSize: 16,
+        fontSize: 12.sp,
         color: Colors.white,
       );
     }
@@ -188,15 +189,22 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
           if (liveAgencies[i].agencyId == data["agencyId"]) {
             liveAgencies[i].lat = data["lat"];
             liveAgencies[i].lng = data["lng"];
-            liveAgencies[i].rescueOpsName = data[""];
+            liveAgencies[i].agencyName = data["agencyName"];
+            liveAgencies[i].agencyId = data["agencyId"];
+            liveAgencies[i].phoneNumber = data["phoneNumber"];
+            liveAgencies[i].representativeName = data["representativeName"];
+            liveAgencies[i].rescueOpsName = data["rescueOpsName"];
+            liveAgencies[i].rescueOpsDescription = data["rescueOpsDescription"];
+            liveAgencies[i].rescueTeamSize = data["rescueTeamSize"];
+            debugPrint("Got agency update location");
             isPlotted = true;
+            break;
           }
         }
-        setState(() {
-          if (!isPlotted) {
-            liveAgencies.add(LiveAgencies.fromJson(data));
-          }
-        });
+        if (!isPlotted) {
+          liveAgencies.add(LiveAgencies.fromJson(data));
+        }
+        setState(() {});
       }
     });
 
@@ -309,12 +317,12 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
   // }
 
   void openModalBottomSheet(
-      {LiveAgencies? liveAgency, LiveRescueUsers? liveRescueUsers}) {
+      {LiveAgencies? liveAgency, LiveRescueUsers? liveRescueUser}) {
     modalBottomSheet.openModal(
       context: context,
       widget: liveAgency != null
           ? markerPointDetails(liveAgency: liveAgency)
-          : markerPointUsersDetails(liveRescueUsers: liveRescueUsers!),
+          : markerPointUsersDetails(liveRescueUser: liveRescueUser!),
     );
   }
 
@@ -452,7 +460,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                         ) {
                           return GestureDetector(
                             onTap: () {
-                              openModalBottomSheet(liveRescueUsers: liveUser);
+                              openModalBottomSheet(liveRescueUser: liveUser);
                             },
                             child: Column(
                               children: [
@@ -505,7 +513,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
     );
   }
 
-  Widget markerPointUsersDetails({required LiveRescueUsers liveRescueUsers}) {
+  Widget markerPointUsersDetails({required LiveRescueUsers liveRescueUser}) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 15,
@@ -546,7 +554,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                         ),
                       ),
                       Text(
-                        liveRescueUsers.userName!,
+                        liveRescueUser.userName!,
                         style: GoogleFonts.mulish().copyWith(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
@@ -554,10 +562,11 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  if (liveRescueUsers.rescueReason != null)
+                  if (liveRescueUser.rescueReason != null)
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  if (liveRescueUser.rescueReason != null)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -569,7 +578,7 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                           ),
                         ),
                         Text(
-                          liveRescueUsers.rescueReason!,
+                          liveRescueUser.rescueReason!,
                           style: GoogleFonts.mulish().copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -577,6 +586,43 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                         ),
                       ],
                     ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Phone Number'.toUpperCase(),
+                        style: GoogleFonts.mulish().copyWith(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        liveRescueUser.phoneNumber.toString(),
+                        style: GoogleFonts.mulish().copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  ManageElevatedButton(
+                    childWidget: CustomTextWidget(
+                      text: "CALL",
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                    ),
+                    onPressed: () async {
+                      await launchPhoneDial(
+                        phoneNo: liveRescueUser.phoneNumber!,
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -771,31 +817,18 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20, top: 10),
-                    child: SizedBox(
-                      width: 200,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await launchPhoneDial(
-                            phoneNo: liveAgency.phoneNumber!,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          backgroundColor: const Color(0xff1E232C),
-                        ),
-                        child: const Text(
-                          'CALL',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
+                ManageElevatedButton(
+                  childWidget: CustomTextWidget(
+                    text: "CALL",
+                    color: Colors.white,
+                    fontSize: 12.sp,
                   ),
-                ),
+                  onPressed: () async {
+                    await launchPhoneDial(
+                      phoneNo: liveAgency.phoneNumber!,
+                    );
+                  },
+                )
               ],
             ),
           ),

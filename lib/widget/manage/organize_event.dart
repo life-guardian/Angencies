@@ -8,6 +8,7 @@ import 'package:agencies_app/widget/circular_progress_indicator/custom_circular_
 import 'package:agencies_app/widget/textfields/select_map_location_field.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:agencies_app/widget/buttons/custom_elevated_button.dart';
 import 'package:agencies_app/helper/functions/datepicker_function.dart';
@@ -41,11 +42,13 @@ class _OrganizeEventState extends State<OrganizeEvent> {
 
   bool buttonEnabled = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Widget activeButtonText = Text(
-    'PUBLISH EVENT',
-    style: GoogleFonts.mulish(
-        fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-  );
+  late Widget activeButtonText;
+
+  @override
+  void initState() {
+    super.initState();
+    setButtonText();
+  }
 
   @override
   void dispose() {
@@ -64,7 +67,7 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     activeButtonText = Text(
       'PUBLISH EVENT',
       style: GoogleFonts.mulish(
-          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+          fontWeight: FontWeight.bold, fontSize: 12.sp, color: Colors.white),
     );
   }
 
@@ -106,8 +109,8 @@ class _OrganizeEventState extends State<OrganizeEvent> {
     String serverMessage;
 
     var reqBody = {
-      "eventName": eventNameController.text,
-      "description": descController.text,
+      "eventName": eventNameController.text.trim(),
+      "description": descController.text.trim(),
       "latitude": lat,
       "longitude": lng,
       "eventDate": _selectedDate.toString()
@@ -175,18 +178,18 @@ class _OrganizeEventState extends State<OrganizeEvent> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomTextWidget(
+              CustomTextWidget(
                 text: 'Organize Awareness Event',
-                fontSize: 20,
+                fontSize: 18.sp,
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               const CustomTextWidget(
                 text: 'LOCATION',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               // ontap , address
               SelectMapLocationField(
@@ -194,14 +197,14 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 address: address,
                 initialText: 'select location',
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'EVENT NAME',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'enter event name',
@@ -209,14 +212,14 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 checkValidation: (value) =>
                     validateTextField(value, 'Event Name'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'EVENT DESCRIPTION',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               ManageEventsTextFormField(
                 hintText: 'enter event description',
@@ -224,28 +227,28 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                 checkValidation: (value) =>
                     validateTextField(value, 'Description'),
               ),
-              const SizedBox(
-                height: 21,
+              SizedBox(
+                height: 21.h,
               ),
               const CustomTextWidget(
                 text: 'DATE',
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: 5.h,
               ),
               GestureDetector(
                 onTap: _presentDatePicker,
                 child: Container(
+                  height: 70.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      // width: 2,
                       color: Colors.grey,
                       style: BorderStyle.solid,
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.r),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -253,31 +256,34 @@ class _OrganizeEventState extends State<OrganizeEvent> {
                           text: _selectedDate == null
                               ? 'pick date'
                               : formatter.format(_selectedDate!),
-                          fontSize: 16,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.normal,
                           color: _selectedDate == null
                               ? Colors.grey.shade500
                               : Theme.of(context).colorScheme.onBackground,
                         ),
-                        const SizedBox(
-                          width: 11,
+                        SizedBox(
+                          width: 11.w,
                         ),
-                        const Icon(Icons.calendar_month_outlined),
+                        Icon(
+                          Icons.calendar_month_outlined,
+                          size: 25.h,
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
               ManageElevatedButton(
                 childWidget: activeButtonText,
                 onPressed: () => _submitForm(context: context),
                 isButtonEnabled: buttonEnabled,
               ),
-              const SizedBox(
-                height: 31,
+              SizedBox(
+                height: 31.h,
               ),
             ],
           ),

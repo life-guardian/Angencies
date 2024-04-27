@@ -4,6 +4,7 @@ import 'package:agencies_app/widget/errors/search_error_image.dart';
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisteredUsersListView extends StatelessWidget {
   const RegisteredUsersListView({
@@ -36,9 +37,9 @@ class RegisteredUsersListView extends StatelessWidget {
                   ),
                   color: Theme.of(context).colorScheme.secondary,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 20,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 20.h,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,16 +51,16 @@ class RegisteredUsersListView extends StatelessWidget {
                               CustomTextWidget(
                                 text: registeredUser.userName.toString(),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 14.sp,
                               ),
-                              const SizedBox(
-                                height: 11,
+                              SizedBox(
+                                height: 11.h,
                               ),
                               CustomTextWidget(
                                 text:
                                     'Phone: ${registeredUser.phoneNumber.toString()}',
                                 color: Colors.grey,
-                                fontSize: 12,
+                                fontSize: 12.sp,
                                 textOverflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

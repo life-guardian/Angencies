@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomLifeGuardianTag extends StatelessWidget {
   const CustomLifeGuardianTag({super.key, this.showLogo = true});
@@ -8,26 +9,25 @@ class CustomLifeGuardianTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const CustomTextWidget(
+        CustomTextWidget(
           text: 'Life ',
           color: Colors.orange,
           fontWeight: FontWeight.w700,
-          fontSize: 16,
+          fontSize: 12.sp,
         ),
-        const CustomTextWidget(
+        CustomTextWidget(
           text: 'Guardian',
           color: Colors.green,
           fontWeight: FontWeight.w900,
-          fontSize: 18,
+          fontSize: 15.sp,
         ),
-        const SizedBox(
-          width: 5,
+        SizedBox(
+          width: 5.w,
         ),
         if (showLogo)
           SizedBox(
-            width: 25,
+            width: 25.w,
             child: Image.asset(
               'assets/images/disasterImage2.jpg',
             ),

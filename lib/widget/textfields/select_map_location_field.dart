@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectMapLocationField extends StatelessWidget {
   const SelectMapLocationField({
@@ -18,31 +19,32 @@ class SelectMapLocationField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 70.h,
         decoration: BoxDecoration(
           border: Border.all(
-            // width: 2,
             color: Colors.grey,
             style: BorderStyle.solid,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.h),
           child: Row(
             children: [
               Icon(
                 Icons.near_me_outlined,
+                size: 20.h,
                 color: (address == null)
                     ? Colors.grey.shade700
                     : Theme.of(context).colorScheme.onBackground,
               ),
-              const SizedBox(
-                width: 11,
+              SizedBox(
+                width: 11.w,
               ),
               Flexible(
                 child: CustomTextWidget(
                   text: address ?? initialText,
-                  fontSize: 16,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.normal,
                   color: (address == null)
                       ? Colors.grey.shade500

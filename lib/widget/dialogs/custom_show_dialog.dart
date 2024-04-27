@@ -1,6 +1,7 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future customShowDialog(
         {required BuildContext context,
@@ -21,12 +22,12 @@ Future customShowDialog(
           title: CustomTextWidget(
             text: titleText,
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: 18.sp,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           content: CustomTextWidget(
             text: contentText,
-            fontSize: 20.0,
+            fontSize: 16.sp,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           actions: [

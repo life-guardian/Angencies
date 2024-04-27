@@ -1,5 +1,6 @@
 import 'package:agencies_app/widget/text/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventRescueCountCard extends StatelessWidget {
   const EventRescueCountCard({
@@ -15,7 +16,7 @@ class EventRescueCountCard extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     return Container(
-      height: 80,
+      height: 80.h,
       decoration: BoxDecoration(
         color: (themeData.brightness == Brightness.dark)
             ? Theme.of(context).colorScheme.secondary
@@ -27,30 +28,30 @@ class EventRescueCountCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.arrow_forward_rounded,
                 color: Colors.green,
-                size: 35,
+                size: 35.h,
               ),
-              const SizedBox(
-                width: 10,
+              SizedBox(
+                width: 10.w,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomTextWidget(
+                  CustomTextWidget(
                     text: "Events",
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 220, 217, 217),
+                    color: const Color.fromARGB(255, 220, 217, 217),
                   ),
-                  const SizedBox(
-                    height: 5,
+                  SizedBox(
+                    height: 5.h,
                   ),
                   CustomTextWidget(
                     text: eventCount,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: const Color.fromARGB(255, 220, 217, 217),
                   ),
@@ -58,37 +59,37 @@ class EventRescueCountCard extends StatelessWidget {
               ),
             ],
           ),
-          const VerticalDivider(
+          VerticalDivider(
             color: Colors.white,
-            indent: 15,
-            endIndent: 15,
+            indent: 15.h,
+            endIndent: 15.h,
           ),
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.arrow_forward_rounded,
                 color: Colors.green,
-                size: 35,
+                size: 35.h,
               ),
-              const SizedBox(
-                width: 10,
+              SizedBox(
+                width: 10.w,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomTextWidget(
+                  CustomTextWidget(
                     text: 'Rescue Ops',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 220, 217, 217),
+                    color: const Color.fromARGB(255, 220, 217, 217),
                   ),
-                  const SizedBox(
-                    height: 5,
+                  SizedBox(
+                    height: 5.h,
                   ),
                   CustomTextWidget(
                     text: rescueCount,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: const Color.fromARGB(255, 220, 217, 217),
                   ),

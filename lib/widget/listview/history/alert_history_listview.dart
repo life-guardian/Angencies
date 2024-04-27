@@ -9,6 +9,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -125,7 +126,7 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                           },
                           backgroundColor:
                               const Color.fromARGB(216, 195, 29, 17),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
                       ],
                     ),
@@ -150,9 +151,9 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 20,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 18.h,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,10 +164,10 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                                   CustomTextWidget(
                                     text: alert.alertName.toString(),
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: 14.sp,
                                   ),
-                                  const SizedBox(
-                                    height: 5,
+                                  SizedBox(
+                                    height: 5.h,
                                   ),
                                   CustomTextWidget(
                                     text: alert.locality.toString(),
@@ -175,17 +176,17 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                                         ? const Color.fromARGB(123, 94, 11, 5)
                                         : const Color.fromARGB(
                                             164, 175, 135, 132),
-                                    fontSize: 12,
+                                    fontSize: 10.sp,
                                     // fontWeight: FontWeight.normal,
                                   ),
-                                  const SizedBox(
-                                    height: 5,
+                                  SizedBox(
+                                    height: 5.h,
                                   ),
                                   CustomTextWidget(
                                     text: alert.alertSeverity.toString(),
                                     color:
                                         const Color.fromARGB(255, 158, 18, 8),
-                                    fontSize: 16,
+                                    fontSize: 14.sp,
                                   ),
                                 ],
                               ),
@@ -200,7 +201,7 @@ class _BuildAlertHistoryListViewState extends State<BuildAlertHistoryListView> {
                                         : Theme.of(context)
                                             .colorScheme
                                             .onBackground,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                               ),
                             ],
                           ),

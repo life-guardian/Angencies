@@ -7,6 +7,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -145,9 +146,9 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 20,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 18.h,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,10 +160,10 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                                     CustomTextWidget(
                                       text: event.eventName.toString(),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 14.sp,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    SizedBox(
+                                      height: 5.h,
                                     ),
                                     CustomTextWidget(
                                       text: event.locality.toString(),
@@ -172,12 +173,12 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                                           : Theme.of(context)
                                               .colorScheme
                                               .onBackground,
-                                      fontSize: 12,
+                                      fontSize: 10.sp,
                                       textOverflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    SizedBox(
+                                      height: 5.h,
                                     ),
                                     CustomTextWidget(
                                       text: event.description.toString(),
@@ -188,15 +189,12 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                                           : Theme.of(context)
                                               .colorScheme
                                               .onBackground,
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       textOverflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
                               ),
                               CustomTextWidget(
                                 text: DateFormat('dd/MM/yy').format(
@@ -208,7 +206,7 @@ class _BuildEventHistoryListViewState extends State<BuildEventHistoryListView> {
                                         : Theme.of(context)
                                             .colorScheme
                                             .onBackground,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                               ),
                             ],
                           ),
