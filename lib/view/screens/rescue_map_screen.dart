@@ -562,11 +562,13 @@ class _RescueMapScreenState extends ConsumerState<RescueMapScreen> {
                       ),
                     ],
                   ),
-                  if (liveRescueUser.rescueReason != null)
+                  if (liveRescueUser.rescueReason != null ||
+                      liveRescueUser.rescueReason!.isNotEmpty)
                     const SizedBox(
                       height: 8,
                     ),
-                  if (liveRescueUser.rescueReason != null)
+                  if (liveRescueUser.rescueReason != null ||
+                      liveRescueUser.rescueReason!.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
